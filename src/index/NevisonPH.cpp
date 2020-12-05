@@ -1,0 +1,45 @@
+#include "index/NevisonPH.h"
+
+#include "Logging.h"
+
+#include <iostream>
+
+epic::index::NevisonPH::NevisonPH(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
+	: RawPublicHelpTheta(g, approx, int_representation) {
+	if (mGame.getNumberOfNullPlayers() > 0 && mGame.getFlagNullPlayerHandling()) {
+		throw std::invalid_argument(log::invalidFlagF);
+	}
+}
+
+std::vector<epic::bigFloat> epic::index::NevisonPH::calculate() {
+	// big_wci[x]: same as wci but represented as bigInt
+	auto big_wci = new bigInt[mGame.getNumberOfPlayers()];
+
+	winningCoalitionsForPlayer(big_wci);
+
+	if (mGame.getFlagOfVerbose()) {
+		std::cout << "Number of winning coalitions a player belongs to: " << std::endl;
+	}
+
+	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
+	{
+		bigInt factor = bigInt(1) << mGame.getNumberOfPlayersWithWeight0(); // additional winning coalitions due to players of weight 0
+		bigInt tmp = bigInt(1) << mGame.getNumberOfPlayers() - 1;
+		bigFloat combinations = tmp;
+
+		for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
+			if (mGame.getFlagOfVerbose()) {
+				std::cout << "Player " << mGame.playerIndexToNumber(i) << ": " << big_wci[i] * factor << std::endl;
+			}
+			solution[i] = (big_wci[i] * factor) / combinations;
+		}
+	}
+
+	delete[] big_wci;
+
+	return solution;
+}
+
+std::string epic::index::NevisonPH::getFullName() {
+	return "Nevison PHA";
+}

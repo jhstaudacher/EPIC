@@ -1,0 +1,45 @@
+#ifndef EPIC_INDEX_KOENIGBRAEUNINGER_H_
+#define EPIC_INDEX_KOENIGBRAEUNINGER_H_
+
+#include "ItfUpperBoundApproximation.h"
+#include "RawBanzhaf.h"
+
+namespace epic::index {
+
+/**
+ * Implementing the ItfPowerIndex interface to calculate the <i>König Bräuninger</i> power index (`KB`) based on the <i>raw Banzhaf</i> power index.
+ *
+ * Let \f$W\f$ denote the set of winning coalitions and \f$W_i \subseteq W\f$ the set of winning coalitions containing player \f$i\f$.
+ * Then the <i>König Bräuninger</i> index of player \f$i\f$ is defined as
+ * \f[
+ *		KB_i = \frac{|W_i|}{|W|}
+ * \f]
+ *
+ * <table>
+ * 		<caption>Behaviour on index specific CLI-flags</caption>
+ * 		<tr><th>Flag<th>Behaviour
+ * 		<tr><td>`--verbose / -v`		<td>no extra output
+ * 		<tr><td>`--filter-null / -f`	<td>INVALID - this power index is null player sensitive
+ * </table>
+ *
+ * <b>Implementation note</b>:
+ * If the mGame contains player of weight zero, they get excluded from the calculation. At the end the corresponding players get assigned the index `0.5`.
+ */
+class KoenigBraeuninger : public RawBanzhaf {
+public:
+	/**
+	 * Construct the KönigBräuninger object
+	 *
+	 * @param g The Game for which the KönigBräuninger index should be calculated.
+	 * @param approx A specialized approximation object to approximate the largest needed numbers.
+	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
+	 */
+	KoenigBraeuninger(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
+
+	std::vector<bigFloat> calculate() override;
+	std::string getFullName() override;
+};
+
+} /* namespace epic::index */
+
+#endif /* EPIC_INDEX_KOENIGBRAEUNINGER_H_ */
