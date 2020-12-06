@@ -57,7 +57,6 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | shortcut | name |
 | -------- | ---- |
 | `ABZ` | Absolute Banzhaf |
-| `AFT` | Absolute Felsenthal |
 | `BZ` | Banzhaf |
 | `CC` | Coleman Collective |
 | `CI` | Coleman Initiative |
@@ -66,23 +65,25 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `FT` | Felsenthal |
 | `HN` | Harsanyi Nash |
 | `J` | Johnston |
-| `KB` | Koenig Braeuninger |
-| `KBPHA` | Koenig Braeuninger PHA |
-| `N` | Nevison |
-| `NPHA` | Nevison PHA |
+| `KB` | Koenig Braeuninger (based on the Dubey-Shapley identity) |
+| `KBPH` | Koenig Braeuninger (based on Raw Public Help Theta) |
+| `N` | Nevison (based on the Dubey-Shapley identity)|
+| `NPH` | Nevison (based on Raw Public Help Theta) |
 | `PG` | Public Good |
-| `PGA` | Absolute Public Good |
-| `PHA` | Absolute Public Help Theta |
-| `PHASD` | Absolute Public Help Theta with Shapley Dubey |
-| `PHT` | Public Help Theta |
+| `PHT` | Public Help Theta (based on the Dubey-Shapley identity) |
+| `PHTPH` | Public Help Theta (based on Raw Public Help Theta) |
 | `PHX` | Public Help Xi |
 | `PIF` | Power Index F |
-| `PIG` | Power Index G |
-| `PIGPHA` | Power Index G PHA |
+| `PIG` | Power Index G (based on the Dubey-Shapley identity)|
+| `PIGPH` | Power Index G (based on Raw Public Help Theta) |
 | `RA` | Rae |
 | `RBZ` | Raw Banzhaf |
 | `RDP` | Raw Deegan Packel |
+| `RFT` | Raw Felsenthal |
 | `RJ` | Raw Johnston |
+| `RPG` | Raw Public Good |
+| `RPHT` | Raw Public Help Theta |
+| `RPHTSD` | Raw Public Help Theta (based on the Dubey-Shapley identity) |
 | `RPIG` | Raw Power Index G |
 | `RPIF` | Raw Power Index F |
 | `RSH` | Raw Shapley Shubik |
