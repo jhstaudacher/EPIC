@@ -54,7 +54,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{PHX, {"PHX", "Public Help xi"}},
 	{PIF, {"PIF", "null-player-free Power Index F"}},
 	{PIG, {"PIG", "null-player-free Power Index G"}},
-	{PIGPH, {"PIGPHA", "null-player-free Power Index G (based on raw Public Help theta)"}},
+	{PIGPH, {"PIGPH", "null-player-free Power Index G (based on raw Public Help theta)"}},
 	{RA, {"RA", "Rae"}},
 	{RBZ, {"RBZ", "raw Banzhaf"}},
 	{RDP, {"RDP", "raw Deegan Packel"}},

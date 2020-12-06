@@ -29,9 +29,7 @@ std::vector<epic::bigFloat> epic::index::PowerIndexGPH::calculate() {
 	bigFloat temp;
 	bigFloat float_swc = big_swc;
 
-	if (mGame.getFlagOfVerbose()) {
-		std::cout << "Total number of winning coalitions: " << big_swc << std::endl
-				  << std::endl;
+	if (mGame.getFlagOfVerbose()) {		
 		std::cout << "Number of winning coalitions a player belongs to: " << std::endl;
 	}
 
