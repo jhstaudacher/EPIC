@@ -57,8 +57,7 @@ protected:
 	 *
 	 * @param mwcs The return array, mwcs[x]: the number of minimal winning coalitions of least size player x belongs to. The array mus have enough memory for at least numberOfPlayers entries. Each entry must be initialized with zero!
 	 */
-	void minimal_winning_coalitions_of_least_size(lint::LargeNumber mwcs[]);
-	std::vector<longUInt> mWeights;
+	void minimal_winning_coalitions_of_least_size(lint::LargeNumber mwcs[]);	
 
 private:
 	/**

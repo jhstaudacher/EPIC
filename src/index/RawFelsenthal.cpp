@@ -7,8 +7,7 @@ epic::index::RawFelsenthal::RawFelsenthal(Game& g, ItfUpperBoundApproximation* a
 
 	// total_csum: cumulative sum of weights
 	bigInt total_csum;
-	mWeights = mGame.getWeights();
-
+	
 	// determine number for minsize (minsize = (number of players subsumed since >= quota))
 	for (longUInt i = 0; i < mGame.getNumberOfPlayers(); i++) {
 		total_csum += mGame.getWeights()[i];
@@ -118,7 +117,7 @@ void epic::index::RawFelsenthal::minimal_winning_coalitions_of_least_size(lint::
 std::vector<epic::bigFloat> epic::index::RawFelsenthal::calculate() {
 	// if a veto player exists, that player gets assigned 1 while all other players get assigned 0
 	// note: the weights have to be sorted decreasingly
-	if (mWeights[0] >= mGame.getQuota()) {
+	if (mGame.getWeights()[0] >= mGame.getQuota()) {
 		std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
 		{
 			solution[0] = 1.0;

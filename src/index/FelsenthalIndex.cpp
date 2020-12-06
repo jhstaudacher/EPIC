@@ -9,7 +9,7 @@ epic::index::FelsenthalIndex::FelsenthalIndex(Game& g, ItfUpperBoundApproximatio
 std::vector<epic::bigFloat> epic::index::FelsenthalIndex::calculate() {
 	// if a veto player exists, that player gets assigned 1 while all other players get assigned 0
 	// note: the weights have to be sorted decreasingly
-	if (mWeights[0] >= mGame.getQuota()) {
+	if (mGame.getWeights()[0] >= mGame.getQuota()) {
 		std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
 		{
 			solution[0] = 1.0;
