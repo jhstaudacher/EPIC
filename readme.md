@@ -41,12 +41,12 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | yes | `-i` / `--index` | index shortcut | the index to compute |
 | yes | `-w` / `--weights` | .csv file | the player weights for the weighted voting mGame (*1) |
 | yes | `-q` / `--quota` | integer | the quota for the weighted voting mGame (*2)|
-| yes | `-o` / `--output` | [`screen` \| `csv`] | whether writing the results to the console or into a .csv file |
 | no | `-v` / `--verbose` | no argument | adds extra output |
 | no | `-f` / `--filter-null` | no argument | excludes null player from the calculation (not compatible with all indices!) |
 | no | `--gmp` | no argument | enforces the use of GMP-classes for large integer calculations |
 | no | `--primes` | no argument | enforces the chinese lint theorem for large integer calculations |
 | no | `--float` | no argument | reads the weights from within the weights-file as floating point numbers |
+| no | `--csv` | no argument | write the results into a .csv file |
 
 (*1) The .csv file must contain one weight per line. The weights must all be integers unless you set the --float flag.
 
