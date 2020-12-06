@@ -17,14 +17,14 @@ typedef enum OutputType { screen, /**< prints output to the console */
 
 static const std::string MSG_REQUIRED_OPTS = "--index | -i <index abbreviation> : Specifies the power index to compute.\n"
 											 "--weights | -w <csv filename> : CSV-file containing the weights for the players.\n"
-											 "--quota | -q <integer> : The quota of the mGame.\n"
-											 "--output | -o <screen|csv> : Option to specify where to output the solution.\n";
+											 "--quota | -q <integer> : The quota of the mGame.\n";											 
 
 static const std::string MSG_OPTIONAL_OPTS = "--filter-null | -f : Flag to filter out null players.\n"
 											 "--verbose | -v : Flag to provide additional details of the computation.\n"
 											 "--gmp : Flag to use the GMP library for large integer representation. Setting this flag will make the memory prediction unreliable due to dynamic memory allocations!\n"
 											 "--primes : Flag to use the Chinese Remainder Theorem for large integer representation\n"
-											 "--float : Flag to input float values from csv. Setting this flag will find an integer representation of a given floating-point problem, which is in no way minimal or optimal\n";
+											 "--float : Flag to input float values from csv. Setting this flag will find an integer representation of a given floating-point problem, which is in no way minimal or optimal\n"
+                                             "--csv : Flag to output the solution in a csv file.\n";;
 /**
  * A class that handles the input from the user (via console) and from the R interface
  *

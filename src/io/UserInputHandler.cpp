@@ -34,20 +34,6 @@ epic::io::UserInputHandler::UserInputHandler() {
 	mWeightsFile = "";
 }
 
-bool epic::io::UserInputHandler::handleOutputType(char* value) {
-	if (strcmp("csv", value) == 0) {
-		mOutputType = csv;
-		return true;
-	}
-	if (strcmp("screen", value) == 0) {
-		mOutputType = screen;
-		return true;
-	}
-
-	std::cout << "The --output option needs one of the following arguments: screen | csv" << std::endl;
-	return false;
-}
-
 bool epic::io::UserInputHandler::handleWeights(const std::string& fileName) {
 	if (mInputFloatWeights) {
 		std::vector<float> floatWeights;
@@ -109,19 +95,20 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 	enum LongOpts {
 		OPT_GMP,
 		OPT_PRIMES,
-		FLOAT
+		FLOAT,
+		CSV
 	};
 
 	static struct option long_options[] = {
 		{"index", required_argument, nullptr, 'i'},
 		{"weights", required_argument, nullptr, 'w'},
-		{"quota", required_argument, nullptr, 'q'},
-		{"output", required_argument, nullptr, 'o'},
+		{"quota", required_argument, nullptr, 'q'},		
 		{"verbose", no_argument, nullptr, 'v'},
 		{"filter-null", no_argument, nullptr, 'f'},
 		{"gmp", no_argument, nullptr, OPT_GMP},
 		{"primes", no_argument, nullptr, OPT_PRIMES},
 		{"float", no_argument, nullptr, FLOAT},
+		{"csv", no_argument, nullptr, CSV},
 		{"help", no_argument, nullptr, 'h'},
 		{nullptr, 0, nullptr, 0}};
 	int arg_count = 0;
@@ -129,11 +116,11 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 	while (true) {
 		int index = -1;
 		//struct option * opt = 0;
-		int result = getopt_long(numberOfArguments, vectorOfArguments, ":i:w:q:o:vfmh", long_options, &index);
+		int result = getopt_long(numberOfArguments, vectorOfArguments, ":i:w:q:vfmh", long_options, &index);
 
 		if (result == -1) {
-			if (arg_count < 4) {
-				std::cout << "Missing required options: -i | --index, -w | --weights, -q | --quota, -o | --output" << std::endl;
+			if (arg_count < 3) {
+				std::cout << "Missing required options: -i | --index, -w | --weights, -q | --quota" << std::endl;
 				return false;
 			}
 			break;
@@ -165,14 +152,7 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 					}
 				}
 				arg_count++;
-				break;
-
-			case 'o':
-				if (!handleOutputType(optarg)) {
-					return false;
-				}
-				arg_count++;
-				break;
+				break;			
 
 			case 'v':
 				mVerbose = true;
@@ -210,6 +190,10 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 
 			case FLOAT:
 				mInputFloatWeights = true;
+				break;
+
+			case CSV:
+				mOutputType = csv;
 				break;
 
 			case '?':
