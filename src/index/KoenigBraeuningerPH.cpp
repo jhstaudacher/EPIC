@@ -40,5 +40,5 @@ std::vector<epic::bigFloat> epic::index::KoenigBraeuningerPH::calculate() {
 }
 
 std::string epic::index::KoenigBraeuningerPH::getFullName() {
-	return "KoenigBraeuninger PHA";
+	return "KoenigBraeuninger (using RawPublicHelpTheta)";
 }

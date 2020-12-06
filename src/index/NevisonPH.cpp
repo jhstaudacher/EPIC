@@ -41,5 +41,5 @@ std::vector<epic::bigFloat> epic::index::NevisonPH::calculate() {
 }
 
 std::string epic::index::NevisonPH::getFullName() {
-	return "Nevison PHA";
+	return "Nevison (using RawPublicHelpTheta)";
 }

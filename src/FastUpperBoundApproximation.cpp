@@ -1,6 +1,5 @@
 #include "FastUpperBoundApproximation.h"
 
-
 epic::FastUpperBoundApproximation::FastUpperBoundApproximation(Game& g)
 	: mGame(g) {}
 

@@ -1,7 +1,7 @@
 #include "io/UserInputHandler.h"
 
-#include "io/DataInput.h"
 #include "index/IndexFactory.h"
+#include "io/DataInput.h"
 
 #include <cstring>
 #include <getopt.h>
@@ -102,7 +102,7 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 	static struct option long_options[] = {
 		{"index", required_argument, nullptr, 'i'},
 		{"weights", required_argument, nullptr, 'w'},
-		{"quota", required_argument, nullptr, 'q'},		
+		{"quota", required_argument, nullptr, 'q'},
 		{"verbose", no_argument, nullptr, 'v'},
 		{"filter-null", no_argument, nullptr, 'f'},
 		{"gmp", no_argument, nullptr, OPT_GMP},
@@ -152,7 +152,7 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 					}
 				}
 				arg_count++;
-				break;			
+				break;
 
 			case 'v':
 				mVerbose = true;
@@ -163,9 +163,12 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 				break;
 
 			case 'h':
-				std::cout << "epic [OPTIONS]" << std::endl << std::endl;
-				std::cout << "required OPTIONS:" << std::endl << MSG_REQUIRED_OPTS << std::endl;
-				std::cout << "optional OPTIONS:" << std::endl << MSG_OPTIONAL_OPTS << std::endl;
+				std::cout << "epic [OPTIONS]" << std::endl
+						  << std::endl;
+				std::cout << "required OPTIONS:" << std::endl
+						  << MSG_REQUIRED_OPTS << std::endl;
+				std::cout << "optional OPTIONS:" << std::endl
+						  << MSG_OPTIONAL_OPTS << std::endl;
 				std::cout << "Index abbreviations:" << std::endl;
 				index::IndexFactory::printIndexList();
 				exit(-1);

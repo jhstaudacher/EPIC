@@ -47,7 +47,7 @@ std::string epic::index::RawBanzhaf::getFullName() {
 }
 
 epic::longUInt epic::index::RawBanzhaf::getMemoryRequirement() {
-	bigInt memory = mNonZeroPlayerCount * mCalculator->getLargeNumberSize();								 // n_sp;
+	bigInt memory = mNonZeroPlayerCount * mCalculator->getLargeNumberSize();						 // n_sp;
 	memory += (mGame.getWeightSum() + 1 - mGame.getQuota()) * mCalculator->getLargeNumberSize() * 2; // n_wc + helper
 
 	longUInt ret = 0;

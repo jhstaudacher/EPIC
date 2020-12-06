@@ -271,7 +271,7 @@ void epic::index::RawJohnston::subsetSumFromSmallestPerWeight(Array2d<longUInt>&
 
 		longUInt idx;
 		for (longUInt i = mNonZeroPlayerCount - 2; i < mNonZeroPlayerCount; --i) { //  i <= 0
-			idx = mNonZeroPlayerCount - i - 2;								 // previous dimension
+			idx = mNonZeroPlayerCount - i - 2;									   // previous dimension
 			for (longUInt x = upper[i]; x > w[i]; --x) {
 				h(idx + 1, x - 1) = h(idx, x - 1) + h(idx, x - w[i] - 1);
 			}
@@ -364,12 +364,12 @@ std::string epic::index::RawJohnston::getFullName() {
 
 epic::longUInt epic::index::RawJohnston::getMemoryRequirement() {
 	// h gets deleted before forwardsArray gets allocated. sizeof(forwardsArray) >= sizeof(h)
-	bigInt memory = mGame.getWeights()[0] * c_sizeof_longUInt;							 // surplusSums
-	memory += mNonZeroPlayerCount * mGame.getQuota() * c_sizeof_longUInt;						 // deficiencySums
-	memory += mNonZeroPlayerCount * mNonZeroPlayerCount * mCalculator->getLargeNumberSize();			 // qmwcs
+	bigInt memory = mGame.getWeights()[0] * c_sizeof_longUInt;									// surplusSums
+	memory += mNonZeroPlayerCount * mGame.getQuota() * c_sizeof_longUInt;						// deficiencySums
+	memory += mNonZeroPlayerCount * mNonZeroPlayerCount * mCalculator->getLargeNumberSize();	// qmwcs
 	memory += mGame.getQuota() * (mNonZeroPlayerCount - 1) * mCalculator->getLargeNumberSize(); // interm
-	memory += mGame.getQuota() * mNonZeroPlayerCount * mCalculator->getLargeNumberSize();		 // forwardsArray
-	memory += mNonZeroPlayerCount * c_sizeof_longUInt;											 // forward_counting_per_weight_cardinality_next_step::upper
+	memory += mGame.getQuota() * mNonZeroPlayerCount * mCalculator->getLargeNumberSize();		// forwardsArray
+	memory += mNonZeroPlayerCount * c_sizeof_longUInt;											// forward_counting_per_weight_cardinality_next_step::upper
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {

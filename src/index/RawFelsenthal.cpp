@@ -7,7 +7,7 @@ epic::index::RawFelsenthal::RawFelsenthal(Game& g, ItfUpperBoundApproximation* a
 
 	// total_csum: cumulative sum of weights
 	bigInt total_csum;
-	
+
 	// determine number for minsize (minsize = (number of players subsumed since >= quota))
 	for (longUInt i = 0; i < mGame.getNumberOfPlayers(); i++) {
 		total_csum += mGame.getWeights()[i];
@@ -164,7 +164,7 @@ std::string epic::index::RawFelsenthal::getFullName() {
 
 epic::longUInt epic::index::RawFelsenthal::getMemoryRequirement() {
 	bigInt memory = (mMinsize + 1) * (mGame.getQuota() + 1) * mCalculator->getLargeNumberSize() * 2; // f, b
-	memory += mNonZeroPlayerCount * mCalculator->getLargeNumberSize();										 // mwcs
+	memory += mNonZeroPlayerCount * mCalculator->getLargeNumberSize();								 // mwcs
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {

@@ -45,7 +45,7 @@ std::vector<epic::bigFloat> epic::index::RawPublicHelpTheta::calculate() {
 }
 
 std::string epic::index::RawPublicHelpTheta::getFullName() {
-	return "Absolute Public Help Theta";
+	return "RawPublicHelpTheta";
 }
 
 void epic::index::RawPublicHelpTheta::winningCoalitionsForPlayer(bigInt big_wci[], bigFloat* big_total_wc) {

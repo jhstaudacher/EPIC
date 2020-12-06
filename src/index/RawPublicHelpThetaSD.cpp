@@ -25,7 +25,7 @@ std::vector<epic::bigFloat> epic::index::RawPublicHelpThetaSD::calculate() {
 }
 
 std::string epic::index::RawPublicHelpThetaSD::getFullName() {
-	return "Absolute Public Help Theta Shapley-Dubey";
+	return "RawPublicHelpTheta (with Dubey-Shapley identity)";
 }
 
 void epic::index::RawPublicHelpThetaSD::winningCoalitionsForPlayer(bigInt big_wci[]) {

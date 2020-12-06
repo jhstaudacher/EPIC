@@ -29,7 +29,7 @@ std::vector<epic::bigFloat> epic::index::PowerIndexGPH::calculate() {
 	bigFloat temp;
 	bigFloat float_swc = big_swc;
 
-	if (mGame.getFlagOfVerbose()) {		
+	if (mGame.getFlagOfVerbose()) {
 		std::cout << "Number of winning coalitions a player belongs to: " << std::endl;
 	}
 
@@ -46,7 +46,7 @@ std::vector<epic::bigFloat> epic::index::PowerIndexGPH::calculate() {
 }
 
 std::string epic::index::PowerIndexGPH::getFullName() {
-	return "Power Index G PHA";
+	return "PowerIndexG (using RawPublicHelpTheta)";
 }
 
 epic::longUInt epic::index::PowerIndexGPH::getMemoryRequirement() {

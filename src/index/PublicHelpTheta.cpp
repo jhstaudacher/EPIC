@@ -29,7 +29,7 @@ std::vector<epic::bigFloat> epic::index::PublicHelpTheta::calculate() {
 	{
 		if (mGame.getFlagOfVerbose()) {
 			bigInt factor = bigInt(1) << mGame.getNumberOfPlayersWithWeight0(); // additional winning coalitions due to players of weight 0
-		
+
 			std::cout << "Number of winning coalitions a player belongs to: " << std::endl;
 
 			for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
@@ -49,5 +49,5 @@ std::vector<epic::bigFloat> epic::index::PublicHelpTheta::calculate() {
 }
 
 std::string epic::index::PublicHelpTheta::getFullName() {
-	return "Public Help Theta Shapley-Dubey";
+	return "PublicHelpTheta (with Dubey-Shapley identity)";
 }

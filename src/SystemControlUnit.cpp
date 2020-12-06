@@ -1,7 +1,7 @@
 #include "SystemControlUnit.h"
 
-#include "index/IndexFactory.h"
 #include "HardwareInfo.h"
+#include "index/IndexFactory.h"
 #include "types.h"
 
 #include <chrono>

@@ -60,5 +60,5 @@ std::vector<epic::bigFloat> epic::index::KoenigBraeuninger::calculate() {
 }
 
 std::string epic::index::KoenigBraeuninger::getFullName() {
-	return "KoenigBraeuninger";
+	return "KoenigBraeuninger (with Dubey-Shapley identity)";
 }

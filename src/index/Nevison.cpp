@@ -70,5 +70,5 @@ std::vector<epic::bigFloat> epic::index::Nevison::calculate() {
 }
 
 std::string epic::index::Nevison::getFullName() {
-	return "Nevison";
+	return "Nevison (with Dubey-Shapley identity)";
 }
