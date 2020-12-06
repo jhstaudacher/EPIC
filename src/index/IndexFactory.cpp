@@ -19,6 +19,7 @@
 #include "index/PowerIndexGPH.h"
 #include "index/PublicGood.h"
 #include "index/PublicHelpTheta.h"
+#include "index/PublicHelpThetaPH.h"
 #include "index/PublicHelpXi.h"
 #include "index/Rae.h"
 #include "index/RawBanzhaf.h"
@@ -45,15 +46,16 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{FT, {"FT", "Felsenthal"}},
 	{HN, {"HN", "Harsanyi Nash"}},
 	{J, {"J", "Johnston"}},
-	{KB, {"KB", "Koenig Braeuninger"}},
+	{KB, {"KB", "Koenig Braeuninger (based on the Dubey-Shapley identity)"}},
 	{KBPH, {"KBPH", "Koenig Braeuninger (based on raw Public Help theta)"}},
-	{N, {"N", "Nevison"}},
+	{N, {"N", "Nevison (based on the Dubey-Shapley identity)"}},
 	{NPH, {"NPHA", "Nevsion (based on raw Public Help theta)"}},
 	{PG, {"PG", "Public Good"}},
-	{PHT, {"PHT", "Public Help theta"}},
+	{PHT, {"PHT", "Public Help theta (based on the Dubey-Shapley identity)"}},
+	{PHTPH, {"PHTPH", "Public Help theta (based on the raw Public Help theta"}},
 	{PHX, {"PHX", "Public Help xi"}},
 	{PIF, {"PIF", "null-player-free Power Index F"}},
-	{PIG, {"PIG", "null-player-free Power Index G"}},
+	{PIG, {"PIG", "null-player-free Power Index G (based on the Dubey-Shapley identity)"}},
 	{PIGPH, {"PIGPH", "null-player-free Power Index G (based on raw Public Help theta)"}},
 	{RA, {"RA", "Rae"}},
 	{RBZ, {"RBZ", "raw Banzhaf"}},
@@ -62,8 +64,8 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{RJ, {"RJ", "raw Johnston"}},
 	{RPG, {"RPG", "raw Public Good"}},
 	{RPHT, {"RPHT", "raw Public Help theta"}},
-	{RPHTSD, {"RPHTSD", "raw Public Help theta (with Shapley Dubey)"}},
-	{RPIG, {"RPIG", "raw null-player-free Power Index G"}},
+	{RPHTSD, {"RPHTSD", "raw Public Help theta (based on the Dubey-Shapley identity)"}},
+	{RPIG, {"RPIG", "raw null-player-free Power Index G (based on the Dubey-Shapley identity)"}},
 	{RPIF, {"RPIF", "raw null-player-free Power Index F"}},
 	{RSH, {"RSH", "raw Shapley Shubik"}},
 	{SH, {"SH", "Shapley Shubik"}},
@@ -95,6 +97,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::NPH: index = new NevisonPH(g, approx, int_representation); break;
 		case IndexType::PG: index = new PublicGood(g, approx, int_representation); break;
 		case IndexType::PHT: index = new PublicHelpTheta(g, approx, int_representation); break;
+		case IndexType::PHTPH: index = new PublicHelpThetaPH(g, approx, int_representation); break;
 		case IndexType::PHX: index = new PublicHelpXi(g, approx, int_representation); break;
 		case IndexType::PIF: index = new PowerIndexF(g, approx, int_representation); break;
 		case IndexType::PIG: index = new PowerIndexG(g, approx, int_representation); break;

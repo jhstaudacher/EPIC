@@ -3,8 +3,8 @@
 
 #include "ItfPowerIndex.h"
 
-#include <map>
 #include <iostream>
+#include <map>
 #include <string>
 
 namespace epic::index {
@@ -54,38 +54,39 @@ private:
 	 */
 	enum IndexType {
 		INVALID_INDEX, /**< Unknown/Invalid power index */
-		ABZ,	 /**< absolute Banzhaf */
-		BZ,	 /**< Banzhaf */
-		CC,	 /**< Coleman collective */
-		CI,	 /**< Coleman initiative */
-		CP,	 /**< Coleman preventive */
-		DP,	 /**< Deegan Packel */
-		FT,	 /**< Felsenthal */
-		HN,	 /**< Harsanyi Nash */
-		J,		 /**< Johnston */
-		KB,	 /**< Koenig Braeuninger */
-		KBPH,	 /**< Koenig Braeuninger (based on raw Public Help theta) */
-		N,		 /**< Nevison */
-		NPH,	 /**< Nevison (based on raw Public Help theta) */
-		PG,	 /**< Public Good */
-		PHT,	 /**< Public Help theta */
-		PHX,	 /**< Public Help xi */
-		PIF,	 /**< null-player-free Power Index F */
-		PIG,	 /**< null-player-free Power Index G */
-		PIGPH, /**< null-player-free Power Index G (based on raw Public Help theta) */
-		RA,	 /**< Rae */
-		RBZ,	 /**< raw Banzhaf */
-		RDP,	 /**< raw Deegan Packel */
-		RFT,	 /**< raw Felsenthal */
-		RJ,	 /**< raw Johnston */
-		RPG,	 /**< raw Public Good */
-		RPHT,	 /**< raw Public Help theta */
-		RPHTSD,	 /**< raw Public Help theta (with Shapley Dubey) */
-		RPIG,	 /**< raw null-player-free Power Index G */
-		RPIF,	 /**< raw null-player-free Power Index F */
-		RSH,	 /**< raw Shapley Shubik */
-		SH,	 /**< Shapley Shubik */
-		T,		 /**< Tijs */
+		ABZ,		   /**< absolute Banzhaf */
+		BZ,			   /**< Banzhaf */
+		CC,			   /**< Coleman collective */
+		CI,			   /**< Coleman initiative */
+		CP,			   /**< Coleman preventive */
+		DP,			   /**< Deegan Packel */
+		FT,			   /**< Felsenthal */
+		HN,			   /**< Harsanyi Nash */
+		J,			   /**< Johnston */
+		KB,			   /**< Koenig Braeuninger (based on the Dubey-Shapley identity) */
+		KBPH,		   /**< Koenig Braeuninger (based on raw Public Help theta) */
+		N,			   /**< Nevison (based on the Dubey-Shapley identity)*/
+		NPH,		   /**< Nevison (based on raw Public Help theta) */
+		PG,			   /**< Public Good */
+		PHT,		   /**< Public Help theta (based on the Dubey-Shapley identity)*/
+		PHTPH,		   /**< Public Help theta (based on raw Public Help theta)) */
+		PHX,		   /**< Public Help xi */
+		PIF,		   /**< null-player-free Power Index F */
+		PIG,		   /**< null-player-free Power Index G (based on the Dubey-Shapley identity)*/
+		PIGPH,		   /**< null-player-free Power Index G (based on raw Public Help theta) */
+		RA,			   /**< Rae */
+		RBZ,		   /**< raw Banzhaf */
+		RDP,		   /**< raw Deegan Packel */
+		RFT,		   /**< raw Felsenthal */
+		RJ,			   /**< raw Johnston */
+		RPG,		   /**< raw Public Good */
+		RPHT,		   /**< raw Public Help theta */
+		RPHTSD,		   /**< raw Public Help theta (based on the Dubey-Shapley identity) */
+		RPIG,		   /**< raw null-player-free Power Index G (based on the Dubey-Shapley identity) */
+		RPIF,		   /**< raw null-player-free Power Index F */
+		RSH,		   /**< raw Shapley Shubik */
+		SH,			   /**< Shapley Shubik */
+		T,			   /**< Tijs */
 	};
 
 	/**
