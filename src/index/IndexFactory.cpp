@@ -125,7 +125,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::T: index = new Tijs(g); break;
 		case IndexType::W: index = new SingleValueW(g, approx, int_representation); break;
 		case IndexType::WNP: index = new SingleValueWNP(g); break;
-		case IndexType::WM: index = new SingleValueWM(g); break;
+		case IndexType::WM: index = new SingleValueWM(g, approx, int_representation); break;
 		case IndexType::WS: index = new SingleValueWS(g); break;
 	}
 
