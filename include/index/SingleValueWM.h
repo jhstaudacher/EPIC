@@ -6,7 +6,7 @@
 namespace epic::index {
 
 /**
- * Implementing the ItfPowerIndex interface to calculate the single value \f$|W^m|\f$ where \f$W^m\f$ is the set of minimal winning coalitions. The calculation is based on the <i>Deegan Packel</i> power index.
+ * Implementing the ItfPowerIndex interface to calculate the single value \f$|W^m|\f$ (i.e. the number of minimal winning coalitions) where \f$W^m\f$ is the set of minimal winning coalitions. The calculation is based on the <i>Deegan Packel</i> power index.
  *
  * <table>
  * 		<caption>Behaviour on index specific CLI-flags</caption>

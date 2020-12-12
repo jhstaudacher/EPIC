@@ -6,7 +6,7 @@
 namespace epic::index {
 
 /**
- * Implementing the ItfPowerIndex interface to calculate the single value \f$|W|\f$ where \f$W\f$ is the set of winning coalitions. The calculation is based on the <i>raw Banzhaf</i> power index.
+ * Implementing the ItfPowerIndex interface to calculate the single value \f$|W|\f$ (i.e. the number of winning coalitions) where \f$W\f$ is the set of winning coalitions. The calculation is based on the <i>raw Banzhaf</i> power index.
  *
  * <table>
  * 		<caption>Behaviour on index specific CLI-flags</caption>
