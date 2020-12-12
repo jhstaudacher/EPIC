@@ -1,17 +1,16 @@
 #ifndef EPIC_INDEX_SINGLEVALUEW_H_
 #define EPIC_INDEX_SINGLEVALUEW_H_
 
-#include "ItfPowerIndex.h"
+#include "RawBanzhaf.h"
 
 namespace epic::index {
 
-class SingleValueW : public ItfPowerIndex {
+class SingleValueW : public RawBanzhaf {
 public:
-	SingleValueW(Game& g);
+	SingleValueW(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
 
 	std::vector<bigFloat> calculate() override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement() override;
 };
 
 } // namespace epic::index
