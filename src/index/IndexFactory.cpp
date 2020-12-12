@@ -34,6 +34,10 @@
 #include "index/RawShapleyShubik.h"
 #include "index/ShapleyShubik.h"
 #include "index/Tijs.h"
+#include "index/SingleValueW.h"
+#include "index/SingleValueWNP.h"
+#include "index/SingleValueWM.h"
+#include "index/SingleValueWS.h"
 
 const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std::string>> epic::index::IndexFactory::cIndexNames = {
 	{INVALID_INDEX, {"INVALID", "invalid index"}},
@@ -70,6 +74,10 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{RSH, {"RSH", "raw Shapley Shubik"}},
 	{SH, {"SH", "Shapley Shubik"}},
 	{T, {"T", "Tijs"}},
+	{W, {"W", "Number of winning coalitions"}},
+	{WNP, {"WNP", "Number of null-player-free winning coalitions"}},
+	{WM, {"WM", "Number of minimal winning coalitions"}},
+	{WS, {"WS", "Number of minimal winning coalitions of smallest cardinality"}}
 };
 
 bool epic::index::IndexFactory::validateIndex(const std::string& short_name) {
@@ -115,6 +123,10 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::RSH: index = new RawShapleyShubik(g, approx, int_representation); break;
 		case IndexType::SH: index = new ShapleyShubik(g, approx, int_representation); break;
 		case IndexType::T: index = new Tijs(g); break;
+		case IndexType::W: index = new SingleValueW(g); break;
+		case IndexType::WNP: index = new SingleValueWNP(g); break;
+		case IndexType::WM: index = new SingleValueWM(g); break;
+		case IndexType::WS: index = new SingleValueWS(g); break;
 	}
 
 	delete approx;
