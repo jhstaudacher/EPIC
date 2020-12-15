@@ -13,9 +13,7 @@ std::vector<epic::bigFloat> epic::index::DeeganPackel::calculate() {
 	if (total_mwc <= 0) {
 		throw std::invalid_argument("Number of minimal winning coalitions is less than or equal to zero. No calculation possible. Please, check your input.");
 	}
-	if (mGame.getFlagOfVerbose()) {
-		log::out << log::info << "Total number of minimal winning coalitions: " << total_mwc << log::endl;
-	}
+	log::out << log::info << "Total number of minimal winning coalitions: " << total_mwc << log::endl;
 
 	std::vector<bigFloat> solution = RawDeeganPackel::calculate();
 

@@ -32,7 +32,7 @@ std::vector<epic::bigFloat> epic::index::ColemanInitiative::calculate() {
 		bigFloat div = (bigInt(1) << mNonZeroPlayerCount) - big_total_wc;
 		bigInt sp;
 
-		if (mGame.getFlagOfVerbose()) {
+		if (log::out.getLogLevel() <= log::info) {
 			bigInt factor = bigInt(1) << mGame.getNumberOfPlayersWithWeight0();
 
 			log::out << log::info << "Total number of winning coalitions: " << big_total_wc * factor << log::endl;

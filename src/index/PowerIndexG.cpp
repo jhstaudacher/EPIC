@@ -15,7 +15,7 @@ std::vector<epic::bigFloat> epic::index::PowerIndexG::calculate() {
 		sum_swc += it;
 	}
 
-	if (mGame.getFlagOfVerbose()) {
+	if (log::out.getLogLevel() <= log::info) {
 		log::out << log::info << "Total number of winning coalitions: " << sum_swc << log::endl;
 		log::out << log::info << "Number of winning coalitions a player belongs to: " << log::endl;
 		for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {

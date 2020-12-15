@@ -16,7 +16,6 @@ epic::io::UserInputHandler::UserInputHandler(const std::string& index, const std
 	mInputFloatWeights = false;
 	mFilterNullPlayers = filterNullPlayers;
 	mIntRepresentation = DEFAULT;
-	mVerbose = verbose;
 	mWeightsFile = "";
 }
 
@@ -29,7 +28,6 @@ epic::io::UserInputHandler::UserInputHandler() {
 	mInputFloatWeights = false;
 	mFilterNullPlayers = false;
 	mIntRepresentation = DEFAULT;
-	mVerbose = false;
 	mWeightsFile = "";
 }
 
@@ -95,7 +93,8 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 		OPT_GMP,
 		OPT_PRIMES,
 		FLOAT,
-		CSV
+		CSV,
+		OPT_QUIET
 	};
 
 	static struct option long_options[] = {
@@ -108,9 +107,12 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 		{"primes", no_argument, nullptr, OPT_PRIMES},
 		{"float", no_argument, nullptr, FLOAT},
 		{"csv", no_argument, nullptr, CSV},
+		{"quiet", no_argument, nullptr, OPT_QUIET},
 		{"help", no_argument, nullptr, 'h'},
 		{nullptr, 0, nullptr, 0}};
 	int arg_count = 0;
+
+	log::out.setLogLevel(log::warning); // default setting
 
 	while (true) {
 		int index = -1;
@@ -154,7 +156,19 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 				break;
 
 			case 'v':
-				mVerbose = true;
+				if (log::out.getLogLevel() == log::error) {
+					log::out << log::warning << "Incompatible options: -v/--verbose and --quiet" << log::endl;
+					return false;
+				}
+				log::out.setLogLevel(log::info);
+				break;
+
+			case OPT_QUIET: // error
+				if (log::out.getLogLevel() == log::info) {
+					log::out << log::warning << "Incompatible options: -v/--verbose and --quiet" << log::endl;
+					return false;
+				}
+				log::out.setLogLevel(log::error);
 				break;
 
 			case 'f':
@@ -244,10 +258,6 @@ bool epic::io::UserInputHandler::doFilterNullPlayers() const {
 
 epic::IntRepresentation epic::io::UserInputHandler::getIntRepresentation() const {
 	return mIntRepresentation;
-}
-
-bool epic::io::UserInputHandler::isVerbose() const {
-	return mVerbose;
 }
 
 std::string epic::io::UserInputHandler::getWeightsFileName() const {

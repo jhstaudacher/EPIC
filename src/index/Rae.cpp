@@ -22,7 +22,7 @@ std::vector<epic::bigFloat> epic::index::Rae::calculate() {
 		bigInt sp;
 		bigFloat gamma = 0.5;
 
-		if (mGame.getFlagOfVerbose()) {
+		if (log::out.getLogLevel() <= log::info) {
 			bigInt factor = bigInt(1) << mGame.getNumberOfPlayersWithWeight0();
 
 			log::out << log::info << "Number of times each player is a swing player:" << log::endl;

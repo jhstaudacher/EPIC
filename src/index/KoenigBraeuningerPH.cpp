@@ -18,16 +18,12 @@ std::vector<epic::bigFloat> epic::index::KoenigBraeuningerPH::calculate() {
 
 	winningCoalitionsForPlayer(big_wci, &big_total_wc);
 
-	if (mGame.getFlagOfVerbose()) {
-		log::out << log::info << "Total number of winning coalitions: " << big_total_wc << log::endl;
-		log::out << "Number of winning coalitions a player belongs to: " << log::endl;
-	}
+	log::out << log::info << "Total number of winning coalitions: " << big_total_wc << log::endl;
+	log::out << log::info << "Number of winning coalitions a player belongs to: " << log::endl;
 
 	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
 	for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
-		if (mGame.getFlagOfVerbose()) {
-			log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << big_wci[i] << log::endl;
-		}
+		log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << big_wci[i] << log::endl;
 		solution[i] = big_wci[i] / big_total_wc;
 	}
 

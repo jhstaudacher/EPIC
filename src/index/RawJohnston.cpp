@@ -232,9 +232,7 @@ std::vector<epic::bigFloat> epic::index::RawJohnston::calculate() {
 	mCalculator->free_largeNumberArray(qmwcs.getArrayPointer());
 	qmwcs.free();
 
-	if (mGame.getFlagOfVerbose()) {
-		log::out << log::info << "Total number of vulnerable coalitions: " << nvc << log::endl;
-	}
+	log::out << log::info << "Total number of vulnerable coalitions: " << nvc << log::endl;
 
 	return raw_j;
 }

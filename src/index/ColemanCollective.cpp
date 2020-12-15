@@ -31,9 +31,7 @@ std::vector<epic::bigFloat> epic::index::ColemanCollective::calculate() {
 		bigInt big_total_wc;
 		mCalculator->to_bigInt(&big_total_wc, total_wc);
 
-		if (mGame.getFlagOfVerbose()) {
-			log::out << log::info << "Total number of winning coalitions: " << big_total_wc * (bigInt(1) << mGame.getNumberOfPlayersWithWeight0()) << log::endl;
-		}
+		log::out << log::info << "Total number of winning coalitions: " << big_total_wc * (bigInt(1) << mGame.getNumberOfPlayersWithWeight0()) << log::endl;
 
 		//total number of winning coalitions / maximal number of winning coalitions(= 2^mNonZeroPlayerCount)
 		bigFloat big_total_wc_float = big_total_wc;

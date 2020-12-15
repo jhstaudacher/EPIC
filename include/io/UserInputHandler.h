@@ -21,6 +21,7 @@ static const std::string MSG_REQUIRED_OPTS = "--index | -i <index abbreviation> 
 
 static const std::string MSG_OPTIONAL_OPTS = "--filter-null | -f : Flag to filter out null players.\n"
 											 "--verbose | -v : Flag to provide additional details of the computation.\n"
+											 "--quiet: Flag to reduce the output to the minimum.\n"
 											 "--gmp : Flag to use the GMP library for large integer representation. Setting this flag will make the memory prediction unreliable due to dynamic memory allocations!\n"
 											 "--primes : Flag to use the Chinese Remainder Theorem for large integer representation\n"
 											 "--float : Flag to input float values from csv. Setting this flag will find an integer representation of a given floating-point problem, which is in no way minimal or optimal\n"
@@ -66,11 +67,6 @@ private:
     * Flag to filter out null players
     */
 	bool mFilterNullPlayers;
-
-	/**
-    * Flag to provide additional details of the computation
-    */
-	bool mVerbose;
 
 	/**
     * Setting which large integer representation should be used.
@@ -177,13 +173,6 @@ public:
      * --gmp & --primes
      */
 	IntRepresentation getIntRepresentation() const;
-
-	/**
-     * Method to return the flag for the verbosity
-     *
-     * --verbose
-     */
-	bool isVerbose() const;
 
 	/**
      * Method to return the name of the weights file

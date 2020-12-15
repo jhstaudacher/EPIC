@@ -55,10 +55,8 @@ epic::SystemControlUnit::~SystemControlUnit() {
 void epic::SystemControlUnit::calculateIndex() {
 	index::ItfPowerIndex* index = index::IndexFactory::new_powerIndex(mUserInputHandler->getIndexToCompute(), *mGame, mUserInputHandler->getIntRepresentation());
 	if (checkHardware(index)) {
-		if (mUserInputHandler->isVerbose()) {
-			log::out << log::info << "Index '" << index->getFullName() << "' was chosen! Start computation..." << log::endl
-					  << log::endl;
-		}
+		log::out << log::info << "Index '" << index->getFullName() << "' was chosen! Start computation..." << log::endl
+				  << log::endl;
 		mGame->setSolution(index->calculate());
 	}
 
@@ -79,28 +77,23 @@ void epic::SystemControlUnit::createGamefromInputAndMinimiseWeights() {
 	weights.pop_back();
 
 	if (m_gcd > 1) {
-		if (mUserInputHandler->isVerbose()) {
-			log::out << log::info << "Greatest common divisor found: " << m_gcd << log::endl;
-		}
+		log::out << log::info << "Greatest common divisor found: " << m_gcd << log::endl;
 		for (auto& weight : weights) {
 			weight /= m_gcd;
 		}
 	}
 
-	mGame = new Game(mUserInputHandler->getQuota() / m_gcd, weights, mUserInputHandler->doFilterNullPlayers(), mUserInputHandler->isVerbose());
+	mGame = new Game(mUserInputHandler->getQuota() / m_gcd, weights, mUserInputHandler->doFilterNullPlayers());
 
-	// information
-	if (mUserInputHandler->isVerbose()) {
-		log::out << log::info << "Game was created:" << log::endl;
-		log::out << "quota: " << mGame->getQuota() << log::endl;
-		log::out << "weight sum: " << mGame->getWeightSum() << log::endl;
-		log::out << "player amount: " << mGame->getNumberOfPlayers() << log::endl;
+	log::out << log::info << "Game was created:" << log::endl;
+	log::out << "quota: " << mGame->getQuota() << log::endl;
+	log::out << "weight sum: " << mGame->getWeightSum() << log::endl;
+	log::out << "player amount: " << mGame->getNumberOfPlayers() << log::endl;
 
-		if (mUserInputHandler->doFilterNullPlayers()) {
-			log::out << "filtered null players: " << mGame->getNumberOfNullPlayers() << log::endl;
-		} else {
-			log::out << "no null player filter" << log::endl;
-		}
+	if (mUserInputHandler->doFilterNullPlayers()) {
+		log::out << "filtered null players: " << mGame->getNumberOfNullPlayers() << log::endl;
+	} else {
+		log::out << "no null player filter" << log::endl;
 	}
 }
 
@@ -112,9 +105,7 @@ void epic::SystemControlUnit::handleInput(int numberOfInputArguments, char* vect
 		throw std::invalid_argument("Input could not be parsed correctly.");
 	}
 
-	if (mUserInputHandler->isVerbose()) {
-		log::out << log::info << "Parser was successful." << log::endl;
-	}
+	log::out << log::info << "Parser was successful." << log::endl;
 }
 
 //handle output for console/csv
@@ -142,10 +133,8 @@ bool epic::SystemControlUnit::checkHardware(index::ItfPowerIndex* index_ptr) {
 	HardwareInfo hInfo;
 	longUInt req = index_ptr->getMemoryRequirement();
 
-	if (mUserInputHandler->isVerbose()) {
-		log::out << log::info << "approximate RAM usage: " << req << " Bytes" << log::endl;
-		log::out << log::info << "Total RAM: " << hInfo.getTotalRamSize() << " Bytes" << log::endl;
-	}
+	log::out << log::info << "approximate RAM usage: " << req << " Bytes" << log::endl;
+	log::out << log::info << "Total RAM: " << hInfo.getTotalRamSize() << " Bytes" << log::endl;
 
 	if (req > hInfo.getFreeRamSize()) {
 		if (req > hInfo.getTotalRamSize()) {
@@ -176,16 +165,14 @@ void epic::SystemControlUnit::estimateTime() {
 	HardwareInfo hInfo;
 
 	// If verbose output the system specifications to the user, also for testing ofc
-	if ((hInfo.getCacheSize() > 0 || hInfo.getCPUFrequency() > 0) && mUserInputHandler->isVerbose()) {
+	if (hInfo.getCPUFrequency() > 0) {
 		log::out << log::info << "Your system specifications are: TotalCacheSize: " << hInfo.getCacheSize() / 1000 << " KB, while your CPU frequency is " << hInfo.getCPUFrequency() << " kHz!" << log::endl;
-	} else if (hInfo.getCPUFrequency() <= 0) {
-		log::out << log::info << "Your CPU clock could not be determined. Therefore no time estimation could be produced!" << log::endl;
+	} else {
+		log::out << log::warning << "Your CPU clock could not be determined. Therefore no time estimation could be produced!" << log::endl;
 		return;
 	}
 
-	if (mUserInputHandler->isVerbose()) {
-		log::out << log::info << "The time estimation is only accurate for calculations without heavy swap-usage. Please bear that in mind, when assessing computing time estimates." << log::endl;
-	}
+	log::out << log::info << "The time estimation is only accurate for calculations without heavy swap-usage. Please bear that in mind, when assessing computing time estimates." << log::endl;
 
 	// Consistency requirement, so the calculation doesn't fail due to a "divide by zero" error!
 	if (mGame->getQuota() > 0 && mGame->getNumberOfPlayers() > 0) {

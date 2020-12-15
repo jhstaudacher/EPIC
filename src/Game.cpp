@@ -5,10 +5,9 @@
 #include <algorithm>
 #include <stdexcept>
 
-epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool flag_withoutNullPlayers, bool flag_verbose) {
+epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool flag_withoutNullPlayers) {
 	this->quota = quota;
 	this->solution = {};
-	this->flag_verbose = flag_verbose;
 	this->flag_null_player_handling = flag_withoutNullPlayers;
 
 	//sort players by weight
@@ -54,10 +53,6 @@ const std::vector<epic::longUInt>& epic::Game::getWeights() const {
 
 epic::longUInt epic::Game::getQuota() const {
 	return quota;
-}
-
-bool epic::Game::getFlagOfVerbose() const {
-	return flag_verbose;
 }
 
 bool epic::Game::getFlagNullPlayerHandling() const {
@@ -205,9 +200,7 @@ epic::longUInt epic::Game::findNullPlayersFromBelow(bool flag_withoutNullPlayers
 			}
 		}
 
-		if (getFlagOfVerbose()) {
-			log::out << log::info << "In this mGame there are " << n_null_players << " null player(s)!" << log::endl;
-		}
+		log::out << log::info << "In this mGame there are " << n_null_players << " null player(s)!" << log::endl;
 
 		return n_null_players;
 	}

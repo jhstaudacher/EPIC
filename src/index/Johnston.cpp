@@ -14,7 +14,7 @@ std::vector<epic::bigFloat> epic::index::Johnston::calculate() {
 		raw_j_sum += solution[i];
 	}
 
-	if (mGame.getFlagOfVerbose()) {
+	if (log::out.getLogLevel() <= log::info) {
 		log::out << log::info << "Raw Johnston: " << log::endl;
 		for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
 			log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << solution[i] << log::endl;

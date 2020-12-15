@@ -45,15 +45,11 @@ std::vector<epic::bigFloat> epic::index::FelsenthalIndex::calculate() {
 		if (arbitrary_sum_mwcs == 0) {
 			log::out << log::warning << "sum of minimal winning coalitions of least size is zero!" << log::endl;
 		} else {
-			if (mGame.getFlagOfVerbose()) {
-				log::out << log::info << "Total number of minimal winning coalitions of least size: " << arbitrary_sum_mwcs << log::endl;
-				log::out << log::info << "Number of minimal winning coalitions of least size individual players belong to: " << log::endl;
-			}
+			log::out << log::info << "Total number of minimal winning coalitions of least size: " << arbitrary_sum_mwcs << log::endl;
+			log::out << log::info << "Number of minimal winning coalitions of least size individual players belong to: " << log::endl;
 			for (longUInt i = 0; i < mNonZeroPlayerCount; ++i) {
 				mCalculator->to_bigInt(&int_tmp, mwcs[i]);
-				if (mGame.getFlagOfVerbose()) {
-					log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << int_tmp << log::endl;
-				}
+				log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << int_tmp << log::endl;
 				solution[i] = (bigFloat)int_tmp / arbitrary_sum_mwcs;
 			}
 

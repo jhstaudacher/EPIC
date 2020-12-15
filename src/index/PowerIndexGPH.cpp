@@ -27,15 +27,11 @@ std::vector<epic::bigFloat> epic::index::PowerIndexGPH::calculate() {
 	bigFloat temp;
 	bigFloat float_swc = big_swc;
 
-	if (mGame.getFlagOfVerbose()) {
-		log::out << log::info << "Number of winning coalitions a player belongs to: " << log::endl;
-	}
+	log::out << log::info << "Number of winning coalitions a player belongs to: " << log::endl;
 
 	for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
 		solution[i] = wci[i];
-		if (mGame.getFlagOfVerbose()) {
-			log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << wci[i] << log::endl;
-		}
+		log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << wci[i] << log::endl;
 		solution[i] /= float_swc;
 	}
 

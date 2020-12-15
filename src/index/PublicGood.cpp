@@ -29,10 +29,8 @@ std::vector<epic::bigFloat> epic::index::PublicGood::calculate() {
 		mCalculator->free_largeNumber(mwc_sum);
 	}
 
-	if (mGame.getFlagOfVerbose()) {
-		log::out << log::info << "Total number of minimal winning coalitions: " << big_mwc_sum << log::endl;
-		log::out << log::info << "Number of winning coalitions individual players belong to: " << log::endl;
-	}
+	log::out << log::info << "Total number of minimal winning coalitions: " << big_mwc_sum << log::endl;
+	log::out << log::info << "Number of winning coalitions individual players belong to: " << log::endl;
 
 	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
 	{
@@ -41,16 +39,12 @@ std::vector<epic::bigFloat> epic::index::PublicGood::calculate() {
 		for (longUInt i = 0; i < mNonZeroPlayerCount; ++i) {
 			mCalculator->to_bigInt(&big_mwc, mwc[i]);
 			solution[i] = big_mwc;
-			if (mGame.getFlagOfVerbose()) {
-				log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << big_mwc << log::endl;
-			}
+			log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << big_mwc << log::endl;
 			solution[i] /= big_mwc_sum;
 		}
 		for (longUInt i = mNonZeroPlayerCount; i < mGame.getNumberOfPlayers(); ++i) {
 			solution[i] = 0;
-			if (mGame.getFlagOfVerbose()) {
-				log::out << "Player " << mGame.playerIndexToNumber(i) << ": 0" << log::endl;
-			}
+			log::out << "Player " << mGame.playerIndexToNumber(i) << ": 0" << log::endl;
 		}
 	}
 

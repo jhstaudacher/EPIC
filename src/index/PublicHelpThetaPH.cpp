@@ -25,7 +25,7 @@ std::vector<epic::bigFloat> epic::index::PublicHelpThetaPH::calculate() {
 
 	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
 	{
-		if (mGame.getFlagOfVerbose()) {
+		if (log::out.getLogLevel() <= log::info) {
 			bigInt factor = bigInt(1) << mGame.getNumberOfPlayersWithWeight0(); // additional winning coalitions due to players of weight 0
 
 			log::out << log::info << "Number of winning coalitions a player belongs to: " << log::endl;

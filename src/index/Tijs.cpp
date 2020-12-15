@@ -17,9 +17,7 @@ std::vector<epic::bigFloat> epic::index::Tijs::calculate() {
 	if (n_vp == 0) {
 		throw std::invalid_argument("Tijs index not defined: There are no veto players.");
 	} else {
-		if (mGame.getFlagOfVerbose()) {
-			log::out << log::info << "Total number of veto players: " << n_vp << log::endl;
-		}
+		log::out << log::info << "Total number of veto players: " << n_vp << log::endl;
 
 		for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
 			if (mGame.getVetoPlayerVector()[i]) {

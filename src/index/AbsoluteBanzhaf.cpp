@@ -20,7 +20,7 @@ std::vector<epic::bigFloat> epic::index::AbsoluteBanzhaf::calculate() {
 		bigInt tmp = bigInt(1) << mNonZeroPlayerCount - 1;
 		bigFloat combinations = tmp;
 
-		if (mGame.getFlagOfVerbose()) {
+		if (log::out.getLogLevel() <= log::info) {
 			log::out << log::info << "Number of times each player is a swing player:" << log::endl;
 
 			bigInt factor = bigInt(1) << mGame.getNumberOfPlayersWithWeight0(); // additional winning coalitions due to players of weight 0
