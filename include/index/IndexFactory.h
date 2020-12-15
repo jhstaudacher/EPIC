@@ -88,7 +88,6 @@ private:
 		SH,			   /**< Shapley Shubik */
 		T,			   /**< Tijs */
 		W,			   /**< The number of winning coalitions */
-		WNP,	/**< The number of null-player-free winning coalitions */
 		WM,		/**< The number of minimal winning coalitions */
 		WS		/**< The number of minimal winning coalitions of smalles cardinality */
 	};
