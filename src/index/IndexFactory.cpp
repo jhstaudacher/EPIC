@@ -15,6 +15,7 @@
 #include "index/Nevison.h"
 #include "index/NevisonPH.h"
 #include "index/PowerIndexF.h"
+#include "index/AbsolutePowerIndexG.h"
 #include "index/PowerIndexG.h"
 #include "index/PowerIndexGPH.h"
 #include "index/PublicGood.h"
@@ -58,6 +59,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{PHTPH, {"PHTPH", "Public Help theta (based on the raw Public Help theta"}},
 	{PHX, {"PHX", "Public Help xi"}},
 	{PIF, {"PIF", "null-player-free Power Index F"}},
+	{APIG, {"APIG", "Absolute null-player-free Power Index G (based on the Dubey-Shapley identity)"}},
 	{PIG, {"PIG", "null-player-free Power Index G (based on the Dubey-Shapley identity)"}},
 	{PIGPH, {"PIGPH", "null-player-free Power Index G (based on raw Public Help theta)"}},
 	{RA, {"RA", "Rae"}},
@@ -106,6 +108,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::PHTPH: index = new PublicHelpThetaPH(g, approx, int_representation); break;
 		case IndexType::PHX: index = new PublicHelpXi(g, approx, int_representation); break;
 		case IndexType::PIF: index = new PowerIndexF(g, approx, int_representation); break;
+		case IndexType::APIG: index = new AbsolutePowerIndexG(g, approx, int_representation); break;
 		case IndexType::PIG: index = new PowerIndexG(g, approx, int_representation); break;
 		case IndexType::PIGPH: index = new PowerIndexGPH(g, approx, int_representation); break;
 		case IndexType::RA: index = new Rae(g, approx, int_representation); break;
