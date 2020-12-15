@@ -1,6 +1,12 @@
 #include "lint/BigIntCalculator.h"
 
+#include "Logging.h"
+
 #include <sstream>
+
+epic::lint::BigIntCalculator::BigIntCalculator() {
+	log::out << log::info << "Using GMP library" << log::endl;
+}
 
 /**
  * @note This implementation returns 0 since each bigInt can independently grow in size (no static size)!

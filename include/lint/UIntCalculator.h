@@ -14,6 +14,8 @@ namespace epic::lint {
  */
 class UIntCalculator : public ItfLargeNumberCalculator {
 public:
+	explicit UIntCalculator();
+
 	longUInt getLargeNumberSize() override;
 
 	void increment(LargeNumber& dest) override;

@@ -20,9 +20,9 @@ epic::lint::ChineseRemainder::ChineseRemainder(const longUInt* primes, const siz
 		mFactors[i] = Mi * Mi_inverse;
 	}
 
-	log::out << log::info << "Using the chinese lint theorem with " << mAmount << " primes " << log::endl;
+	log::out << log::info << "Using the Chinese Remainder Theorem (" << mAmount << " coprimes)" << log::endl;
 	for (longUInt i = 0; i < mAmount; ++i) {
-		log::out << "prime[" << i << "] = " << mPrimes[i] << log::endl;
+		log::out << " * coprime[" << i << "] = " << mPrimes[i] << log::endl;
 	}
 }
 
