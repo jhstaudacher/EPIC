@@ -129,7 +129,7 @@ public:
 /**
  * A global Logger instance to be used everywhere in the project. Nonetheless it is of course possible to create additional instances if needed.
  */
-static Logger out;
+extern Logger out;
 
 } // namespace epic::log
 

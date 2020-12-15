@@ -1,6 +1,6 @@
 #include "Logging.h"
 
-#include "../include/Logging.h"
+epic::log::Logger epic::log::out;
 
 const std::array<std::string, epic::log::Logger::cLevelCount> epic::log::Logger::mLevelNames = {
 	"INFO:    ",
