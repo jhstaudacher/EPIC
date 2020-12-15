@@ -69,6 +69,13 @@ public:
 	void setSolution(const std::vector<bigFloat>& solution);
 
 	/**
+	 * A function to set the solution of a single value calculation (e.g. number of winning coalitions).
+	 *
+	 * @param solution The calculated value
+	 */
+	void setSingleValueSolution(const bigFloat& value);
+
+	/**
 	 * A function to get the verbose-Flag
 	 *
 	 */
