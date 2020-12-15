@@ -126,8 +126,8 @@ void epic::index::IndexFactory::delete_powerIndex(ItfPowerIndex* index) {
 }
 
 void epic::index::IndexFactory::printIndexList(std::ostream& os) {
-	for (const auto& it : cIndexNames) {
-		os << it.second.first << ":\t" << it.second.second << std::endl;
+	for (auto it = ++cIndexNames.begin(); it != cIndexNames.end(); ++it) { // first entry is INVALID_INDEX (do not print that one)
+		os << it->second.first << ":\t" << it->second.second << std::endl;
 	}
 }
 
