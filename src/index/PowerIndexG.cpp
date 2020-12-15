@@ -3,8 +3,6 @@
 #include "Array.h"
 #include "Logging.h"
 
-#include <iostream>
-
 epic::index::PowerIndexG::PowerIndexG(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
 	: RawPowerIndexG(g, approx, int_representation) {
 }
@@ -18,11 +16,10 @@ std::vector<epic::bigFloat> epic::index::PowerIndexG::calculate() {
 	}
 
 	if (mGame.getFlagOfVerbose()) {
-		std::cout << "Total number of winning coalitions: " << sum_swc << std::endl
-				  << std::endl;
-		std::cout << "Number of winning coalitions a player belongs to: " << std::endl;
+		log::out << log::info << "Total number of winning coalitions: " << sum_swc << log::endl;
+		log::out << log::info << "Number of winning coalitions a player belongs to: " << log::endl;
 		for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
-			std::cout << "Player " << mGame.playerIndexToNumber(i) << ": " << solution[i] << std::endl;
+			log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << solution[i] << log::endl;
 		}
 	}
 

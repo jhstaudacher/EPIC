@@ -1,7 +1,8 @@
 #include "Game.h"
 
+#include "Logging.h"
+
 #include <algorithm>
-#include <iostream>
 #include <stdexcept>
 
 epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool flag_withoutNullPlayers, bool flag_verbose) {
@@ -205,7 +206,7 @@ epic::longUInt epic::Game::findNullPlayersFromBelow(bool flag_withoutNullPlayers
 		}
 
 		if (getFlagOfVerbose()) {
-			std::cout << "In this mGame there are " << n_null_players << " null player(s)!" << std::endl;
+			log::out << log::info << "In this mGame there are " << n_null_players << " null player(s)!" << log::endl;
 		}
 
 		return n_null_players;

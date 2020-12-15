@@ -2,8 +2,6 @@
 
 #include "Logging.h"
 
-#include <iostream>
-
 epic::index::KoenigBraeuningerPH::KoenigBraeuningerPH(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
 	: RawPublicHelpTheta(g, approx, int_representation) {
 	if (mGame.getNumberOfNullPlayers() > 0 && mGame.getFlagNullPlayerHandling()) {
@@ -21,15 +19,14 @@ std::vector<epic::bigFloat> epic::index::KoenigBraeuningerPH::calculate() {
 	winningCoalitionsForPlayer(big_wci, &big_total_wc);
 
 	if (mGame.getFlagOfVerbose()) {
-		std::cout << "Total number of winning coalitions: " << big_total_wc << std::endl
-				  << std::endl;
-		std::cout << "Number of winning coalitions a player belongs to: " << std::endl;
+		log::out << log::info << "Total number of winning coalitions: " << big_total_wc << log::endl;
+		log::out << "Number of winning coalitions a player belongs to: " << log::endl;
 	}
 
 	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
 	for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
 		if (mGame.getFlagOfVerbose()) {
-			std::cout << "Player " << mGame.playerIndexToNumber(i) << ": " << big_wci[i] << std::endl;
+			log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << big_wci[i] << log::endl;
 		}
 		solution[i] = big_wci[i] / big_total_wc;
 	}

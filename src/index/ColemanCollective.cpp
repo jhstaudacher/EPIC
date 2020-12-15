@@ -1,6 +1,6 @@
 #include "index/ColemanCollective.h"
 
-#include <iostream>
+#include "Logging.h"
 
 epic::index::ColemanCollective::ColemanCollective(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
 	: PowerIndexWithWinningCoalitions(g) {
@@ -32,8 +32,7 @@ std::vector<epic::bigFloat> epic::index::ColemanCollective::calculate() {
 		mCalculator->to_bigInt(&big_total_wc, total_wc);
 
 		if (mGame.getFlagOfVerbose()) {
-			std::cout << "Total number of winning coalitions: " << big_total_wc * (bigInt(1) << mGame.getNumberOfPlayersWithWeight0()) << std::endl
-					  << std::endl;
+			log::out << log::info << "Total number of winning coalitions: " << big_total_wc * (bigInt(1) << mGame.getNumberOfPlayersWithWeight0()) << log::endl;
 		}
 
 		//total number of winning coalitions / maximal number of winning coalitions(= 2^mNonZeroPlayerCount)

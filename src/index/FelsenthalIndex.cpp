@@ -1,6 +1,6 @@
 #include "index/FelsenthalIndex.h"
 
-#include <iostream>
+#include "Logging.h"
 
 epic::index::FelsenthalIndex::FelsenthalIndex(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
 	: RawFelsenthal(g, approx, int_representation) {
@@ -41,20 +41,18 @@ std::vector<epic::bigFloat> epic::index::FelsenthalIndex::calculate() {
 		mCalculator->to_bigInt(&int_tmp, sum_mwcs);
 		arbitrary_sum_mwcs = int_tmp;
 
-		if (mGame.getFlagOfVerbose()) {
-			std::cout << "Total number of minimal winning coalitions of least size: " << arbitrary_sum_mwcs << std::endl
-					  << std::endl;
-			std::cout << "Number of minimal winning coalitions of least size individual players belong to: " << std::endl;
-		}
-
 		// compute Felsenthal-index: Number of minimal winning coalitions of player i / (SUM(Number of minimal winning coalitions of all players))
 		if (arbitrary_sum_mwcs == 0) {
-			std::cout << "warning: sum of minimal winning coalitions of least size is zero!" << std::endl;
+			log::out << log::warning << "sum of minimal winning coalitions of least size is zero!" << log::endl;
 		} else {
+			if (mGame.getFlagOfVerbose()) {
+				log::out << log::info << "Total number of minimal winning coalitions of least size: " << arbitrary_sum_mwcs << log::endl;
+				log::out << log::info << "Number of minimal winning coalitions of least size individual players belong to: " << log::endl;
+			}
 			for (longUInt i = 0; i < mNonZeroPlayerCount; ++i) {
 				mCalculator->to_bigInt(&int_tmp, mwcs[i]);
 				if (mGame.getFlagOfVerbose()) {
-					std::cout << "Player " << mGame.playerIndexToNumber(i) << ": " << int_tmp << std::endl;
+					log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << int_tmp << log::endl;
 				}
 				solution[i] = (bigFloat)int_tmp / arbitrary_sum_mwcs;
 			}

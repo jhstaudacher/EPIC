@@ -1,6 +1,6 @@
 #include "index/DeeganPackel.h"
 
-#include <iostream>
+#include "Logging.h"
 
 epic::index::DeeganPackel::DeeganPackel(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
 	: RawDeeganPackel(g, approx, int_representation) {
@@ -14,8 +14,7 @@ std::vector<epic::bigFloat> epic::index::DeeganPackel::calculate() {
 		throw std::invalid_argument("Number of minimal winning coalitions is less than or equal to zero. No calculation possible. Please, check your input.");
 	}
 	if (mGame.getFlagOfVerbose()) {
-		std::cout << "Total number of minimal winning coalitions: " << total_mwc << std::endl
-				  << std::endl;
+		log::out << log::info << "Total number of minimal winning coalitions: " << total_mwc << log::endl;
 	}
 
 	std::vector<bigFloat> solution = RawDeeganPackel::calculate();

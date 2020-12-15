@@ -2,10 +2,9 @@
 
 #include "index/IndexFactory.h"
 #include "io/DataInput.h"
+#include "Logging.h"
 
-#include <cstring>
 #include <getopt.h>
-#include <iostream>
 #include <string>
 
 epic::io::UserInputHandler::UserInputHandler(const std::string& index, const std::vector<longUInt>& weights, longUInt quota, OutputType outputType, bool filterNullPlayers, bool verbose) {
@@ -45,7 +44,7 @@ bool epic::io::UserInputHandler::handleWeights(const std::string& fileName) {
 	}
 
 	if (mWeights.empty()) {
-		std::cout << "The --weights option requires a non empty csv file." << std::endl;
+		log::out << log::error << "The --weights option requires a non empty csv file." << log::endl;
 		return false;
 	}
 
@@ -57,7 +56,7 @@ bool epic::io::UserInputHandler::handleQuotaFromWeightfile(const std::string& fi
 	mQuota = DataInput::getQuotaFromCSV(fileName);
 
 	if (mQuota <= 0) {
-		std::cout << "The --quota option requires an argument > 0." << std::endl;
+		log::out << log::error << "The --quota option requires an argument > 0." << log::endl;
 		return false;
 	}
 
@@ -71,7 +70,7 @@ bool epic::io::UserInputHandler::handleQuota(char* value) {
 	if (mQuota > 0) {
 		return true;
 	} else {
-		std::cout << "The --quota option requires an argument > 0." << std::endl;
+		log::out << log::error << "The --quota option requires an argument > 0." << log::endl;
 		return false;
 	}
 }
@@ -84,7 +83,7 @@ bool epic::io::UserInputHandler::handleIndex(char* value) {
 		mIndex = i_str;
 		ret = true;
 	} else {
-		std::cout << "The --index option needs one of the following arguments:" << std::endl;
+		log::out << log::error << "The --index option needs one of the following arguments:" << log::endl;
 		index::IndexFactory::printIndexList(std::cout);
 	}
 
@@ -120,7 +119,7 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 
 		if (result == -1) {
 			if (arg_count < 3) {
-				std::cout << "Missing required options: -i | --index, -w | --weights, -q | --quota" << std::endl;
+				log::out << log::error << "Missing required options: -i | --index, -w | --weights, -q | --quota" << log::endl;
 				return false;
 			}
 			break;
@@ -177,7 +176,7 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 				if (mIntRepresentation == DEFAULT) {
 					mIntRepresentation = GMP;
 				} else {
-					std::cout << "Incompatible options: The options --gmp and --primes can not be used at the same time!" << std::endl;
+					log::out << log::error << "Incompatible options: The options --gmp and --primes can not be used at the same time!" << log::endl;
 					return false;
 				}
 				break;
@@ -186,7 +185,7 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 				if (mIntRepresentation == DEFAULT) {
 					mIntRepresentation = PRIMES;
 				} else {
-					std::cout << "Incompatible options: The options --gmp and --primes can not be used at the same time!" << std::endl;
+					log::out << log::error << "Incompatible options: The options --gmp and --primes can not be used at the same time!" << log::endl;
 					return false;
 				}
 				break;
@@ -200,11 +199,11 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 				break;
 
 			case '?':
-				std::cout << "Unknown option: " << vectorOfArguments[optind - 1] << std::endl;
+				log::out << log::error << "Unknown option: " << vectorOfArguments[optind - 1] << log::endl;
 				return false;
 
 			case ':':
-				std::cout << "Missing arg for: " << vectorOfArguments[optind - 1] << std::endl;
+				log::out << log::error << "Missing arg for: " << vectorOfArguments[optind - 1] << log::endl;
 				return false;
 
 			default:
@@ -217,7 +216,7 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 	}
 
 	while (optind < numberOfArguments) {
-		std::cout << "Other parameter: " << vectorOfArguments[optind++] << std::endl;
+		log::out << log::info << "Other parameter: " << vectorOfArguments[optind++] << log::endl;
 	}
 
 	return true;

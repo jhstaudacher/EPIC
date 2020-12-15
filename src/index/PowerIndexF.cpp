@@ -1,6 +1,6 @@
 #include "index/PowerIndexF.h"
 
-#include <iostream>
+#include "Logging.h"
 
 epic::index::PowerIndexF::PowerIndexF(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
 	: RawPowerIndexF(g, approx, int_representation) {
@@ -29,8 +29,7 @@ std::vector<epic::bigFloat> epic::index::PowerIndexF::calculate() {
 	n_wc.free();
 
 	if (mGame.getFlagOfVerbose()) {
-		std::cout << "Total number of winning coalitions: " << total_number_of_winning_coalitions << std::endl
-				  << std::endl;
+		log::out << log::info << "Total number of winning coalitions: " << total_number_of_winning_coalitions << log::endl;
 	}
 
 	std::vector<bigFloat> solution = RawPowerIndexF::calculate();

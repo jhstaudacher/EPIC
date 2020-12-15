@@ -3,8 +3,6 @@
 #include "Array.h"
 #include "Logging.h"
 
-#include <iostream>
-
 epic::index::PowerIndexGPH::PowerIndexGPH(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
 	: RawPublicHelpTheta(g, approx, int_representation) {
 	if (mGame.getNumberOfNullPlayers() > 0 && !mGame.getFlagNullPlayerHandling()) {
@@ -30,13 +28,13 @@ std::vector<epic::bigFloat> epic::index::PowerIndexGPH::calculate() {
 	bigFloat float_swc = big_swc;
 
 	if (mGame.getFlagOfVerbose()) {
-		std::cout << "Number of winning coalitions a player belongs to: " << std::endl;
+		log::out << log::info << "Number of winning coalitions a player belongs to: " << log::endl;
 	}
 
 	for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
 		solution[i] = wci[i];
 		if (mGame.getFlagOfVerbose()) {
-			std::cout << "Player " << mGame.playerIndexToNumber(i) << ": " << wci[i] << std::endl;
+			log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << wci[i] << log::endl;
 		}
 		solution[i] /= float_swc;
 	}

@@ -1,6 +1,6 @@
 #include "index/RawJohnston.h"
 
-#include <iostream>
+#include "Logging.h"
 
 epic::index::RawJohnston::RawJohnston(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
 	: PowerIndexWithWinningCoalitions(g) {
@@ -233,8 +233,7 @@ std::vector<epic::bigFloat> epic::index::RawJohnston::calculate() {
 	qmwcs.free();
 
 	if (mGame.getFlagOfVerbose()) {
-		std::cout << "Total number of vulnerable coalitions: " << nvc << std::endl
-				  << std::endl;
+		log::out << log::info << "Total number of vulnerable coalitions: " << nvc << log::endl;
 	}
 
 	return raw_j;

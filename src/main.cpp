@@ -1,12 +1,12 @@
 #include "SystemControlUnit.h"
 
-#include <iostream>
+#include "Logging.h"
 
 int main(int argc, char* argv[]) {
 	try {
 		epic::SystemControlUnit control(argc, argv);
 	} catch (std::invalid_argument& e) {
-		std::cerr << "Error: " << e.what() << std::endl;
+		epic::log::out << epic::log::error << e.what() << epic::log::endl;
 		return -1;
 	}
 

@@ -1,8 +1,7 @@
 #include "index/Tijs.h"
 
 #include "types.h"
-
-#include <iostream>
+#include "Logging.h"
 
 epic::index::Tijs::Tijs(Game& g)
 	: ItfPowerIndex(g) {
@@ -19,7 +18,7 @@ std::vector<epic::bigFloat> epic::index::Tijs::calculate() {
 		throw std::invalid_argument("Tijs index not defined: There are no veto players.");
 	} else {
 		if (mGame.getFlagOfVerbose()) {
-			std::cout << "Total number of veto players: " << n_vp << std::endl;
+			log::out << log::info << "Total number of veto players: " << n_vp << log::endl;
 		}
 
 		for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
