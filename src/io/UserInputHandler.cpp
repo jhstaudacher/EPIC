@@ -95,8 +95,8 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 	enum LongOpts {
 		OPT_GMP,
 		OPT_PRIMES,
-		FLOAT,
-		CSV
+		OPT_FLOAT,
+		OPT_CSV
 	};
 
 	static struct option long_options[] = {
@@ -107,8 +107,8 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 		{"filter-null", no_argument, nullptr, 'f'},
 		{"gmp", no_argument, nullptr, OPT_GMP},
 		{"primes", no_argument, nullptr, OPT_PRIMES},
-		{"float", no_argument, nullptr, FLOAT},
-		{"csv", no_argument, nullptr, CSV},
+		{"float", no_argument, nullptr, OPT_FLOAT},
+		{"csv", no_argument, nullptr, OPT_CSV},
 		{"help", no_argument, nullptr, 'h'},
 		{nullptr, 0, nullptr, 0}};
 	int arg_count = 0;
@@ -191,11 +191,11 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 				}
 				break;
 
-			case FLOAT:
+			case OPT_FLOAT:
 				mInputFloatWeights = true;
 				break;
 
-			case CSV:
+			case OPT_CSV:
 				mOutputType = csv;
 				break;
 
