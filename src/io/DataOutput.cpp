@@ -27,8 +27,12 @@ void epic::io::DataOutput::outputToCSV(Game& game, const std::string& index_name
 void epic::io::DataOutput::outputToScreen(Game& game) {
 	std::vector<bigFloat> results = game.getSolution();
 
-	for (size_t i = 0; i < results.size(); ++i) {
-		std::cout << "P" << i << ": " << results[i] << std::endl;
+	if (results.size() == 1) { // single value result
+		std::cout << results[0] << std::endl;
+	} else {
+		for (size_t i = 0; i < results.size(); ++i) {
+			std::cout << "P" << i << ": " << results[i] << std::endl;
+		}
 	}
 }
 

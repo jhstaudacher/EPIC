@@ -95,6 +95,11 @@ void epic::Game::setSolution(const std::vector<bigFloat>& pre_solution) {
 	}
 }
 
+void epic::Game::setSingleValueSolution(const bigFloat& value) {
+	solution.resize(1);
+	solution[0] = value;
+}
+
 epic::longUInt epic::Game::getNumberOfNullPlayers() const {
 	return numberOfNullPlayers;
 }

@@ -42,7 +42,7 @@ public:
 	std::vector<bigFloat> calculate() override;
 	std::string getFullName() override;
 
-private:
+protected:
 	/*
 	 * A function to compute the total number of minimal winning coalitions
 	 *

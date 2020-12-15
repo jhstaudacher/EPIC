@@ -58,7 +58,13 @@ void epic::SystemControlUnit::calculateIndex() {
 			std::cout << "Index '" << index->getFullName() << "' was chosen! Start computation..." << std::endl
 					  << std::endl;
 		}
-		mGame->setSolution(index->calculate());
+
+		std::string idx = mUserInputHandler->getIndexToCompute();
+		if (idx == "W" || idx == "WM" || idx == "WS") { // single value calculation
+			mGame->setSingleValueSolution(index->calculate()[0]);
+		} else {
+			mGame->setSolution(index->calculate());
+		}
 	}
 
 	index::IndexFactory::delete_powerIndex(index);
