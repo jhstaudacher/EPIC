@@ -115,9 +115,8 @@ public:
      * @param quota the quota of the mGame
      * @param outputType the output type as depicted in enum OutputType
      * @param filterNullPlayers flag to filter out null players
-     * @param verbose flag to provide additional details of the computation
      */
-	UserInputHandler(const std::string& index, const std::vector<longUInt>& weights, longUInt quota, OutputType outputType, bool filterNullPlayers, bool verbose);
+	UserInputHandler(const std::string& index, const std::vector<longUInt>& weights, longUInt quota, OutputType outputType, bool filterNullPlayers);
 
 	/**
      * Constructor B: For the input from console

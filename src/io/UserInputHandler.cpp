@@ -7,7 +7,7 @@
 #include <getopt.h>
 #include <string>
 
-epic::io::UserInputHandler::UserInputHandler(const std::string& index, const std::vector<longUInt>& weights, longUInt quota, OutputType outputType, bool filterNullPlayers, bool verbose) {
+epic::io::UserInputHandler::UserInputHandler(const std::string& index, const std::vector<longUInt>& weights, longUInt quota, OutputType outputType, bool filterNullPlayers) {
 	mIndex = index;
 	mWeights = weights;
 	mQuota = quota;
