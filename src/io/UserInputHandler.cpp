@@ -42,7 +42,7 @@ bool epic::io::UserInputHandler::handleWeights(const std::string& fileName) {
 	}
 
 	if (mWeights.empty()) {
-		log::out << log::error << "The --weights option requires a non empty csv file." << log::endl;
+		log::out << log::warning << "The --weights option requires a non empty csv file." << log::endl;
 		return false;
 	}
 
@@ -54,7 +54,7 @@ bool epic::io::UserInputHandler::handleQuotaFromWeightfile(const std::string& fi
 	mQuota = DataInput::getQuotaFromCSV(fileName);
 
 	if (mQuota <= 0) {
-		log::out << log::error << "The --quota option requires an argument > 0." << log::endl;
+		log::out << log::warning << "The --quota option requires an argument > 0." << log::endl;
 		return false;
 	}
 
@@ -68,7 +68,7 @@ bool epic::io::UserInputHandler::handleQuota(char* value) {
 	if (mQuota > 0) {
 		return true;
 	} else {
-		log::out << log::error << "The --quota option requires an argument > 0." << log::endl;
+		log::out << log::warning << "The --quota option requires an argument > 0." << log::endl;
 		return false;
 	}
 }
@@ -81,7 +81,7 @@ bool epic::io::UserInputHandler::handleIndex(char* value) {
 		mIndex = i_str;
 		ret = true;
 	} else {
-		log::out << log::error << "The --index option needs one of the following arguments:" << log::endl;
+		log::out << log::warning << "The --index option needs one of the following arguments:" << log::endl;
 		index::IndexFactory::printIndexList(std::cout);
 	}
 
@@ -121,7 +121,7 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 
 		if (result == -1) {
 			if (arg_count < 3) {
-				log::out << log::error << "Missing required options: -i | --index, -w | --weights, -q | --quota" << log::endl;
+				log::out << log::warning << "Missing required options: -i | --index, -w | --weights, -q | --quota" << log::endl;
 				return false;
 			}
 			break;
@@ -163,7 +163,7 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 				log::out.setLogLevel(log::info);
 				break;
 
-			case OPT_QUIET: // error
+			case OPT_QUIET:
 				if (log::out.getLogLevel() == log::info) {
 					log::out << log::warning << "Incompatible options: -v/--verbose and --quiet" << log::endl;
 					return false;
@@ -190,7 +190,7 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 				if (mIntRepresentation == DEFAULT) {
 					mIntRepresentation = GMP;
 				} else {
-					log::out << log::error << "Incompatible options: The options --gmp and --primes can not be used at the same time!" << log::endl;
+					log::out << log::warning << "Incompatible options: --gmp and --primes" << log::endl;
 					return false;
 				}
 				break;
@@ -199,7 +199,7 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 				if (mIntRepresentation == DEFAULT) {
 					mIntRepresentation = PRIMES;
 				} else {
-					log::out << log::error << "Incompatible options: The options --gmp and --primes can not be used at the same time!" << log::endl;
+					log::out << log::warning << "Incompatible options: --gmp and --primes" << log::endl;
 					return false;
 				}
 				break;
@@ -213,11 +213,11 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 				break;
 
 			case '?':
-				log::out << log::error << "Unknown option: " << vectorOfArguments[optind - 1] << log::endl;
+				log::out << log::warning << "Unknown option: " << vectorOfArguments[optind - 1] << log::endl;
 				return false;
 
 			case ':':
-				log::out << log::error << "Missing arg for: " << vectorOfArguments[optind - 1] << log::endl;
+				log::out << log::warning << "Missing arg for: " << vectorOfArguments[optind - 1] << log::endl;
 				return false;
 
 			default:

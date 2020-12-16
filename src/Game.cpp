@@ -200,7 +200,7 @@ epic::longUInt epic::Game::findNullPlayersFromBelow(bool flag_withoutNullPlayers
 			}
 		}
 
-		log::out << log::info << "In this mGame there are " << n_null_players << " null player(s)!" << log::endl;
+		log::out << log::info << n_null_players << " null player(s) found!" << log::endl;
 
 		return n_null_players;
 	}

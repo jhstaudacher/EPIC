@@ -133,9 +133,7 @@ bool epic::SystemControlUnit::checkHardware(index::ItfPowerIndex* index_ptr) {
 	HardwareInfo hInfo;
 	longUInt req = index_ptr->getMemoryRequirement();
 
-	log::out << log::info << "Read RAM capacity (" << hInfo.getTotalRamSize() << " Bytes)" << log::endl;
 	log::out << log::info << "Approximated RAM usage: " << req << " Bytes" << log::endl;
-
 	if (req > hInfo.getFreeRamSize()) {
 		if (req > hInfo.getTotalRamSize()) {
 			log::out << log::warning << "Not enough memory! (total: " << hInfo.getTotalRamSize() << "B, approximately needed: " << req << "B)" << log::endl;
@@ -166,10 +164,8 @@ void epic::SystemControlUnit::estimateTime() {
 	HardwareInfo hInfo;
 
 	// If verbose output the system specifications to the user, also for testing ofc
-	if (hInfo.getCPUFrequency() > 0) {
-		log::out << log::info << "Read system specs (total cache: " << hInfo.getCacheSize() / 1000 << "KB, CPU freq: " << hInfo.getCPUFrequency() << "kHz)" << log::endl;
-	} else {
-		log::out << log::warning << "CPU frequency could not get determined! No time estimation available." << log::endl;
+	if (hInfo.getCPUFrequency() == 0) {
+		log::out << log::warning << "Unable to read CPU frequency! No time estimation available." << log::endl;
 		return;
 	}
 

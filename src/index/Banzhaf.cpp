@@ -29,7 +29,7 @@ std::vector<epic::bigFloat> epic::index::Banzhaf::calculate() {
 
 		if (log::out.getLogLevel() <= log::info) {
 			log::out << log::info << "Total number of swing players: " << float_total_n_sp << log::endl;
-			log::out << log::info << "Number of times each player is a swing player:" << log::endl;
+			log::out << log::info << "Raw Banzhaf:" << log::endl;
 
 			bigInt factor = bigInt(1) << mGame.getNumberOfPlayersWithWeight0(); // additional winning coalitions due to players of weight 0
 			for (longUInt i = 0; i < mNonZeroPlayerCount; ++i) {
