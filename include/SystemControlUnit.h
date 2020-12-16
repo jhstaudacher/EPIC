@@ -6,7 +6,6 @@
 #include "io/DataOutput.h"
 #include "io/UserInputHandler.h"
 
-#include <iostream>
 
 namespace epic {
 

@@ -1,6 +1,6 @@
 #include "index/Johnston.h"
 
-#include <iostream>
+#include "Logging.h"
 
 epic::index::Johnston::Johnston(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
 	: RawJohnston(g, approx, int_representation) {
@@ -14,10 +14,10 @@ std::vector<epic::bigFloat> epic::index::Johnston::calculate() {
 		raw_j_sum += solution[i];
 	}
 
-	if (mGame.getFlagOfVerbose()) {
-		std::cout << "Raw Johnston: " << std::endl;
+	if (log::out.getLogLevel() <= log::info) {
+		log::out << log::info << "Raw Johnston: " << log::endl;
 		for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
-			std::cout << "Player " << mGame.playerIndexToNumber(i) << ": " << solution[i] << std::endl;
+			log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << solution[i] << log::endl;
 		}
 	}
 

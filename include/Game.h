@@ -25,7 +25,7 @@ public:
 	 * @param flag_verbose a flag causing extra verbose output if set.
 	 *
 	 */
-	Game(longUInt quota, std::vector<longUInt>& weights, bool flag_filterOutNullPlayers, bool flag_verbose);
+	Game(longUInt quota, std::vector<longUInt>& weights, bool flag_filterOutNullPlayers);
 
 	/**
 	 * A function to get all weights
@@ -74,12 +74,6 @@ public:
 	 * @param solution The calculated value
 	 */
 	void setSingleValueSolution(const bigFloat& value);
-
-	/**
-	 * A function to get the verbose-Flag
-	 *
-	 */
-	bool getFlagOfVerbose() const;
 
 	/**
 	 * A function to get the veto player boolean vector
@@ -165,11 +159,6 @@ private:
 	 * A vector, which contain the solution of the computation
 	 */
 	std::vector<bigFloat> solution;
-
-	/**
-	 * If true, extensive information on the program flow is output.
-	 */
-	bool flag_verbose;
 
 	/**
 	 * If true, null players are to be sorted out.

@@ -1,6 +1,6 @@
 #include "lint/ChineseRemainder.h"
 
-#include <iostream>
+#include "Logging.h"
 #include <sstream>
 
 epic::lint::ChineseRemainder::ChineseRemainder(const longUInt* primes, const size_t amount, const bigInt& m)
@@ -20,9 +20,9 @@ epic::lint::ChineseRemainder::ChineseRemainder(const longUInt* primes, const siz
 		mFactors[i] = Mi * Mi_inverse;
 	}
 
-	std::cout << "Using the chinese lint theorem with " << mAmount << " primes " << std::endl;
+	log::out << log::info << "Using the Chinese Remainder Theorem (" << mAmount << " coprimes)" << log::endl;
 	for (longUInt i = 0; i < mAmount; ++i) {
-		std::cout << "prime[" << i << "] = " << mPrimes[i] << std::endl;
+		log::out << " * coprime[" << i << "] = " << mPrimes[i] << log::endl;
 	}
 }
 

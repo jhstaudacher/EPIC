@@ -1,5 +1,11 @@
 #include "lint/UIntCalculator.h"
 
+#include "Logging.h"
+
+epic::lint::UIntCalculator::UIntCalculator() {
+	log::out << log::info << "Using unsigned integer" << log::endl;
+}
+
 epic::longUInt epic::lint::UIntCalculator::getLargeNumberSize() {
 	return sizeof(LargeNumber); // only the longUInt. No dynamic allocated memory
 }
