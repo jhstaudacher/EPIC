@@ -12,6 +12,7 @@ epic::io::UserInputHandler::UserInputHandler(const std::string& index, const std
 	mIndex = index;
 	mWeights = weights;
 	mQuota = quota;
+	mFloatQuota = 0.0;	
 	mOutputType = outputType;
 	mTestFlag = false;
 	mInputFloatWeights = false;
@@ -25,6 +26,7 @@ epic::io::UserInputHandler::UserInputHandler() {
 	mIndex = "Invalid";
 	mWeights.clear();
 	mQuota = 0;
+	mFloatQuota = 0.0;	
 	mOutputType = screen;
 	mTestFlag = false;
 	mInputFloatWeights = false;
@@ -34,13 +36,22 @@ epic::io::UserInputHandler::UserInputHandler() {
 	mWeightsFile = "";
 }
 
-bool epic::io::UserInputHandler::handleWeights(const std::string& fileName) {
+bool epic::io::UserInputHandler::handleWeightsAndQuota(const std::string& fileName) {
 	if (mInputFloatWeights) {
 		std::vector<float> floatWeights;
 		floatWeights = DataInput::inputFloatCSV(fileName, mTestFlag);
-		float multiplicator = UpscaleFloatToIntAndReturnMultiplicator(floatWeights, mWeights);
-		mQuota = multiplicator * mQuota;
+		floatWeights.push_back(mFloatQuota);
+		UpscaleFloatToIntAndReturnMultiplicator(floatWeights, mWeights);
+		mQuota = mWeights.back();	
+		mWeights.pop_back();		
 	} else {
+		if (static_cast<longUInt>(mFloatQuota) == mFloatQuota) {
+  			mQuota = static_cast<longUInt>(mFloatQuota);
+		}
+		else {
+			std::cout << "Float quota specified without the --float flag." << std::endl;
+			return false;
+		}
 		mWeights = DataInput::inputCSV(fileName, mTestFlag);
 	}
 
@@ -54,9 +65,9 @@ bool epic::io::UserInputHandler::handleWeights(const std::string& fileName) {
 
 bool epic::io::UserInputHandler::handleQuotaFromWeightfile(const std::string& fileName) {
 	//detect quota from weight file
-	mQuota = DataInput::getQuotaFromCSV(fileName);
+	mFloatQuota = DataInput::getQuotaFromCSV(fileName);
 
-	if (mQuota <= 0) {
+	if (mFloatQuota <= 0) {
 		std::cout << "The --quota option requires an argument > 0." << std::endl;
 		return false;
 	}
@@ -66,9 +77,9 @@ bool epic::io::UserInputHandler::handleQuotaFromWeightfile(const std::string& fi
 }
 
 bool epic::io::UserInputHandler::handleQuota(char* value) {
-	mQuota = std::atoi(value);
+	mFloatQuota = std::stof(value);		
 
-	if (mQuota > 0) {
+	if (mFloatQuota > 0) {
 		return true;
 	} else {
 		std::cout << "The --quota option requires an argument > 0." << std::endl;
@@ -141,7 +152,7 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 				break;
 
 			case 'q':
-				if (std::atoi(optarg) == 0) {
+				if (std::stof(optarg) == 0) {
 					//No quota specified -> search in weightfile
 					if (!handleQuotaFromWeightfile(mWeightsFile)) {
 						return false;
@@ -211,8 +222,8 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 				return false;
 		}
 	}
-
-	if (!handleWeights(mWeightsFile)) {
+	
+	if (!handleWeightsAndQuota(mWeightsFile)) {
 		return false;
 	}
 

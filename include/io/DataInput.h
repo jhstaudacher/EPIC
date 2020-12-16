@@ -34,9 +34,9 @@ public:
 	 * Read the quota from a given .csv file
 	 *
 	 * @param filePath The .csv file name (including the path to it)
-	 * @return The quota read from the .csv file (as int)
+	 * @return The quota read from the .csv file (as float)
 	 */
-	static longUInt getQuotaFromCSV(const std::string& filePath);
+	static float getQuotaFromCSV(const std::string& filePath);
 
 }; /* class DataInput */
 
