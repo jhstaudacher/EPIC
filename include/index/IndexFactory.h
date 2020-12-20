@@ -55,6 +55,8 @@ private:
 	enum IndexType {
 		INVALID_INDEX, /**< Unknown/Invalid power index */
 		ABZ,		   /**< absolute Banzhaf */
+		APG,		   /**< absolute Public Good*/
+		APIG,		   /**< absolute null-player-free Power Index G (based on the Dubey-Shapley identity)*/
 		BZ,			   /**< Banzhaf */
 		CC,			   /**< Coleman collective */
 		CI,			   /**< Coleman initiative */
@@ -72,7 +74,6 @@ private:
 		PHTPH,		   /**< Public Help theta (based on raw Public Help theta)) */
 		PHX,		   /**< Public Help xi */
 		PIF,		   /**< null-player-free Power Index F */
-		APIG,		   /**< Absolute null-player-free Power Index G (based on the Dubey-Shapley identity)*/
 		PIG,		   /**< null-player-free Power Index G (based on the Dubey-Shapley identity)*/
 		PIGPH,		   /**< null-player-free Power Index G (based on raw Public Help theta) */
 		RA,			   /**< Rae */

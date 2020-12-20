@@ -29,8 +29,7 @@ std::vector<epic::bigFloat> epic::index::PublicGood::calculate() {
 		mCalculator->free_largeNumber(mwc_sum);
 	}
 
-	log::out << log::info << "Total number of minimal winning coalitions: " << big_mwc_sum << log::endl;
-	log::out << log::info << "Number of winning coalitions individual players belong to: " << log::endl;
+	log::out << log::info << "Number of minimal winning coalitions individual players belong to: " << log::endl;
 
 	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
 	{
