@@ -38,7 +38,7 @@ epic::io::UserInputHandler::UserInputHandler() {
 
 bool epic::io::UserInputHandler::handleWeightsAndQuota(const std::string& fileName) {
 	if (mInputFloatWeights) {
-		std::vector<float> floatWeights;
+		std::vector<double> floatWeights;
 		floatWeights = DataInput::inputFloatCSV(fileName, mTestFlag);
 		floatWeights.push_back(mFloatQuota);
 		UpscaleFloatToIntAndReturnMultiplicator(floatWeights, mWeights);
@@ -77,7 +77,7 @@ bool epic::io::UserInputHandler::handleQuotaFromWeightfile(const std::string& fi
 }
 
 bool epic::io::UserInputHandler::handleQuota(char* value) {
-	mFloatQuota = std::stof(value);		
+	mFloatQuota = std::atof(value);		
 
 	if (mFloatQuota > 0) {
 		return true;

@@ -49,7 +49,7 @@ private:
     /**
     * The quota of the mGame as float
     */
-	float mFloatQuota;    
+	double mFloatQuota;    
 	/**
     * The specified output type/channel
     */

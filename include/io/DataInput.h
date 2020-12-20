@@ -28,7 +28,7 @@ public:
 	 * @param testFlag If set the first line gets skipped (conatins the quota)
 	 * @return A vector of float values read from the .csv file
 	 */
-	static std::vector<float> inputFloatCSV(const std::string& filePath, bool testFlag);
+	static std::vector<double> inputFloatCSV(const std::string& filePath, bool testFlag);
 
 	/**
 	 * Read the quota from a given .csv file
@@ -36,7 +36,7 @@ public:
 	 * @param filePath The .csv file name (including the path to it)
 	 * @return The quota read from the .csv file (as float)
 	 */
-	static float getQuotaFromCSV(const std::string& filePath);
+	static double getQuotaFromCSV(const std::string& filePath);
 
 }; /* class DataInput */
 
