@@ -28,10 +28,11 @@ std::vector<epic::bigFloat> epic::index::Banzhaf::calculate() {
 		bigFloat float_total_n_sp = tmp;
 
 		if (log::out.getLogLevel() <= log::info) {
-			log::out << log::info << "Total number of swing players: " << float_total_n_sp << log::endl;
+			bigInt factor = bigInt(1) << mGame.getNumberOfPlayersWithWeight0(); // additional winning coalitions due to players of weight 0
+
+			log::out << log::info << "Total number of swing players: " << float_total_n_sp * factor << log::endl;
 			log::out << log::info << "Raw Banzhaf:" << log::endl;
 
-			bigInt factor = bigInt(1) << mGame.getNumberOfPlayersWithWeight0(); // additional winning coalitions due to players of weight 0
 			for (longUInt i = 0; i < mNonZeroPlayerCount; ++i) {
 				mCalculator->to_bigInt(&tmp, n_sp[i]);
 				log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << tmp * factor << log::endl;
