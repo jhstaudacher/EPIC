@@ -13,6 +13,6 @@
  * @param floats the float vector containing the values to be rescaled to integers
  * @param ints the int vector containing the rescaled results
 */
-float UpscaleFloatToIntAndReturnMultiplicator(std::vector<float>& floats, std::vector<epic::longUInt>& ints);
+double UpscaleFloatToIntAndReturnMultiplicator(std::vector<double>& floats, std::vector<epic::longUInt>& ints);
 
 #endif

@@ -33,8 +33,8 @@ std::vector<epic::longUInt> epic::io::DataInput::inputCSV(const std::string& fil
 	return weights;
 }
 
-std::vector<float> epic::io::DataInput::inputFloatCSV(const std::string& filePath, bool testFlag) {
-	std::vector<float> weights;
+std::vector<double> epic::io::DataInput::inputFloatCSV(const std::string& filePath, bool testFlag) {
+	std::vector<double> weights;
 
 	std::ifstream fstream(filePath);
 	if (!fstream) {
@@ -42,7 +42,7 @@ std::vector<float> epic::io::DataInput::inputFloatCSV(const std::string& filePat
 	}
 
 	std::string tmp_str;
-	float tmp_float;
+	double tmp_float;
 
 	// if testFlag is set, the first line contains the quota. Therefore skip the first line.
 	if (testFlag) {
@@ -51,7 +51,7 @@ std::vector<float> epic::io::DataInput::inputFloatCSV(const std::string& filePat
 
 	for (longUInt line_no = 1; fstream >> tmp_str; ++line_no) {
 		try {
-			tmp_float = std::stof(tmp_str);
+			tmp_float = std::atof(tmp_str.c_str());
 		} catch (std::exception& ex) {
 			throw std::invalid_argument("Unknown character(s) in input file at line: " + std::to_string(line_no) + " (\"" + tmp_str + "\")");
 		}
@@ -62,8 +62,8 @@ std::vector<float> epic::io::DataInput::inputFloatCSV(const std::string& filePat
 	return weights;
 }
 
-epic::longUInt epic::io::DataInput::getQuotaFromCSV(const std::string& filePath) {
-	longUInt quota;
+double epic::io::DataInput::getQuotaFromCSV(const std::string& filePath) {
+	double floatQuota;
 
 	std::ifstream fstream(filePath);
 	if (!fstream) {
@@ -74,10 +74,10 @@ epic::longUInt epic::io::DataInput::getQuotaFromCSV(const std::string& filePath)
 	fstream >> tmp_str;
 
 	try {
-		quota = std::stoull(tmp_str);
+		floatQuota = std::atof(tmp_str.c_str());
 	} catch (std::exception& ex) {
 		throw std::invalid_argument("Unknown character(s) in input file at first line (\"" + tmp_str + "\")");
 	}
 
-	return quota;
+	return floatQuota;
 }

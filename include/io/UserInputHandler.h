@@ -47,7 +47,10 @@ private:
     * The quota of the mGame
     */
 	longUInt mQuota;
-
+    /**
+    * The quota of the mGame as float
+    */
+	double mFloatQuota;    
 	/**
     * The specified output type/channel
     */
@@ -88,7 +91,7 @@ private:
 	/**
     * Method used to validate the entered weight file and weights
     */
-	bool handleWeights(const std::string& fileName);
+	bool handleWeightsAndQuota(const std::string& fileName);
 
 	/**
     * Method used to validate the quota specified in the weights file
