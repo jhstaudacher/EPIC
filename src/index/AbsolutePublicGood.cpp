@@ -1,34 +1,53 @@
-#include "index/DeeganPackel.h"
+#include "index/AbsolutePublicGood.h"
 
+#include "Array.h"
 #include "Logging.h"
 
-epic::index::DeeganPackel::DeeganPackel(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
-	: RawDeeganPackel(g, approx, int_representation) {
+#include <iostream>
+
+epic::index::AbsolutePublicGood::AbsolutePublicGood(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
+	: RawPublicGood(g, approx, int_representation) {
 }
 
-std::vector<epic::bigFloat> epic::index::DeeganPackel::calculate() {
-	// total_mwc: number of minimal winning coalitions.
+std::vector<epic::bigFloat> epic::index::AbsolutePublicGood::calculate() {
 	bigInt total_mwc;
 	numberOfMinimalWinningCoalitions(&total_mwc);
 	if (total_mwc <= 0) {
 		throw std::invalid_argument("Number of minimal winning coalitions is less than or equal to zero. No calculation possible. Please, check your input.");
 	}
+
+	auto mwc = new lint::LargeNumber[mNonZeroPlayerCount];
+	mCalculator->allocInit_largeNumberArray(mwc, mNonZeroPlayerCount);	
+
+	calculateMinimalWinningCoalitionsPerPlayer(mwc);
+
 	log::out << log::info << "Total number of minimal winning coalitions: " << total_mwc << log::endl;
+	log::out << log::info << "Number of minimal winning coalitions individual players belong to: " << log::endl;
 
-	std::vector<bigFloat> solution = RawDeeganPackel::calculate();
 
-	for (longUInt i = 0; i < mNonZeroPlayerCount; ++i) {
-		solution[i] /= total_mwc;
+	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
+	{
+		bigInt big_mwc;
+
+		for (longUInt i = 0; i < mNonZeroPlayerCount; ++i) {
+			mCalculator->to_bigInt(&big_mwc, mwc[i]);
+			solution[i] = big_mwc;
+			log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << big_mwc << log::endl;
+			solution[i] /= total_mwc;
+		}
+		for (longUInt i = mNonZeroPlayerCount; i < mGame.getNumberOfPlayers(); ++i) {
+			solution[i] = 0;
+			log::out << "Player " << mGame.playerIndexToNumber(i) << ": 0" << log::endl;
+		}
 	}
+
+	mCalculator->free_largeNumberArray(mwc);
+	delete[] mwc;
 
 	return solution;
 }
 
-std::string epic::index::DeeganPackel::getFullName() {
-	return "DeeganPackel";
-}
-
-void epic::index::DeeganPackel::numberOfMinimalWinningCoalitions(bigInt* total_mwc) {
+void epic::index::AbsolutePublicGood::numberOfMinimalWinningCoalitions(bigInt* total_mwc) {
 	// wc[x]: winning coalitions with weight x
 	auto wc = new lint::LargeNumber[mGame.getQuota() + 1];
 	mCalculator->allocInit_largeNumberArray(wc, mGame.getQuota() + 1);
@@ -82,3 +101,9 @@ void epic::index::DeeganPackel::numberOfMinimalWinningCoalitions(bigInt* total_m
 	mCalculator->free_largeNumberArray(sum_minwc);
 	delete[] sum_minwc;
 }
+
+std::string epic::index::AbsolutePublicGood::getFullName() {
+	return "AbsolutePublicGood";
+}
+
+

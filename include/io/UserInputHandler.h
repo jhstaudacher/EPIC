@@ -21,6 +21,7 @@ static const std::string MSG_REQUIRED_OPTS = "--index | -i <index abbreviation> 
 
 static const std::string MSG_OPTIONAL_OPTS = "--filter-null | -f : Flag to filter out null players.\n"
 											 "--verbose | -v : Flag to provide additional details of the computation.\n"
+											 "--quiet: Flag to reduce the output to the minimum.\n"
 											 "--gmp : Flag to use the GMP library for large integer representation. Setting this flag will make the memory prediction unreliable due to dynamic memory allocations!\n"
 											 "--primes : Flag to use the Chinese Remainder Theorem for large integer representation\n"
 											 "--float : Flag to input float values from csv. Setting this flag will find an integer representation of a given floating-point problem, which is in no way minimal or optimal\n"
@@ -71,11 +72,6 @@ private:
 	bool mFilterNullPlayers;
 
 	/**
-    * Flag to provide additional details of the computation
-    */
-	bool mVerbose;
-
-	/**
     * Setting which large integer representation should be used.
     *
     * @remark If the problem is small enough that a single uint64_t is enough, a single variable gets used (neither GMP nor PRIMES) no matter what option is set!
@@ -122,9 +118,8 @@ public:
      * @param quota the quota of the mGame
      * @param outputType the output type as depicted in enum OutputType
      * @param filterNullPlayers flag to filter out null players
-     * @param verbose flag to provide additional details of the computation
      */
-	UserInputHandler(const std::string& index, const std::vector<longUInt>& weights, longUInt quota, OutputType outputType, bool filterNullPlayers, bool verbose);
+	UserInputHandler(const std::string& index, const std::vector<longUInt>& weights, longUInt quota, OutputType outputType, bool filterNullPlayers);
 
 	/**
      * Constructor B: For the input from console
@@ -180,13 +175,6 @@ public:
      * --gmp & --primes
      */
 	IntRepresentation getIntRepresentation() const;
-
-	/**
-     * Method to return the flag for the verbosity
-     *
-     * --verbose
-     */
-	bool isVerbose() const;
 
 	/**
      * Method to return the name of the weights file

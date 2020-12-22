@@ -2,8 +2,6 @@
 
 #include "Logging.h"
 
-#include <iostream>
-
 epic::index::PublicHelpThetaPH::PublicHelpThetaPH(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
 	: RawPublicHelpTheta(g, approx, int_representation) {
 	if (mGame.getNumberOfNullPlayers() > 0 && mGame.getFlagNullPlayerHandling()) {
@@ -27,14 +25,14 @@ std::vector<epic::bigFloat> epic::index::PublicHelpThetaPH::calculate() {
 
 	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
 	{
-		if (mGame.getFlagOfVerbose()) {
+		if (log::out.getLogLevel() <= log::info) {
 			bigInt factor = bigInt(1) << mGame.getNumberOfPlayersWithWeight0(); // additional winning coalitions due to players of weight 0
 
-			std::cout << "Number of winning coalitions a player belongs to: " << std::endl;
+			log::out << log::info << "Number of winning coalitions a player belongs to: " << log::endl;
 
 			for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
 				solution[i] = big_wci[i] / float_swc;
-				std::cout << "Player " << mGame.playerIndexToNumber(i) << ": " << big_wci[i] * factor << std::endl;
+				log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << big_wci[i] * factor << log::endl;
 			}
 
 		} else {

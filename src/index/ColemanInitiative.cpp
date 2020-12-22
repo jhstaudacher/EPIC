@@ -1,6 +1,6 @@
 #include "index/ColemanInitiative.h"
 
-#include <iostream>
+#include "Logging.h"
 
 epic::index::ColemanInitiative::ColemanInitiative(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
 	: RawBanzhaf(g, approx, int_representation) {
@@ -32,21 +32,20 @@ std::vector<epic::bigFloat> epic::index::ColemanInitiative::calculate() {
 		bigFloat div = (bigInt(1) << mNonZeroPlayerCount) - big_total_wc;
 		bigInt sp;
 
-		if (mGame.getFlagOfVerbose()) {
+		if (log::out.getLogLevel() <= log::info) {
 			bigInt factor = bigInt(1) << mGame.getNumberOfPlayersWithWeight0();
 
-			std::cout << "Total number of winning coalitions: " << big_total_wc * factor << std::endl
-					  << std::endl;
-			std::cout << "Number of times each player is a swing player:" << std::endl;
+			log::out << log::info << "Total number of winning coalitions: " << big_total_wc * factor << log::endl;
+			log::out << log::info << "Number of times each player is a swing player:" << log::endl;
 
 			for (longUInt i = 0; i < mNonZeroPlayerCount; ++i) {
 				mCalculator->to_bigInt(&sp, n_sp[i]);
 				solution[i] = sp;
 				solution[i] /= div;
-				std::cout << "Player " << mGame.playerIndexToNumber(i) << ": " << sp * factor << std::endl;
+				log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << sp * factor << log::endl;
 			}
 			for (longUInt i = mNonZeroPlayerCount; i < mGame.getNumberOfPlayers(); ++i) {
-				std::cout << "Player " << mGame.playerIndexToNumber(i) << ": 0" << std::endl;
+				log::out << "Player " << mGame.playerIndexToNumber(i) << ": 0" << log::endl;
 				// solution[i] = 0; (already zero-initialized)
 			}
 		} else {

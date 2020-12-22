@@ -13,6 +13,9 @@ namespace epic::lint {
 * @remark This implementation only uses the ChineseNumber's uint member. That's why the alloc and free methods are empty.
 */
 class BigIntCalculator : public ItfLargeNumberCalculator {
+public:
+	BigIntCalculator();
+
 	longUInt getLargeNumberSize() override;
 
 	void increment(LargeNumber& dest) override;

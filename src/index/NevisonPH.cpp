@@ -2,8 +2,6 @@
 
 #include "Logging.h"
 
-#include <iostream>
-
 epic::index::NevisonPH::NevisonPH(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
 	: RawPublicHelpTheta(g, approx, int_representation) {
 	if (mGame.getNumberOfNullPlayers() > 0 && mGame.getFlagNullPlayerHandling()) {
@@ -17,9 +15,7 @@ std::vector<epic::bigFloat> epic::index::NevisonPH::calculate() {
 
 	winningCoalitionsForPlayer(big_wci);
 
-	if (mGame.getFlagOfVerbose()) {
-		std::cout << "Number of winning coalitions a player belongs to: " << std::endl;
-	}
+	log::out << log::info << "Number of winning coalitions a player belongs to: " << log::endl;
 
 	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
 	{
@@ -28,9 +24,7 @@ std::vector<epic::bigFloat> epic::index::NevisonPH::calculate() {
 		bigFloat combinations = tmp;
 
 		for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
-			if (mGame.getFlagOfVerbose()) {
-				std::cout << "Player " << mGame.playerIndexToNumber(i) << ": " << big_wci[i] * factor << std::endl;
-			}
+			log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << big_wci[i] * factor << log::endl;
 			solution[i] = (big_wci[i] * factor) / combinations;
 		}
 	}

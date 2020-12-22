@@ -2,6 +2,8 @@
 
 #include "FastUpperBoundApproximation.h"
 #include "index/AbsoluteBanzhaf.h"
+#include "index/AbsolutePublicGood.h"
+#include "index/AbsolutePowerIndexG.h"
 #include "index/Banzhaf.h"
 #include "index/ColemanCollective.h"
 #include "index/ColemanInitiative.h"
@@ -15,7 +17,6 @@
 #include "index/Nevison.h"
 #include "index/NevisonPH.h"
 #include "index/PowerIndexF.h"
-#include "index/AbsolutePowerIndexG.h"
 #include "index/PowerIndexG.h"
 #include "index/PowerIndexGPH.h"
 #include "index/PublicGood.h"
@@ -42,6 +43,8 @@
 const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std::string>> epic::index::IndexFactory::cIndexNames = {
 	{INVALID_INDEX, {"INVALID", "invalid index"}},
 	{ABZ, {"ABZ", "absolute Banzhaf"}},
+	{APG, {"APG", "absolute Public Good"}},
+	{APIG, {"APIG", "absolute null-player-free Power Index G (based on the Dubey-Shapley identity)"}},	
 	{BZ, {"BZ", "Banzhaf"}},
 	{CC, {"CC", "Coleman collective"}},
 	{CI, {"CI", "Coleman initiative"}},
@@ -58,8 +61,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{PHT, {"PHT", "Public Help theta (based on the Dubey-Shapley identity)"}},
 	{PHTPH, {"PHTPH", "Public Help theta (based on the raw Public Help theta"}},
 	{PHX, {"PHX", "Public Help xi"}},
-	{PIF, {"PIF", "null-player-free Power Index F"}},
-	{APIG, {"APIG", "Absolute null-player-free Power Index G (based on the Dubey-Shapley identity)"}},
+	{PIF, {"PIF", "null-player-free Power Index F"}},	
 	{PIG, {"PIG", "null-player-free Power Index G (based on the Dubey-Shapley identity)"}},
 	{PIGPH, {"PIGPH", "null-player-free Power Index G (based on raw Public Help theta)"}},
 	{RA, {"RA", "Rae"}},
@@ -92,6 +94,8 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::INVALID_INDEX: index = nullptr; break;
 		case IndexType::ABZ: index = new AbsoluteBanzhaf(g, approx, int_representation); break;
 		case IndexType::BZ: index = new Banzhaf(g, approx, int_representation); break;
+		case IndexType::APG: index = new AbsolutePublicGood(g, approx, int_representation); break;
+		case IndexType::APIG: index = new AbsolutePowerIndexG(g, approx, int_representation); break;
 		case IndexType::CC: index = new ColemanCollective(g, approx, int_representation); break;
 		case IndexType::CI: index = new ColemanInitiative(g, approx, int_representation); break;
 		case IndexType::CP: index = new ColemanPreventive(g, approx, int_representation); break;
@@ -107,8 +111,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::PHT: index = new PublicHelpTheta(g, approx, int_representation); break;
 		case IndexType::PHTPH: index = new PublicHelpThetaPH(g, approx, int_representation); break;
 		case IndexType::PHX: index = new PublicHelpXi(g, approx, int_representation); break;
-		case IndexType::PIF: index = new PowerIndexF(g, approx, int_representation); break;
-		case IndexType::APIG: index = new AbsolutePowerIndexG(g, approx, int_representation); break;
+		case IndexType::PIF: index = new PowerIndexF(g, approx, int_representation); break;		
 		case IndexType::PIG: index = new PowerIndexG(g, approx, int_representation); break;
 		case IndexType::PIGPH: index = new PowerIndexGPH(g, approx, int_representation); break;
 		case IndexType::RA: index = new Rae(g, approx, int_representation); break;

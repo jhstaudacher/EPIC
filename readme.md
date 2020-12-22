@@ -42,6 +42,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | yes | `-w` / `--weights` | .csv file | the player weights for the weighted voting mGame (*1) |
 | yes | `-q` / `--quota` | integer | the quota for the weighted voting mGame (*2)|
 | no | `-v` / `--verbose` | no argument | adds extra output |
+| no | `--quiet` | no argument | reduces output to a minimum |
 | no | `-f` / `--filter-null` | no argument | excludes null player from the calculation (not compatible with all indices!) |
 | no | `--gmp` | no argument | enforces the use of GMP-classes for large integer calculations |
 | no | `--primes` | no argument | enforces the chinese lint theorem for large integer calculations |

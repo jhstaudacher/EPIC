@@ -1,13 +1,13 @@
 #include "Game.h"
 
+#include "Logging.h"
+
 #include <algorithm>
-#include <iostream>
 #include <stdexcept>
 
-epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool flag_withoutNullPlayers, bool flag_verbose) {
+epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool flag_withoutNullPlayers) {
 	this->quota = quota;
 	this->solution = {};
-	this->flag_verbose = flag_verbose;
 	this->flag_null_player_handling = flag_withoutNullPlayers;
 
 	//sort players by weight
@@ -53,10 +53,6 @@ const std::vector<epic::longUInt>& epic::Game::getWeights() const {
 
 epic::longUInt epic::Game::getQuota() const {
 	return quota;
-}
-
-bool epic::Game::getFlagOfVerbose() const {
-	return flag_verbose;
 }
 
 bool epic::Game::getFlagNullPlayerHandling() const {
@@ -109,7 +105,7 @@ epic::longUInt epic::Game::getNumberOfPlayersWithWeight0() const {
 }
 
 epic::longUInt epic::Game::playerIndexToNumber(longUInt index) const {
-	return sortingPermutation[index];
+	return sortingPermutation[index] + 1; // +1 to get values in [1,n]
 }
 
 //---------- private methods -------------
@@ -209,9 +205,7 @@ epic::longUInt epic::Game::findNullPlayersFromBelow(bool flag_withoutNullPlayers
 			}
 		}
 
-		if (getFlagOfVerbose()) {
-			std::cout << "In this mGame there are " << n_null_players << " null player(s)!" << std::endl;
-		}
+		log::out << log::info << n_null_players << " null player(s) found!" << log::endl;
 
 		return n_null_players;
 	}

@@ -2,8 +2,6 @@
 
 #include "Logging.h"
 
-#include <iostream>
-
 epic::index::Rae::Rae(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
 	: RawBanzhaf(g, approx, int_representation) {
 	if (mGame.getNumberOfNullPlayers() > 0 && mGame.getFlagNullPlayerHandling()) {
@@ -24,19 +22,19 @@ std::vector<epic::bigFloat> epic::index::Rae::calculate() {
 		bigInt sp;
 		bigFloat gamma = 0.5;
 
-		if (mGame.getFlagOfVerbose()) {
+		if (log::out.getLogLevel() <= log::info) {
 			bigInt factor = bigInt(1) << mGame.getNumberOfPlayersWithWeight0();
 
-			std::cout << "Number of times each player is a swing player:" << std::endl;
+			log::out << log::info << "Number of times each player is a swing player:" << log::endl;
 
 			for (longUInt i = 0; i < mNonZeroPlayerCount; ++i) {
 				mCalculator->to_bigInt(&sp, n_sp[i]);
 				solution[i] = (sp / n_combinations) + gamma;
-				std::cout << "Player " << mGame.playerIndexToNumber(i) << ": " << sp * factor << std::endl;
+				log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << sp * factor << log::endl;
 			}
 			for (longUInt i = mNonZeroPlayerCount; i < mGame.getNumberOfPlayers(); ++i) {
 				solution[i] = 0.5;
-				std::cout << "Player " << mGame.playerIndexToNumber(i) << ": 0" << std::endl;
+				log::out << "Player " << mGame.playerIndexToNumber(i) << ": 0" << log::endl;
 			}
 		} else {
 			for (longUInt i = 0; i < mNonZeroPlayerCount; ++i) {
