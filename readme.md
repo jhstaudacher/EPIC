@@ -11,8 +11,8 @@ If you need help to install the prerequisites, see the [install prerequisites se
 
 ## Compile
 1. If not already done, download the repository. This can be done in two different ways:
-    1. Clone the repository using git (`git clone https://ips.hs-kempten.de/powerindex/powerindex.git`)
-    1. Download the repository as archive (for example .zip) using the download dropdown menu on the Repository overview. The archive must get extracted after download.
+    1. Clone the repository using git (`git clone https://github.com/jhstaudacher/EPIC.git`)
+    1. Download the repository as ZIP archive using the download dropdown menu on the Repository overview. The archive must get extracted after download.
 1. Go to the cloned or extracted directory (`cd <path_to>/epic`) (in MSYS2 the drive `C:` can get accessed via `cd c/`).
 2. If the GMP library was manually downloaded and installed (not covered in this manual), add its installation directory with the `-L` option to the `LDFLAGS` variable in the `makefile`.
 3. Compile the application using make (`make all`). Checkout all available targets using `make help`.
