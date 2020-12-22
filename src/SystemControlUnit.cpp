@@ -10,6 +10,10 @@
 #include <map>
 #include <vector>
 
+#ifndef M_E // undefined on Windows/MSYS2
+	#define M_E 2.7182818284590452354
+#endif
+
 //Constructor to handle application
 epic::SystemControlUnit::SystemControlUnit(int numberOfInputArguments, char* vectorOfInputArguments[]) {
 	mGame = nullptr;
