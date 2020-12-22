@@ -95,7 +95,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 
 For a simple example we want to calculate the Banzhaf index for a simple 5-player mGame with the weights (9, 5, 3, 1, 1) and quota 11. Therefore create the file `weights.csv` inside the `epic/` directory and add the weights (one per line): 9, 5, 3, 1, 1.
 
-Then call the program: `./epic -i BZ -w ./weights.csv -q 11 -o screen -v`
+Then call the program: `./epic -i BZ -w ./weights.csv -q 11 -v`
 
 By adding the `-v` we get extra output like the raw Banzhaf values and the total number of swing players (sum over the raw Banzhaf values).
 
