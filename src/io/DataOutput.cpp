@@ -31,7 +31,7 @@ void epic::io::DataOutput::outputToScreen(Game& game) {
 		std::cout << results[0] << std::endl;
 	} else {
 		for (size_t i = 0; i < results.size(); ++i) {
-			std::cout << "P" << i << ": " << results[i] << std::endl;
+			std::cout << "P" << i + 1 << ": " << results[i] << std::endl;
 		}
 	}
 }

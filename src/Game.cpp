@@ -105,7 +105,7 @@ epic::longUInt epic::Game::getNumberOfPlayersWithWeight0() const {
 }
 
 epic::longUInt epic::Game::playerIndexToNumber(longUInt index) const {
-	return sortingPermutation[index];
+	return sortingPermutation[index] + 1; // +1 to get values in [1,n]
 }
 
 //---------- private methods -------------

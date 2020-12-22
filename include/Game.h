@@ -107,6 +107,8 @@ public:
 	/**
 	 * Converting the player index (sorted weights) into the player number (input ordering).
 	 *
+	 * @note The indices are in the interval [0,n-1] while the player numbers are in the interval [1,n].
+	 *
 	 * @param index The player index of sorted weights
 	 * @return The player number of original ordering
 	 */
