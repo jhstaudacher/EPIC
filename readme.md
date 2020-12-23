@@ -46,7 +46,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | no | `-f` / `--filter-null` | no argument | excludes null player from the calculation (not compatible with all indices!) |
 | no | `--gmp` | no argument | enforces the use of GMP-classes for large integer calculations |
 | no | `--primes` | no argument | enforces the chinese lint theorem for large integer calculations |
-| no | `--float` | no argument | reads the weights from within the weights-file as floating point numbers |
+| no | `--float` | no argument | reads the weights and the quota as floating point numbers |
 | no | `--csv` | no argument | write the results into a .csv file |
 
 (*1) The .csv file must contain one weight per line. The weights must all be integers unless you set the --float flag.
@@ -58,6 +58,8 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | shortcut | name |
 | -------- | ---- |
 | `ABZ` | Absolute Banzhaf |
+| `APG` | Absolute Public Good |
+| `APIG` | Absolute Power Index G (based on the Dubey-Shapley identity) |
 | `BZ` | Banzhaf |
 | `CC` | Coleman Collective |
 | `CI` | Coleman Initiative |
