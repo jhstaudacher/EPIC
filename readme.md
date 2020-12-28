@@ -11,10 +11,10 @@ If you need help to install the prerequisites, see the [install prerequisites se
 
 ## Compile
 1. If not already done, download the repository. This can be done in two different ways:
-    1. Clone the repository using git (`git clone https://ips.hs-kempten.de/powerindex/powerindex.git`)
-    1. Download the repository as archive (for example .zip) using the download dropdown menu on the Repository overview. The archive must get extracted after download.
-1. Go to the cloned or extracted directory (`cd <path_to>/epic`). 
-2. If the GMP library was manually downloaded and installed, add its installation directory with the `-L` option to the `LDFLAGS` variable in the `makefile`.
+    1. Clone the repository using git (`git clone https://github.com/jhstaudacher/EPIC.git`)
+    1. Download the repository as ZIP archive using the download dropdown menu on the Repository overview. The archive must get extracted after download.
+1. Go to the cloned or extracted directory (`cd <path_to>/epic`) (in MSYS2 the drive `C:` can get accessed via `cd c/`).
+2. If the GMP library was manually downloaded and installed (not covered in this manual), add its installation directory with the `-L` option to the `LDFLAGS` variable in the `makefile`.
 3. Compile the application using make (`make all`). Checkout all available targets using `make help`.
 4. The compiled application `epic` will appear in the top-level directory
 
@@ -33,7 +33,7 @@ If you want to remove all compilation products including the application itself,
 All the needed tools can be installed using the distributions package manager (e.g. for apt package manager run: `apt install gcc git make libgmp-dev`).
 
 # Usage
-First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. After that the program can get called by typing `./epic` followed by the options listed below. Additional to the lists below you can always get this information by calling `./epic --help`.
+First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. After that the program can get called by typing `./epic` (`./epic.exe` on Windows) followed by the options listed below. Additional to the lists below you can always get this information by calling `./epic --help`.
 
 ## Options
 | required? | option | argument | description |
@@ -97,12 +97,14 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 
 For a simple example we want to calculate the Banzhaf index for a simple 5-player mGame with the weights (9, 5, 3, 1, 1) and quota 11. Therefore create the file `weights.csv` inside the `epic/` directory and add the weights (one per line): 9, 5, 3, 1, 1.
 
-Then call the program: `./epic -i BZ -w ./weights.csv -q 11 -o screen -v`
+Then call the program: `./epic -i BZ -w ./weights.csv -q 11 -v`
 
 By adding the `-v` we get extra output like the raw Banzhaf values and the total number of swings (sum over the raw Banzhaf values).
 
 
 # For developer
+
+Everything described in this section was only tested on Linux (Ubuntu). To use the mentioned tools and procedures may need some modifications to run them with MSYS2 on Windows.
 
 ## Documentation generation
 
