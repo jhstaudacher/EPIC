@@ -99,7 +99,7 @@ For a simple example we want to calculate the Banzhaf index for a simple 5-playe
 
 Then call the program: `./epic -i BZ -w ./weights.csv -q 11 -o screen -v`
 
-By adding the `-v` we get extra output like the raw Banzhaf values and the total number of swing players (sum over the raw Banzhaf values).
+By adding the `-v` we get extra output like the raw Banzhaf values and the total number of swings (sum over the raw Banzhaf values).
 
 
 # For developer

@@ -55,7 +55,7 @@ protected:
 	void numberOfTimesPlayerIsSwingPlayer(ArrayOffset<lint::LargeNumber>& n_wc, lint::LargeNumber n_sp[]);
 
 	/**
-	 * Calculating the total number of all swing players
+	 * Calculating the total number of all swings
 	 *
 	 * This function sums up the array calculated by one of the numberOfTimesPlayerIsSwingPlayer() functions.
 	 *
