@@ -7,7 +7,7 @@
 namespace epic::lint {
 
 /**
- * Defining a mathematical operation. These are the operations that are supported by the ChineseRemainder classes.
+ * Defining a mathematical operation. These are the operations that are supported by the LargeNumber classes.
  */
 enum Operation {
 	addition,
