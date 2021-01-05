@@ -40,7 +40,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | -------- | ------ | -------- | ----------- |
 | yes | `-i` / `--index` | index shortcut | the index to compute |
 | yes | `-w` / `--weights` | .csv file | the player weights for the weighted voting mGame (*1) |
-| yes | `-q` / `--quota` | integer | the quota for the weighted voting mGame (*2)|
+| yes | `-q` / `--quota` | integer or float | the quota for the weighted voting mGame (*2)|
 | no | `-v` / `--verbose` | no argument | adds extra output |
 | no | `--quiet` | no argument | reduces output to a minimum |
 | no | `-f` / `--filter-null` | no argument | excludes null player from the calculation (not compatible with all indices!) |
@@ -92,6 +92,9 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `RSH` | Raw Shapley Shubik |
 | `SH` | Shapley Shubik |
 | `T` | Tijs |
+| `W` | Number of winning coalitions|
+| `WM` | Number of minimal winning coalitions |
+| `WS` | Number of minimal winning coalitions of smallest cardinality |
 
 ## Example
 
