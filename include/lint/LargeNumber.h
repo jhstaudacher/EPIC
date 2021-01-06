@@ -20,6 +20,13 @@ union LargeNumber {
 	bigInt* bint;	 // pointer to an BigInt object (needed to save memory for very large problems since bigInt only allocates as much memory as it needs)
 };
 
+/**
+ * # How to use LargeNumber objects for calculations
+ *
+ * **examples/LargeNumber_usage.cpp**:
+ * @example{lineno} LargeNumber_usage.cpp
+ */
+
 } /* namespace epic::lint */
 
 #endif /* EPIC_LINT_LARGENUMBER_H_ */
