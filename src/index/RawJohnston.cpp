@@ -26,18 +26,20 @@ std::vector<epic::bigFloat> epic::index::RawJohnston::calculate() {
 	 * Preprocessing step 1: Collect sums later needed for surpluses
 	 */
 	auto max_weight = mGame.getWeights()[0];
-	longUInt hSum = 1;
 	auto surplusSums = new longUInt[max_weight]();
-	surplusSums[0] = hSum;
+	{ // initialize surplusSums
+		longUInt hSum = 1;
+		surplusSums[0] = hSum;
 
-	for (longUInt l = 1; l < max_weight; ++l) {
-		longUInt idx = findIndexInRev(l);
+		for (longUInt l = 1; l < max_weight; ++l) {
+			longUInt idx = findIndexInRev(l);
 
-		if (idx < mNonZeroPlayerCount) {
-			hSum += h(idx, l - 1);
+			if (idx < mNonZeroPlayerCount) {
+				hSum += h(idx, l - 1);
+			}
+
+			surplusSums[l] = hSum;
 		}
-
-		surplusSums[l] = hSum;
 	}
 
 	/*
@@ -48,7 +50,7 @@ std::vector<epic::bigFloat> epic::index::RawJohnston::calculate() {
 
 	for (longUInt deficiency = 0; deficiency < mGame.getQuota() - 1; ++deficiency) {
 		for (longUInt j = 0; j < mNonZeroPlayerCount; ++j) {
-			hSum = 0;
+			longUInt hSum = 0;
 			auto wj = mGame.getWeights()[j];
 
 			if (wj > 1.00001) {
@@ -151,7 +153,7 @@ std::vector<epic::bigFloat> epic::index::RawJohnston::calculate() {
 					for (longUInt s = 1; s < mNonZeroPlayerCount; ++s) {
 						mCalculator->assign_zero(sum1);
 						for (longInt currentWeight = 0; currentWeight <= static_cast<longInt>(mGame.getQuota() - wi - wj - 1); ++currentWeight) {
-							longUInt deficiency = mGame.getQuota() - (currentWeight + wi + wj) - 1;
+							deficiency = mGame.getQuota() - (currentWeight + wi + wj) - 1;
 							longUInt hSum = 0;
 
 							if (wj > 1.00001) {
@@ -176,12 +178,9 @@ std::vector<epic::bigFloat> epic::index::RawJohnston::calculate() {
 
 							if (wj == 1 && s > 1) {
 								mCalculator->plusEqual(sum2, interm(currentWeight, s - 2));
-							} else {
-								hSum = surplusSums[wj - surplus - 1];
-								if (s > 1) {
-									mCalculator->mul(tmp, interm(currentWeight, s - 2), hSum);
-									mCalculator->plusEqual(sum2, tmp);
-								}
+							} else if (s > 1) {
+								mCalculator->mul(tmp, interm(currentWeight, s - 2), surplusSums[wj - surplus - 1]);
+								mCalculator->plusEqual(sum2, tmp);
 							}
 						}
 						mCalculator->plusEqual(qmwcs(i, s), sum2);
