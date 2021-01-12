@@ -143,7 +143,7 @@ protected:
  *
  *
  * ## complete examples
- * If you are familiar with git patches, you can use one of the following files providing empty (but working) class implementations to get started (git apply <patch-file>):
+ * If you are familiar with git patches, you can use one of the following files providing empty (but working) class implementations to get started (`git apply [-3] <patch-file>`):
  *	- independent implementation: `examples/new_index/independent/newindex_independent.patch`
  *	- derived implementation: `examples/new_index/derived/newindex_derived.patch`
  */
