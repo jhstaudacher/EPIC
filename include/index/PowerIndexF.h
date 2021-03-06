@@ -2,7 +2,7 @@
 #define EPIC_INDEX_POWERINDEXF_H_
 
 #include "ItfUpperBoundApproximation.h"
-#include "RawPowerIndexF.h"
+#include "SwingsPerPlayerAndCardinality.h"
 #include "lint/ItfLargeNumberCalculator.h"
 
 namespace epic::index {
@@ -23,7 +23,7 @@ namespace epic::index {
  * 		<tr><td>`--filter-null / -f`	<td>required (if null players exits in the mGame) since the index is not defined for null players. Filtered null player get the index `0`.
  * </table>
  */
-class PowerIndexF : public RawPowerIndexF {
+class PowerIndexF : public SwingsPerPlayerAndCardinality {
 public:
 	/**
 	 * Construct the PowerIndexF object
@@ -35,9 +35,11 @@ public:
 	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
 	 */
 	PowerIndexF(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
+	~PowerIndexF() override;
 
 	std::vector<bigFloat> calculate() override;
 	std::string getFullName() override;
+	longUInt getMemoryRequirement() override;
 };
 
 } // namespace epic::index
