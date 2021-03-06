@@ -24,6 +24,12 @@ namespace epic::index {
  *
  * <b>Implementation note</b>:
  * If the mGame contains player of weight zero, they get excluded from the calculation. At the end the corresponding players get assigned the index \f$Z_i = \frac{|W|}{2^n}\f$.
+ * 
+ * The winning coalitions containing player \f$i\f$ are calculated using the Dubey-Shapley identity which is defined as
+ *  \f[
+ *		W_i = 0.5 *(\eta_i(\nu) + |W|)
+ * \f]
+ * where \f$\nu\f$ be a simple \f$n\f$-player mGame and \f$\eta_i(\nu)\f$ the number of coalitions for which \f$i\f$ is a critical player.
  */
 class Nevison : public RawBanzhaf {
 public:

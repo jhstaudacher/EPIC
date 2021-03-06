@@ -20,6 +20,13 @@ namespace epic::index {
  * 		<tr><td>`--verbose / -v`		<td>print the total number of (null player free) winning coalitions as well as the number of (null player free) winning coalitions each player is a member of (raw null player free index g).
  * 		<tr><td>`--filter-null / -f`	<td>required (if null players exits in the mGame) since the index is not defined for null players. Filtered null player get the index `0`.
  * </table>
+ * 
+ * <b>Implementation note</b>:
+ * The winning coalitions containing player \f$i\f$ are calculated using the Dubey-Shapley identity which is defined as
+ *  \f[
+ *		W_i^{np} = 0.5 *(\eta_i(\nu) + |W^{np}|)
+ * \f]
+ * where \f$\nu\f$ be a simple \f$n\f$-player mGame and \f$\eta_i(\nu)\f$ the number of coalitions for which \f$i\f$ is a critical player.
  */
 class PowerIndexG : public RawPowerIndexG {
 public:
