@@ -48,7 +48,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{BZ, {"BZ", "Banzhaf"}},
 	{CC, {"CC", "Coleman collective"}},
 	{CI, {"CI", "Coleman initiative"}},
-	{CP, {"CP", "Coleman collective"}},
+	{CP, {"CP", "Coleman preventive"}},
 	{DP, {"DP", "Deegan Packel"}},
 	{FT, {"FT", "Felsenthal"}},
 	{HN, {"HN", "Harsanyi Nash"}},
