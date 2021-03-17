@@ -133,7 +133,7 @@ void epic::SystemControlUnit::handleOutput() {
 }
 
 //handle output in R
-std::map<std::string, std::vector<std::string>> epic::SystemControlUnit::handleRReturnValue() {
+std::vector<double> epic::SystemControlUnit::handleRReturnValue() {
 	return io::DataOutput::outputToR(*mGame, mUserInputHandler->getIndexToCompute());
 }
 

@@ -36,19 +36,13 @@ void epic::io::DataOutput::outputToScreen(Game& game) {
 	}
 }
 
-std::map<std::string, std::vector<std::string>> epic::io::DataOutput::outputToR(Game& game, const std::string& index) {
-	std::vector<bigFloat> results = game.getSolution();
-	std::map<std::string, std::vector<std::string>> formattedResults;
-	std::vector<std::string> r_results;
-
+std::vector<double> epic::io::DataOutput::outputToR(Game& game, const std::string& index) {
+	std::vector<bigFloat> results = game.getSolution();		
+	std::vector<double> r_results;
 	for (auto& result : results) {
-		std::ostringstream stringstream;
-		stringstream << result;
 
-		r_results.push_back(stringstream.str());
-	}
+		r_results.push_back(result.get_d());
+	}	
 
-	formattedResults[index] = r_results;
-
-	return formattedResults;
+	return r_results;
 }

@@ -36,7 +36,7 @@ public:
 	 * @param index The name of the calculated index
 	 * @return A map object with one entry: {<index>, <solution vector>}
 	 */
-	static std::map<std::string, std::vector<std::string>> outputToR(Game& game, const std::string& index);
+	static std::vector<double> outputToR(Game& game, const std::string& index);
 
 }; /* class DataInput */
 

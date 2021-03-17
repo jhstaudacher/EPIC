@@ -66,7 +66,7 @@ public:
        * A function that handle the output in R. Passes the result of the index calculation to an instance of DataOutput.
        *
        */
-	std::map<std::string, std::vector<std::string>> handleRReturnValue();
+	std::vector<double> handleRReturnValue();
 
 	/**
        * Checks if the current computer hardware fits the requirements to compute the given index
