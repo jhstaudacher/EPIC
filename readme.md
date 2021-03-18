@@ -1,4 +1,4 @@
-# EPIC - Efficient Power Index Calculation
+# EPIC - Efficient Power Index Computation
 
 [[_TOC_]]
 
