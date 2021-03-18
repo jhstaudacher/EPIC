@@ -2,6 +2,7 @@
 #define EPIC_FLOATTOINTREPRESENTATION_H_
 
 #include "types.h"
+#include <vector>
 
 /**
  * Utility to find an integer representation of a given floating-point problem, in no way minimal or optimal

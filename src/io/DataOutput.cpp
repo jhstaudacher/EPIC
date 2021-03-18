@@ -36,12 +36,12 @@ void epic::io::DataOutput::outputToScreen(Game& game) {
 	}
 }
 
-std::vector<double> epic::io::DataOutput::outputToR(Game& game, const std::string& index) {
+std::vector<std::string> epic::io::DataOutput::outputToR(Game& game, const std::string& index) {
 	std::vector<bigFloat> results = game.getSolution();		
-	std::vector<double> r_results;
+	std::vector<std::string> r_results;
 	for (auto& result : results) {
 
-		r_results.push_back(result.get_d());
+		r_results.push_back(GMPHelper::mpf_class_to_string(result));
 	}	
 
 	return r_results;

@@ -1,7 +1,5 @@
 #include "FloatToIntRepresentation.h"
 
-#include <vector>
-
 double UpscaleFloatToIntAndReturnMultiplicator(std::vector<double>& floats, std::vector<epic::longUInt>& ints) {
 	ints.resize(floats.size());
 
