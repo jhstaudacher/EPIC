@@ -1,6 +1,7 @@
 #include "lint/ChineseRemainder.h"
 
 #include "Logging.h"
+
 #include <sstream>
 
 epic::lint::ChineseRemainder::ChineseRemainder(const longUInt* primes, const size_t amount, const bigInt& m)

@@ -17,13 +17,12 @@ std::vector<epic::bigFloat> epic::index::AbsolutePublicGood::calculate() {
 	}
 
 	auto mwc = new lint::LargeNumber[mNonZeroPlayerCount];
-	mCalculator->allocInit_largeNumberArray(mwc, mNonZeroPlayerCount);	
+	mCalculator->allocInit_largeNumberArray(mwc, mNonZeroPlayerCount);
 
 	calculateMinimalWinningCoalitionsPerPlayer(mwc);
 
 	log::out << log::info << "Total number of minimal winning coalitions: " << total_mwc << log::endl;
 	log::out << log::info << "Number of minimal winning coalitions individual players belong to: " << log::endl;
-
 
 	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
 	{
@@ -105,5 +104,3 @@ void epic::index::AbsolutePublicGood::numberOfMinimalWinningCoalitions(bigInt* t
 std::string epic::index::AbsolutePublicGood::getFullName() {
 	return "AbsolutePublicGood";
 }
-
-

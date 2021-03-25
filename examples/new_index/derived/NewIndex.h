@@ -9,7 +9,7 @@ namespace epic::index {
  * Add here a description of the new power index for the Doxygen documentation generator.
  */
 class NewIndex : public RawPublicGood {
-/*
+	/*
  * Override the RawPublicGood methods as required:
  */
 public:

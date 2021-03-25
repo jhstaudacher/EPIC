@@ -1,10 +1,10 @@
 #ifndef EPIC_LOG_LOGGING_H_
 #define EPIC_LOG_LOGGING_H_
 
-#include <iostream>
-#include <string>
 #include <array>
+#include <iostream>
 #include <map>
+#include <string>
 
 namespace epic::log {
 
@@ -17,7 +17,6 @@ static const std::string invalidFlagF = "This power index is null player sensiti
  * Log-Message for the case that the `-f` flag was not set although the index (and the given weights) require it.
  */
 static const std::string missingFlagF = "This power index is not defined for null players! Retry with the '-f' flag.";
-
 
 /**
  * An enumeration type of all supported logging-levels. The > relation is defined as follows:

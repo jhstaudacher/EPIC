@@ -44,7 +44,7 @@ std::vector<epic::bigFloat> epic::index::PowerIndexF::calculate() {
 	n_wc.free();
 
 	log::out << log::info << "Total number of winning coalitions: " << total_number_of_winning_coalitions << log::endl;
-	
+
 	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
 	{
 		bigInt tmp_int;
@@ -64,7 +64,7 @@ std::vector<epic::bigFloat> epic::index::PowerIndexF::calculate() {
 			solution[i] /= total_number_of_winning_coalitions;
 		}
 	}
-	
+
 	// delete pif
 	mCalculator->free_largeNumberArray(pif.getArrayPointer());
 

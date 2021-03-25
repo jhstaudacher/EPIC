@@ -5,8 +5,7 @@ epic::log::Logger epic::log::out;
 const std::array<std::string, epic::log::Logger::cLevelCount> epic::log::Logger::mLevelNames = {
 	"INFO:    ",
 	"WARNING: ",
-	"ERROR:   "
-};
+	"ERROR:   "};
 
 const std::string epic::log::Logger::mWhiteSpace = "         ";
 

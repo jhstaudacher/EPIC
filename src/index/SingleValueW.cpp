@@ -1,7 +1,7 @@
 #include "index/SingleValueW.h"
 
-epic::index::SingleValueW::SingleValueW(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation) : RawBanzhaf(g, approx, int_representation) {
-
+epic::index::SingleValueW::SingleValueW(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
+	: RawBanzhaf(g, approx, int_representation) {
 }
 
 std::vector<epic::bigFloat> epic::index::SingleValueW::calculate() {
@@ -16,7 +16,6 @@ std::vector<epic::bigFloat> epic::index::SingleValueW::calculate() {
 	numberOfWinningCoalitions(n_wc, total_wc);
 
 	mCalculator->free_largeNumberArray(n_wc.getArrayPointer());
-
 
 	std::vector<bigFloat> solution(1);
 	{

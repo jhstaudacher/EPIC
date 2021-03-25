@@ -1,6 +1,7 @@
 #include "index/NewIndex.h"
 
-epic::index::NewIndex::NewIndex(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation) : RawPublicGood(g, approx, int_representation) {
+epic::index::NewIndex::NewIndex(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
+	: RawPublicGood(g, approx, int_representation) {
 	/*
 	 * If needed add additional initializations below
 	 */

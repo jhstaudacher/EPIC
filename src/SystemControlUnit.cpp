@@ -1,9 +1,9 @@
 #include "SystemControlUnit.h"
 
 #include "HardwareInfo.h"
+#include "Logging.h"
 #include "index/IndexFactory.h"
 #include "types.h"
-#include "Logging.h"
 
 #include <chrono>
 #include <cmath>
@@ -11,7 +11,7 @@
 #include <vector>
 
 #ifndef M_E // undefined on Windows/MSYS2
-	#define M_E 2.7182818284590452354
+#define M_E 2.7182818284590452354
 #endif
 
 //Constructor to handle application
@@ -32,7 +32,8 @@ epic::SystemControlUnit::SystemControlUnit(int numberOfInputArguments, char* vec
 	//calculate Index
 	calculateIndex();
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-	log::out << log::info << "Calculation completed (" << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "µs)" << log::endl << log::endl;
+	log::out << log::info << "Calculation completed (" << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "µs)" << log::endl
+			 << log::endl;
 
 	//handle output
 	handleOutput();
@@ -282,7 +283,7 @@ void epic::SystemControlUnit::estimateTime() {
 			estimation = "trivial or not implemented";
 		}
 
-		log::out << log::info << "Calculation time estimation: " << estimation <<  " (only accurate without swap-usage)" << log::endl;
+		log::out << log::info << "Calculation time estimation: " << estimation << " (only accurate without swap-usage)" << log::endl;
 	}
 }
 

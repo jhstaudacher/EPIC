@@ -10,7 +10,7 @@ namespace epic::index {
  * Add here a description of the new power index for the Doxygen documentation generator.
  */
 class NewIndex : public ItfPowerIndex {
-/*
+	/*
  * Implement the ItfPowerIndex interface:
  */
 public:

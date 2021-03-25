@@ -2,8 +2,8 @@
 #define EPIC_TYPES_H_
 
 #include <cinttypes>
-#include <sstream>
 #include <gmpxx.h>
+#include <sstream>
 
 namespace epic {
 
@@ -63,16 +63,15 @@ public:
 	 * @param value The bigFloat object to convert
 	 * @return The std::string of the bigFloat object
 	 */
-	static std::string mpf_class_to_string(mpf_class& value) {	  
-	  double dValue = value.get_d();
-	  std::ostringstream stringstream;
-	  stringstream << dValue;
-	  
-	  std::string str = stringstream.str();
-	  
-	  return str;	    
-	}
+	static std::string mpf_class_to_string(mpf_class& value) {
+		double dValue = value.get_d();
+		std::ostringstream stringstream;
+		stringstream << dValue;
 
+		std::string str = stringstream.str();
+
+		return str;
+	}
 
 private:
 	static constexpr longUInt mLimbSize = GMP_LIMB_BITS / 8;

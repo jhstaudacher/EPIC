@@ -1,7 +1,7 @@
 #include "index/Tijs.h"
 
-#include "types.h"
 #include "Logging.h"
+#include "types.h"
 
 epic::index::Tijs::Tijs(Game& g)
 	: ItfPowerIndex(g) {

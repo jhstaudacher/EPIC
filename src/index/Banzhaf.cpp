@@ -3,7 +3,6 @@
 #include "Array.h"
 #include "Logging.h"
 
-
 epic::index::Banzhaf::Banzhaf(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
 	: RawBanzhaf(g, approx, int_representation) {
 }

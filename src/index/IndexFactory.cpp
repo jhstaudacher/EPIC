@@ -2,8 +2,8 @@
 
 #include "FastUpperBoundApproximation.h"
 #include "index/AbsoluteBanzhaf.h"
-#include "index/AbsolutePublicGood.h"
 #include "index/AbsolutePowerIndexG.h"
+#include "index/AbsolutePublicGood.h"
 #include "index/Banzhaf.h"
 #include "index/ColemanCollective.h"
 #include "index/ColemanInitiative.h"
@@ -35,16 +35,16 @@
 #include "index/RawPublicHelpThetaSD.h"
 #include "index/RawShapleyShubik.h"
 #include "index/ShapleyShubik.h"
-#include "index/Tijs.h"
 #include "index/SingleValueW.h"
 #include "index/SingleValueWM.h"
 #include "index/SingleValueWS.h"
+#include "index/Tijs.h"
 
 const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std::string>> epic::index::IndexFactory::cIndexNames = {
 	{INVALID_INDEX, {"INVALID", "invalid index"}},
 	{ABZ, {"ABZ", "absolute Banzhaf"}},
 	{APG, {"APG", "absolute Public Good"}},
-	{APIG, {"APIG", "absolute null-player-free Power Index G (based on the Dubey-Shapley identity)"}},	
+	{APIG, {"APIG", "absolute null-player-free Power Index G (based on the Dubey-Shapley identity)"}},
 	{BZ, {"BZ", "Banzhaf"}},
 	{CC, {"CC", "Coleman collective"}},
 	{CI, {"CI", "Coleman initiative"}},
@@ -61,7 +61,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{PHT, {"PHT", "Public Help theta (based on the Dubey-Shapley identity)"}},
 	{PHTPH, {"PHTPH", "Public Help theta (based on the raw Public Help theta"}},
 	{PHX, {"PHX", "Public Help xi"}},
-	{PIF, {"PIF", "null-player-free Power Index F"}},	
+	{PIF, {"PIF", "null-player-free Power Index F"}},
 	{PIG, {"PIG", "null-player-free Power Index G (based on the Dubey-Shapley identity)"}},
 	{PIGPH, {"PIGPH", "null-player-free Power Index G (based on raw Public Help theta)"}},
 	{RA, {"RA", "Rae"}},
@@ -79,8 +79,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{T, {"T", "Tijs"}},
 	{W, {"W", "Number of winning coalitions"}},
 	{WM, {"WM", "Number of minimal winning coalitions"}},
-	{WS, {"WS", "Number of minimal winning coalitions of smallest cardinality"}}
-};
+	{WS, {"WS", "Number of minimal winning coalitions of smallest cardinality"}}};
 
 bool epic::index::IndexFactory::validateIndex(const std::string& short_name) {
 	return getIndexType(short_name) != INVALID_INDEX;
@@ -111,7 +110,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::PHT: index = new PublicHelpTheta(g, approx, int_representation); break;
 		case IndexType::PHTPH: index = new PublicHelpThetaPH(g, approx, int_representation); break;
 		case IndexType::PHX: index = new PublicHelpXi(g, approx, int_representation); break;
-		case IndexType::PIF: index = new PowerIndexF(g, approx, int_representation); break;		
+		case IndexType::PIF: index = new PowerIndexF(g, approx, int_representation); break;
 		case IndexType::PIG: index = new PowerIndexG(g, approx, int_representation); break;
 		case IndexType::PIGPH: index = new PowerIndexGPH(g, approx, int_representation); break;
 		case IndexType::RA: index = new Rae(g, approx, int_representation); break;

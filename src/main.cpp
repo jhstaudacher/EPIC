@@ -1,6 +1,5 @@
-#include "SystemControlUnit.h"
-
 #include "Logging.h"
+#include "SystemControlUnit.h"
 
 int main(int argc, char* argv[]) {
 	try {

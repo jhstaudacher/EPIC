@@ -2,6 +2,7 @@
 #define EPIC_FLOATTOINTREPRESENTATION_H_
 
 #include "types.h"
+
 #include <vector>
 
 /**

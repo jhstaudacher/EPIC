@@ -1,6 +1,7 @@
 #include "index/NewIndex.h"
 
-epic::index::NewIndex::NewIndex(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation) : ItfPowerIndex(g) {
+epic::index::NewIndex::NewIndex(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
+	: ItfPowerIndex(g) {
 	/*
 	 * Initialize the protected ItfPowerIndex::mCalculator object. This gets used to do all large integer calculations later.
 	 * For an approximation of the maximum value needed for the calculations the approx object can get used.

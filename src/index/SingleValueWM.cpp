@@ -1,7 +1,7 @@
 #include "index/SingleValueWM.h"
 
-epic::index::SingleValueWM::SingleValueWM(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation) : DeeganPackel(g, approx, int_representation) {
-
+epic::index::SingleValueWM::SingleValueWM(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
+	: DeeganPackel(g, approx, int_representation) {
 }
 
 std::vector<epic::bigFloat> epic::index::SingleValueWM::calculate() {

@@ -1,7 +1,7 @@
 #include "index/SingleValueWS.h"
 
-epic::index::SingleValueWS::SingleValueWS(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation) : RawFelsenthal(g, approx, int_representation) {
-
+epic::index::SingleValueWS::SingleValueWS(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
+	: RawFelsenthal(g, approx, int_representation) {
 }
 
 std::vector<epic::bigFloat> epic::index::SingleValueWS::calculate() {
