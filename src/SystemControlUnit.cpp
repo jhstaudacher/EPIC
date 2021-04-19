@@ -145,7 +145,9 @@ bool epic::SystemControlUnit::checkHardware(index::ItfPowerIndex* index_ptr) {
 	longUInt req = index_ptr->getMemoryRequirement();
 
 	log::out << log::info << "Approximated RAM usage: " << req << " Bytes" << log::endl;
-	if (req > hInfo.getFreeRamSize()) {
+	if (hInfo.getFreeRamSize() == 0) {
+		log::out << log::warning << "Unable to read RAM size! (approximately needed: " << req << "B)" << log::endl;
+	} else if (req > hInfo.getFreeRamSize()) {
 		if (req > hInfo.getTotalRamSize()) {
 			log::out << log::warning << "Not enough memory! (total: " << hInfo.getTotalRamSize() << "B, approximately needed: " << req << "B)" << log::endl;
 		} else {
