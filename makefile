@@ -32,6 +32,11 @@ all:
 	@rm .tmp.txt
 	$(MAKE) $(TARGET)
 
+.PHONY: allmac
+allmac:
+	@cd $(SRC_DIR); find * -type d -exec mkdir -p -- ../$(BUILD_DIR)/{} \;
+	$(MAKE) $(TARGET)
+
 $(TARGET): $(OBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
