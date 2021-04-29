@@ -13,6 +13,9 @@ typedef mpf_class bigFloat;
 #if defined(__linux__)
 typedef std::uint64_t longUInt;
 typedef std::int64_t longInt;
+#elif defined(__APPLE__)
+typedef unsigned long longUInt;
+typedef std::int64_t longInt;
 #else
 typedef unsigned int longUInt;
 typedef int longInt;

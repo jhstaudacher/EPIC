@@ -27,8 +27,11 @@ private:
 	/**
 	 * An Array containing the precalculated primes
 	 */
-	// static constexpr StaticArray<longUInt, mNPrecPrimes> mPrecPrimes = ItfPrimeCalculator::precalculate_primes<mNPrecPrimes>(std::pow(2, std::numeric_limits<longUInt>::digits - 1));
-	static constexpr StaticArray<longUInt, mNPrecPrimes> mPrecPrimes = ItfPrimeCalculator::precalculate_primes<mNPrecPrimes>(1 << (std::numeric_limits<longUInt>::digits - 1));
+#if defined(__APPLE__)
+	static constexpr StaticArray<longUInt, mNPrecPrimes> mPrecPrimes = ItfPrimeCalculator::precalculate_primes<mNPrecPrimes>((unsigned long) 9223372036854775808);
+#else
+	static constexpr StaticArray<longUInt, mNPrecPrimes> mPrecPrimes = ItfPrimeCalculator::precalculate_primes<mNPrecPrimes>(std::pow(2, std::numeric_limits<longUInt>::digits - 1));
+#endif
 };
 
 } /* namespace epic::lint */

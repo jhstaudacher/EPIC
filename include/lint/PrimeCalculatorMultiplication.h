@@ -18,13 +18,16 @@ private:
 	/**
 	 * The number of precalculated primes
 	 */
-	static constexpr size_t mNPrecPrimes = 20;
+	static constexpr longUInt mNPrecPrimes = 20;
 
 	/**
 	 * An Array containing the precalculated primes
 	 */
-	// static constexpr StaticArray<longUInt, mNPrecPrimes> mPrecPrimes = ItfPrimeCalculator::precalculate_primes<mNPrecPrimes>(std::pow(2, std::numeric_limits<longUInt>::digits / 2));
-	static constexpr StaticArray<longUInt, mNPrecPrimes> mPrecPrimes = ItfPrimeCalculator::precalculate_primes<mNPrecPrimes>(1 << (std::numeric_limits<longUInt>::digits / 2));
+#if defined(__APPLE__)
+	static constexpr StaticArray<longUInt, mNPrecPrimes> mPrecPrimes = ItfPrimeCalculator::precalculate_primes<mNPrecPrimes>(4294967296);
+#else
+	static constexpr StaticArray<longUInt, mNPrecPrimes> mPrecPrimes = ItfPrimeCalculator::precalculate_primes<mNPrecPrimes>(std::pow(2, std::numeric_limits<longUInt>::digits / 2));
+#endif
 };
 
 } /* namespace epic::lint */
