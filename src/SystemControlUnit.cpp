@@ -28,12 +28,8 @@ epic::SystemControlUnit::SystemControlUnit(int numberOfInputArguments, char* vec
 	//Estimate the time needed to calculate the index
 	estimateTime();
 
-	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 	//calculate Index
 	calculateIndex();
-	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-	log::out << log::info << "Calculation completed (" << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "µs)" << log::endl
-			 << log::endl;
 
 	//handle output
 	handleOutput();
@@ -64,11 +60,18 @@ void epic::SystemControlUnit::calculateIndex() {
 				 << log::endl;
 
 		std::string idx = mUserInputHandler->getIndexToCompute();
+
+		std::chrono::steady_clock::time_point t_begin = std::chrono::steady_clock::now();
 		if (idx == "W" || idx == "WM" || idx == "WS") { // single value calculation
 			mGame->setSingleValueSolution(index->calculate()[0]);
 		} else {
 			mGame->setSolution(index->calculate());
 		}
+		std::chrono::steady_clock::time_point t_end = std::chrono::steady_clock::now();
+
+		log::out << log::info << "Calculation completed (" << std::chrono::duration_cast<std::chrono::microseconds>(t_end - t_begin).count() << " µs)" << log::endl;
+	} else {
+		log::out << log::info << "Calculation aborted" << log::endl;
 	}
 
 	index::IndexFactory::delete_powerIndex(index);
