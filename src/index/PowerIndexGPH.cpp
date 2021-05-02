@@ -46,12 +46,14 @@ std::string epic::index::PowerIndexGPH::getFullName() {
 epic::longUInt epic::index::PowerIndexGPH::getMemoryRequirement() {
 	bigInt memory = 0;
 
-	memory += RawPublicHelpTheta::getMemoryRequirement();
 	bigInt max_n_wci = 2;
 	mpz_pow_ui(max_n_wci.get_mpz_t(), max_n_wci.get_mpz_t(), mGame.getNumberOfPlayers());
 	memory += mGame.getNumberOfPlayers() * GMPHelper::size_of_int(max_n_wci); // big_wci (all players are in the maximum of winning coalitions 2^n)
 	memory += GMPHelper::size_of_int(max_n_wci * mGame.getNumberOfPlayers()); // big_swc (sum of all big_wci)
 	// exclude solutions vector since the PowerIndexWithWinningCoalitionsPerPlayer function already adds the wci array which is (numberOfPlayer * numberOfRemainder large)
+	memory /= cMemUnit_factor;
+
+	memory += RawPublicHelpTheta::getMemoryRequirement();
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {

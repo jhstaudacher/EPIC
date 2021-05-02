@@ -5,7 +5,8 @@ epic::index::SwingsPerPlayerAndCardinality::SwingsPerPlayerAndCardinality(Game& 
 }
 
 epic::longUInt epic::index::SwingsPerPlayerAndCardinality::getMemoryRequirement() {
-	bigInt memory = (mGame.getWeightSum() + 1 - mGame.getQuota()) * (mNonZeroPlayerCount + 1) * mCalculator->getLargeNumberSize() * 2; // n_wc, helper_wc
+	bigInt memory = bigInt(mGame.getWeightSum() + 1 - mGame.getQuota()) * (mNonZeroPlayerCount + 1) * mCalculator->getLargeNumberSize() * 2; // n_wc, helper_wc
+	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {

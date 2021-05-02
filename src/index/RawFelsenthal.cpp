@@ -165,6 +165,7 @@ std::string epic::index::RawFelsenthal::getFullName() {
 epic::longUInt epic::index::RawFelsenthal::getMemoryRequirement() {
 	bigInt memory = (mMinsize + 1) * (mGame.getQuota() + 1) * mCalculator->getLargeNumberSize() * 2; // f, b
 	memory += mNonZeroPlayerCount * mCalculator->getLargeNumberSize();								 // mwcs
+	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {

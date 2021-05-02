@@ -39,6 +39,7 @@ epic::longUInt epic::index::Tijs::getMemoryRequirement() {
 	bigFloat n_vp = mGame.getNumberOfPlayers();
 	n_vp = 1 / n_vp;
 	bigInt memory = mGame.getNumberOfPlayers() * GMPHelper::size_of_float(n_vp); // solution
+	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {

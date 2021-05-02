@@ -61,8 +61,11 @@ std::string epic::index::RawPowerIndexF::getFullName() {
 }
 
 epic::longUInt epic::index::RawPowerIndexF::getMemoryRequirement() {
-	bigInt memory = SwingsPerPlayerAndCardinality::getMemoryRequirement();
-	memory += mGame.getNumberOfPlayers() * (mGame.getNumberOfPlayers() + 1) * mCalculator->getLargeNumberSize(); // pif
+	bigInt memory = mGame.getNumberOfPlayers();
+	memory *= (mGame.getNumberOfPlayers() + 1) * mCalculator->getLargeNumberSize(); // pif
+	memory /= cMemUnit_factor;
+
+	memory += SwingsPerPlayerAndCardinality::getMemoryRequirement();
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {

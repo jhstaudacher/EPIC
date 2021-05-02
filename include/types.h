@@ -18,6 +18,19 @@ typedef unsigned int longUInt;
 typedef int longInt;
 #endif
 
+
+/**
+ * The calculation factor between the base unit (Bytes) and cMemUnit_name!
+ * x [Byte] / cMemUnit_factor = y [cMemUnit_name]
+ */
+static const longUInt cMemUnit_factor = 1024;
+
+/**
+ * The shortcut for the used memory unit.
+ */
+static const std::string cMemUnit_name = "KiB";
+
+
 /**
  * Enum-Type defining the different options for large integer representations
  */

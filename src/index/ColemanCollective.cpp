@@ -52,8 +52,10 @@ std::string epic::index::ColemanCollective::getFullName() {
 }
 
 epic::longUInt epic::index::ColemanCollective::getMemoryRequirement() {
-	bigInt memory = (mGame.getWeightSum() + 1 - mGame.getQuota()) * mCalculator->getLargeNumberSize(); // n_wc
-	memory += mCalculator->getLargeNumberSize();													   // total_wc
+	bigInt memory = mCalculator->getLargeNumberSize();
+	memory *= mGame.getWeightSum() + 1 - mGame.getQuota(); // n_wc
+	memory += mCalculator->getLargeNumberSize();	       // total_wc
+	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {

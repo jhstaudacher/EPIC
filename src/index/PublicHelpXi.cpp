@@ -138,8 +138,10 @@ std::string epic::index::PublicHelpXi::getFullName() {
 }
 
 epic::longUInt epic::index::PublicHelpXi::getMemoryRequirement() {
-	bigInt memory = SwingsPerPlayerAndCardinality::getMemoryRequirement();
-	memory += mGame.getNumberOfPlayers() * (mGame.getNumberOfPlayers() + 1) * mCalculator->getLargeNumberSize(); // wci
+	bigInt memory = mGame.getNumberOfPlayers() * (mGame.getNumberOfPlayers() + 1) * mCalculator->getLargeNumberSize(); // wci
+	memory /= cMemUnit_factor;
+
+	memory += SwingsPerPlayerAndCardinality::getMemoryRequirement();
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {

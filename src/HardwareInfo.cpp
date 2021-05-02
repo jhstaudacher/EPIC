@@ -14,8 +14,8 @@ epic::HardwareInfo::HardwareInfo() {
 		struct sysinfo info;
 		if (sysinfo(&info) == 0) {
 			// success
-			mRamSizeTotal = info.totalram;
-			mRamSizeFree = info.freeram;
+			mRamSizeTotal = info.totalram / cMemUnit_factor;
+			mRamSizeFree = info.freeram / cMemUnit_factor;
 		} else {
 			// error
 			mRamSizeTotal = 0;
@@ -63,8 +63,8 @@ epic::HardwareInfo::HardwareInfo() {
 		MEMORYSTATUSEX state = {sizeof(state)};
 
 		if (GlobalMemoryStatusEx(&state)) {
-			mRamSizeTotal = state.ullTotalPhys;
-			mRamSizeFree = state.ullAvailPhys;
+			mRamSizeTotal = state.ullTotalPhys / cMemUnit_factor;
+			mRamSizeFree = state.ullAvailPhys / cMemUnit_factor;
 		} else {
 			mRamSizeTotal = 0;
 			mRamSizeFree = 0;

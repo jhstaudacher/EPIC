@@ -35,8 +35,10 @@ std::string epic::index::SingleValueWS::getFullName() {
 }
 
 epic::longUInt epic::index::SingleValueWS::getMemoryRequirement() {
-	bigInt memory = RawFelsenthal::getMemoryRequirement();
-	memory += mCalculator->getLargeNumberSize(); // sum_mwcs
+	bigInt memory = mCalculator->getLargeNumberSize(); // sum_mwcs
+	memory /= cMemUnit_factor;
+
+	memory += RawFelsenthal::getMemoryRequirement();
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {

@@ -29,7 +29,7 @@ public:
 	/**
 	 * Getting an approximated size of memory (RAM) needed for computation
 	 *
-	 * @return The approximated RAM size in Bytes. If 0 is returned the approximated memory is larger than 2^64 Bytes (does not fit in to a longUInt variable).
+	 * @return The approximated RAM size in <cMemUnit_name>. If 0 is returned the approximated memory is larger than 2^64 Bytes (does not fit in to a longUInt variable).
 	 */
 	virtual longUInt getMemoryRequirement() = 0;
 

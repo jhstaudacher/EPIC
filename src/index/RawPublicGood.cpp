@@ -46,8 +46,8 @@ epic::longUInt epic::index::RawPublicGood::getMemoryRequirement() {
 	// The memory needed inside the calculateMinimalWinningCoalitionsPerPlayer() function
 	memory += mGame.getQuota() * mCalculator->getLargeNumberSize();			  // f
 	memory += (mGame.getQuota() + 1) * mCalculator->getLargeNumberSize() * 2; // b, b_helper
-
 	// don't add solution vector since it gets allocated after the previous arrays are already freed.
+	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {

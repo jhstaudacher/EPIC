@@ -13,12 +13,12 @@ public:
 	HardwareInfo();
 
 	/**
-	 * @return The total size of RAM in Bytes. If the value is zero either the OS gets not supported or an error occurred at construction time while reading the value from the system.
+	 * @return The total size of RAM in <cMemUnit_name>. If the value is zero either the OS gets not supported or an error occurred at construction time while reading the value from the system.
 	 */
 	longUInt getTotalRamSize() const;
 
 	/**
-	 * @return The free size of RAM in Bytes. If the value is zero either the OS gets not supported or an error occurred at construction time while reading the value from the system.
+	 * @return The free size of RAM in <cMemUnit_name>. If the value is zero either the OS gets not supported or an error occurred at construction time while reading the value from the system.
 	 */
 	longUInt getFreeRamSize() const;
 

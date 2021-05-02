@@ -35,6 +35,5 @@ std::string epic::index::HarsanyiNashIndex::getFullName() {
 
 epic::longUInt epic::index::HarsanyiNashIndex::getMemoryRequirement() {
 	bigFloat c_1 = 1;
-	longUInt ret = mGame.getNumberOfPlayers() * GMPHelper::size_of_float(c_1);
-	return ret;
+	return (mGame.getNumberOfPlayers() * GMPHelper::size_of_float(c_1)) / cMemUnit_factor;
 }

@@ -74,13 +74,16 @@ std::string epic::index::RawShapleyShubik::getFullName() {
 }
 
 epic::longUInt epic::index::RawShapleyShubik::getMemoryRequirement() {
-	bigInt memory = mNonZeroPlayerCount * (mNonZeroPlayerCount + 1) * mCalculator->getLargeNumberSize(); // ssi
+	bigInt memory = mNonZeroPlayerCount;
+	memory *= (mNonZeroPlayerCount + 1) * mCalculator->getLargeNumberSize(); // ssi
+	memory /= cMemUnit_factor;
 
 	bigInt memory_1 = SwingsPerPlayerAndCardinality::getMemoryRequirement();
 
 	bigInt factorial_n = 0;
 	mpz_fac_ui(factorial_n.get_mpz_t(), mNonZeroPlayerCount);
 	bigInt memory_2 = 2 * GMPHelper::size_of_int(factorial_n) * 2; // factorial, factorial_s_ns: sum_{i = 0}^{N} i! < 2 * N!
+	memory_2 /= cMemUnit_factor;
 
 	memory += (memory_1 > memory_2) ? memory_1 : memory_2;
 

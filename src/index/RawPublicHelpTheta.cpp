@@ -6,6 +6,7 @@ epic::longUInt epic::index::RawPublicHelpTheta::getMemoryRequirement() {
 	bigInt memory = (mGame.getWeightSum() + 1 - mGame.getQuota()) * mCalculator->getLargeNumberSize() * 2;	// n_wc, helper
 	memory += mGame.getNumberOfPlayers() * mCalculator->getLargeNumberSize();								// wci
 	memory += GMPHelper::size_of_int(bigInt(1) << mGame.getNumberOfPlayers()) * mGame.getNumberOfPlayers(); // big_wci
+	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {

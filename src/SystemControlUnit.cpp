@@ -144,14 +144,14 @@ bool epic::SystemControlUnit::checkHardware(index::ItfPowerIndex* index_ptr) {
 	HardwareInfo hInfo;
 	longUInt req = index_ptr->getMemoryRequirement();
 
-	log::out << log::info << "Approximated RAM usage: " << req << " Bytes" << log::endl;
+	log::out << log::info << "Approximated RAM usage: " << req << " " << cMemUnit_name << log::endl;
 	if (hInfo.getFreeRamSize() == 0) {
-		log::out << log::warning << "Unable to read RAM size! (approximately needed: " << req << "B)" << log::endl;
+		log::out << log::warning << "Unable to read RAM size! (approximately needed: " << req << " " << cMemUnit_name << ")" << log::endl;
 	} else if (req > hInfo.getFreeRamSize()) {
 		if (req > hInfo.getTotalRamSize()) {
-			log::out << log::warning << "Not enough memory! (total: " << hInfo.getTotalRamSize() << "B, approximately needed: " << req << "B)" << log::endl;
+			log::out << log::warning << "Not enough memory! (total: " << hInfo.getTotalRamSize() << " " << cMemUnit_name << ", approximately needed: " << req << " " << cMemUnit_name << ")" << log::endl;
 		} else {
-			log::out << log::warning << "Not enough memory! (available: " << hInfo.getFreeRamSize() << "B, approximately needed: " << req << "B!" << log::endl;
+			log::out << log::warning << "Not enough memory! (available: " << hInfo.getFreeRamSize() << " " << cMemUnit_name << ", approximately needed: " << req << " " << cMemUnit_name << ")" << log::endl;
 		}
 		log::out << "Nonetheless the calculation may succeed with the use of swapping but will take much longer!" << log::endl;
 
@@ -167,7 +167,7 @@ bool epic::SystemControlUnit::checkHardware(index::ItfPowerIndex* index_ptr) {
 			ret = false;
 		}
 	} else if (req > hInfo.getFreeRamSize() * 0.75) {
-		log::out << log::warning << "High memory usage! (available: " << hInfo.getFreeRamSize() << "B, approximately needed: " << req << "B)" << log::endl;
+		log::out << log::warning << "High memory usage! (available: " << hInfo.getFreeRamSize() << " " << cMemUnit_name << ", approximately needed: " << req << " " << cMemUnit_name << ")" << log::endl;
 	}
 
 	return ret;

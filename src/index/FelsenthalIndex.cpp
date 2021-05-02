@@ -74,8 +74,10 @@ std::string epic::index::FelsenthalIndex::getFullName() {
 }
 
 epic::longUInt epic::index::FelsenthalIndex::getMemoryRequirement() {
-	bigInt memory = RawFelsenthal::getMemoryRequirement();
-	memory += mCalculator->getLargeNumberSize(); // sum_mwcs
+	bigInt memory = mCalculator->getLargeNumberSize(); // sum_mwcs
+	memory /= cMemUnit_factor;
+
+	memory += RawFelsenthal::getMemoryRequirement();
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {

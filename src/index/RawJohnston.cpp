@@ -366,6 +366,7 @@ epic::longUInt epic::index::RawJohnston::getMemoryRequirement() {
 	memory += mGame.getQuota() * (mNonZeroPlayerCount - 1) * mCalculator->getLargeNumberSize(); // interm
 	memory += mGame.getQuota() * mNonZeroPlayerCount * mCalculator->getLargeNumberSize();		// forwardsArray
 	memory += mNonZeroPlayerCount * c_sizeof_longUInt;											// forward_counting_per_weight_cardinality_next_step::upper
+	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {

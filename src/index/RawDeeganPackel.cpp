@@ -138,8 +138,8 @@ std::string epic::index::RawDeeganPackel::getFullName() {
 epic::longUInt epic::index::RawDeeganPackel::getMemoryRequirement() {
 	bigInt memory = mNonZeroPlayerCount * (mGame.getQuota() + 1) * mCalculator->getLargeNumberSize(); //f
 	memory += mNonZeroPlayerCount * (mGame.getQuota() + 1) * c_sizeof_double;						  // b
-
 	// the memory used by f and b is always larger than the memory needed for the numberOfMinimalWinningCoalitions() function, which is (mGame.getQuota() + 1 + mGame.getNumberOfPlayers) * mCalculator->getLargeNumberSize() for wc and sum_minwc.
+	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {
