@@ -10,13 +10,9 @@ namespace epic {
 typedef mpz_class bigInt;
 typedef mpf_class bigFloat;
 
-#if defined(__linux__)
-typedef std::uint64_t longUInt;
-typedef std::int64_t longInt;
-#else
-typedef unsigned int longUInt;
-typedef int longInt;
-#endif
+// Larger integers are better. However the current GMP version can not handle long long integers.
+typedef unsigned long longUInt;
+typedef long longInt;
 
 
 /**
