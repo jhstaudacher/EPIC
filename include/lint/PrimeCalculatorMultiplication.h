@@ -24,7 +24,7 @@ private:
 	 * An Array containing the precalculated primes
 	 */
 #if defined(__APPLE__)
-	static constexpr StaticArray<longUInt, mNPrecPrimes> mPrecPrimes = ItfPrimeCalculator::precalculate_primes<mNPrecPrimes>(4294967296);
+	static constexpr StaticArray<longUInt, mNPrecPrimes> mPrecPrimes = ItfPrimeCalculator::precalculate_primes<mNPrecPrimes>(1UL << (std::numeric_limits<longUInt>::digits / 2));
 #else
 	static constexpr StaticArray<longUInt, mNPrecPrimes> mPrecPrimes = ItfPrimeCalculator::precalculate_primes<mNPrecPrimes>(std::pow(2, std::numeric_limits<longUInt>::digits / 2));
 #endif
