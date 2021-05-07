@@ -56,8 +56,8 @@ epic::HardwareInfo::HardwareInfo() {
 		struct sysinfo info;
 		if (sysinfo(&info) == 0) {
 			// success
-			mRamSizeTotal = info.totalram / cMemUnit_factor;
-			mRamSizeFree = info.freeram / cMemUnit_factor;
+			mRamSizeTotal = (info.totalram * info.mem_unit) / cMemUnit_factor;
+			mRamSizeFree = (info.freeram * info.mem_unit) / cMemUnit_factor;
 		} else {
 			// error
 			mRamSizeTotal = 0;
