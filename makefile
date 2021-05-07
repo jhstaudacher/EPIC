@@ -27,9 +27,7 @@ LDFLAGS=-lgmpxx -lgmp
 
 .PHONY: all
 all:
-	@find $(SRC_DIR) -type d -printf '$(BUILD_DIR)/%P\n' > .tmp.txt
-	@xargs mkdir -p < .tmp.txt
-	@rm .tmp.txt
+	@cd $(SRC_DIR); find * -type d -exec mkdir -p -- ../$(BUILD_DIR)/{} \;
 	$(MAKE) $(TARGET)
 
 $(TARGET): $(OBJS)

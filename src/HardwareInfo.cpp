@@ -50,6 +50,85 @@ epic::HardwareInfo::HardwareInfo() {
 	}
 }
 
+#elif defined(__APPLE__)
+/*
+ * MacOS
+ */
+
+#include <fstream>		 // read system pseudo-files
+#include <sys/sysctl.h>
+#include <unistd.h>		 // sysconf
+
+static double ParseMemValue(const char * b)
+{
+   while((*b)&&(isdigit(*b) == false)) b++;
+   return isdigit(*b) ? atof(b) : -1.0;
+}
+
+epic::HardwareInfo::HardwareInfo() {
+	// Total RAM
+	{
+		int mib[] = {CTL_HW, HW_MEMSIZE};
+		unsigned long long mem;
+		size_t length = sizeof(mem);
+
+		// (name,
+		//  length of name,
+		//  ptr to save it to,
+		//  length of ptr,
+		//  NULL and 0 indicate that results should not be stored in separate variables)
+		if(sysctl(mib, 2, &mem, &length, NULL, 0) == -1) {
+			// error
+			mRamSizeTotal = 0;
+		} else {
+			mRamSizeTotel = mem / cMemUnit_factor;
+		}
+	}
+	// RAM used
+	{
+		FILE * fpIn = popen("/usr/bin/vm_stat", "r");
+		if (!fpIn) {
+			// error
+			mRamSizeFree = 0;
+		} else {
+			double pagesUsed = 0.0, totalPages = 0.0;
+			char buf[512];
+			while(fgets(buf, sizeof(buf), fpIn) != NULL) {
+				if (strncmp(buf, "Pages", 5) == 0) {
+					double val = ParseMemValue(buf);
+					if (val >= 0.0) {
+						if ((strncmp(buf, "Pages wired", 11) == 0)||(strncmp(buf, "Pages active", 12) == 0)) pagesUsed += val;
+						totalPages += val;
+					}
+				}
+				else if (strncmp(buf, "Mach Virtual Memory Statistics", 30) != 0)
+				 	// Stop at "Translation Faults", we don't care about anything at or below that
+					break;
+			}
+			pclose(fpIn);
+
+			// pagesUsed / totalPages => percentage of how much RAM is used
+			mRamSizeFree = mRamSizeTotal - static_cast<epic::longUInt>(mRamSizeTotal * (pagesUsed / totalPages));
+		}
+	}
+
+
+	// CPU frequency
+	{
+		int mib[] = {CTL_HW, HW_CPU_FREQ};
+		size_t length = sizeof(mCpuFrequency);
+
+		// (name, length of name, ptr to save it to, length of ptr, NULL and 0 indicate that results should not be stored in separate variables)
+		if(sysctl(mib, 2, &mCpuFrequency, &length, NULL, 0) == -1) {
+			// error
+			mCpuFrequency = 0;
+		}
+	}
+
+	// is cache size important?
+	mCacheSize = 0;
+}
+
 #elif defined(__WIN32__) || defined(__CYGWIN__)
 /*
  * WINDOWS

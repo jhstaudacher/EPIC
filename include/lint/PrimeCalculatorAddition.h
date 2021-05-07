@@ -27,7 +27,7 @@ private:
 	/**
 	 * An Array containing the precalculated primes
 	 */
-	static constexpr StaticArray<longUInt, mNPrecPrimes> mPrecPrimes = ItfPrimeCalculator::precalculate_primes<mNPrecPrimes>(std::pow(2, std::numeric_limits<longUInt>::digits - 1));
+	static constexpr StaticArray<longUInt, mNPrecPrimes> mPrecPrimes = ItfPrimeCalculator::precalculate_primes<mNPrecPrimes>(static_cast<longUInt>(1) << (std::numeric_limits<longUInt>::digits - 1)); // largest_prime = 2^(longUInt::digits - 1)
 };
 
 } /* namespace epic::lint */
