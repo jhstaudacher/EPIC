@@ -23,11 +23,6 @@ public:
 	longUInt getFreeRamSize() const;
 
 	/**
-	 * @return The sum of all CPU-Caches (L1D, L2, L3, L4) in Bytes. If the value is zero either the OS gets not supported or an error occurred at construction time while reading the value from the system.
-	 */
-	longUInt getCacheSize() const;
-
-	/**
 	 * @return The maximum CPU frequency in kHz. If the value is zero either the OS gets not supported or an error occurred at construction time while reading the value from the system.
 	 */
 	longUInt getCPUFrequency() const;
@@ -35,7 +30,6 @@ public:
 private:
 	longUInt mRamSizeTotal;
 	longUInt mRamSizeFree;
-	longUInt mCacheSize;
 	longUInt mCpuFrequency;
 };
 
