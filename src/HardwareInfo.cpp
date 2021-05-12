@@ -120,7 +120,7 @@ epic::HardwareInfo::HardwareInfo() {
 			// error
 			mRamSizeTotal = 0;
 		} else {
-			mRamSizeTotel = mem / cMemUnit_factor;
+			mRamSizeTotal = mem / cMemUnit_factor;
 		}
 	}
 	// RAM used
