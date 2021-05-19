@@ -71,7 +71,7 @@ private:
 		NPH,		   /**< Nevison (based on raw Public Help theta) */
 		PG,			   /**< Public Good */
 		PHT,		   /**< Public Help theta (based on the Dubey-Shapley identity)*/
-		PHTPH,		   /**< Public Help theta (based on raw Public Help theta)) */
+		PHTPH,		   /**< Public Help theta (based on raw Public Help theta) */
 		PHX,		   /**< Public Help xi */
 		PIF,		   /**< null-player-free Power Index F */
 		PIG,		   /**< null-player-free Power Index G (based on the Dubey-Shapley identity)*/
