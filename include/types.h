@@ -14,7 +14,6 @@ typedef mpf_class bigFloat;
 typedef unsigned long longUInt;
 typedef long longInt;
 
-
 /**
  * The calculation factor between the base unit (Bytes) and cMemUnit_name!
  * x [Byte] / cMemUnit_factor = y [cMemUnit_name]
@@ -25,7 +24,6 @@ static const longUInt cMemUnit_factor = 1024;
  * The shortcut for the used memory unit.
  */
 static const std::string cMemUnit_name = "KiB";
-
 
 /**
  * Enum-Type defining the different options for large integer representations
