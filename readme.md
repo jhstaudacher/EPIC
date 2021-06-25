@@ -32,6 +32,11 @@ If you want to remove all compilation products including the application itself,
 ### Linux
 All the needed tools can be installed using the distributions package manager (e.g. for apt package manager run: `apt install gcc git make libgmp-dev`).
 
+### MacOS
+
+* Download XCode's command line tools by running `xcode-select --install` in Terminal
+* Through [HomeBrew](https://brew.sh) install the other dependencies by running `brew install git gmp`
+
 # Usage
 First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. After that the program can get called by typing `./epic` (`./epic.exe` on Windows) followed by the options listed below. Additional to the lists below you can always get this information by calling `./epic --help`.
 
