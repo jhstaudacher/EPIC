@@ -78,6 +78,7 @@ private:
 		PIGPH,		   /**< null-player-free Power Index G (based on raw Public Help theta) */
 		RA,			   /**< Rae */
 		RBZ,		   /**< raw Banzhaf */
+		RBZB,		   /**< raw Banzhaf from below */
 		RDP,		   /**< raw Deegan Packel */
 		RFT,		   /**< raw Felsenthal */
 		RJ,			   /**< raw Johnston */

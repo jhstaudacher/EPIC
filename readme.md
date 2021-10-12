@@ -86,6 +86,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `PIGPH` | Power Index G (based on Raw Public Help Theta) |
 | `RA` | Rae |
 | `RBZ` | Raw Banzhaf |
+| `RBZB` | Raw Banzhaf below |
 | `RDP` | Raw Deegan Packel |
 | `RFT` | Raw Felsenthal |
 | `RJ` | Raw Johnston |

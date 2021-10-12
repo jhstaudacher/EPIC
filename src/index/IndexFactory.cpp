@@ -25,6 +25,7 @@
 #include "index/PublicHelpXi.h"
 #include "index/Rae.h"
 #include "index/RawBanzhaf.h"
+#include "index/RawBanzhafBelow.h"
 #include "index/RawDeeganPackel.h"
 #include "index/RawFelsenthal.h"
 #include "index/RawJohnston.h"
@@ -66,6 +67,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{PIGPH, {"PIGPH", "null-player-free Power Index G (based on raw Public Help theta)"}},
 	{RA, {"RA", "Rae"}},
 	{RBZ, {"RBZ", "raw Banzhaf"}},
+	{RBZB, {"RBZB", "raw Banzhaf from below"}},
 	{RDP, {"RDP", "raw Deegan Packel"}},
 	{RFT, {"RFT", "raw Felsenthal"}},
 	{RJ, {"RJ", "raw Johnston"}},
@@ -115,6 +117,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::PIGPH: index = new PowerIndexGPH(g, approx, int_representation); break;
 		case IndexType::RA: index = new Rae(g, approx, int_representation); break;
 		case IndexType::RBZ: index = new RawBanzhaf(g, approx, int_representation); break;
+		case IndexType::RBZB: index = new RawBanzhafBelow(g, approx, int_representation); break;
 		case IndexType::RDP: index = new RawDeeganPackel(g, approx, int_representation); break;
 		case IndexType::RFT: index = new RawFelsenthal(g, approx, int_representation); break;
 		case IndexType::RJ: index = new RawJohnston(g, approx, int_representation); break;
