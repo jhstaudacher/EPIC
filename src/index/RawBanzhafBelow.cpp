@@ -97,6 +97,12 @@ void epic::index::RawBanzhafBelow::numberOfTimesPlayerIsSwingPlayer(lint::LargeN
 	mCalculator->free_largeNumberArray(helper);
 }
 
+void epic::index::RawBanzhafBelow::numberOfSwingPlayer(lint::LargeNumber n_sp[], lint::LargeNumber& total_sp) {
+	for (longUInt i = 0; i < mNonZeroPlayerCount; ++i) {
+		mCalculator->plusEqual(total_sp, n_sp[i]);
+	}
+}
+
 // n_lc must be zero-initialized
 void epic::index::RawBanzhafBelow::numberOfLosingCoalitionsPerWeight(lint::LargeNumber n_lc[]) {
 	// initialize the empty coalition (weight = 0) with 1, since it is always losing

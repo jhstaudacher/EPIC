@@ -55,6 +55,16 @@ protected:
 	 */
 	void numberOfTimesPlayerIsSwingPlayer(lint::LargeNumber n_lc[], lint::LargeNumber n_sp[]);
 
+	/**
+	 * Calculating the total number of all swings
+	 *
+	 * This function sums up the array calculated by one of the numberOfTimesPlayerIsSwingPlayer() functions.
+	 *
+	 * @param n_sp An Array containing the number of swing players. n_sp[x]: number of times player x is a swing player. This array must be filled in the range [0, mNonZeroPlayerCount].
+	 * @param total_sp A return parameter containing the calculated sum
+	 */
+	void numberOfSwingPlayer(lint::LargeNumber n_sp[], lint::LargeNumber& total_sp);
+
 private:
 	void numberOfLosingCoalitionsPerWeight(lint::LargeNumber n_lc[]);
 };
