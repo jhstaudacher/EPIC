@@ -36,7 +36,9 @@
 #include "index/RawPublicHelpTheta.h"
 #include "index/RawPublicHelpThetaSD.h"
 #include "index/RawShapleyShubik.h"
+#include "index/RawShapleyShubikBelow.h"
 #include "index/ShapleyShubik.h"
+#include "index/ShapleyShubikBelow.h"
 #include "index/SingleValueW.h"
 #include "index/SingleValueWM.h"
 #include "index/SingleValueWS.h"
@@ -79,7 +81,9 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{RPIG, {"RPIG", "raw null-player-free Power Index G (based on the Dubey-Shapley identity)"}},
 	{RPIF, {"RPIF", "raw null-player-free Power Index F"}},
 	{RSH, {"RSH", "raw Shapley Shubik"}},
+	{RSHB, {"RSHB", "raw Shapley Shubik below"}},
 	{SH, {"SH", "Shapley Shubik"}},
+	{SHB, {"SHB", "Shapley Shubik below"}},
 	{T, {"T", "Tijs"}},
 	{W, {"W", "Number of winning coalitions"}},
 	{WM, {"WM", "Number of minimal winning coalitions"}},
@@ -130,7 +134,9 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::RPIG: index = new RawPowerIndexG(g, approx, int_representation); break;
 		case IndexType::RPIF: index = new RawPowerIndexF(g, approx, int_representation); break;
 		case IndexType::RSH: index = new RawShapleyShubik(g, approx, int_representation); break;
+		case IndexType::RSHB: index = new RawShapleyShubikBelow(g, approx, int_representation); break;
 		case IndexType::SH: index = new ShapleyShubik(g, approx, int_representation); break;
+		case IndexType::SHB: index = new ShapleyShubikBelow(g, approx, int_representation); break;
 		case IndexType::T: index = new Tijs(g); break;
 		case IndexType::W: index = new SingleValueW(g, approx, int_representation); break;
 		case IndexType::WM: index = new SingleValueWM(g, approx, int_representation); break;

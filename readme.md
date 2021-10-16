@@ -97,7 +97,9 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `RPIG` | Raw Power Index G |
 | `RPIF` | Raw Power Index F |
 | `RSH` | Raw Shapley Shubik |
+| `RSHB` | Raw Shapley Shubik from below |
 | `SH` | Shapley Shubik |
+| `SHB` | Shapley Shubik from below |
 | `T` | Tijs |
 | `W` | Number of winning coalitions|
 | `WM` | Number of minimal winning coalitions |

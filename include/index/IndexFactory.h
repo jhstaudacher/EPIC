@@ -89,7 +89,9 @@ private:
 		RPIG,		   /**< raw null-player-free Power Index G (based on the Dubey-Shapley identity) */
 		RPIF,		   /**< raw null-player-free Power Index F */
 		RSH,		   /**< raw Shapley Shubik */
+		RSHB,		   /**< raw Shapley Shubik from below */
 		SH,			   /**< Shapley Shubik */
+		SHB,		   /**< Shapley Shubik from below */
 		T,			   /**< Tijs */
 		W,			   /**< The number of winning coalitions */
 		WM,			   /**< The number of minimal winning coalitions */
