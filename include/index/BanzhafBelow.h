@@ -8,7 +8,7 @@
 namespace epic::index {
 
 /**
- * Implementing the ItfPowerIndex interface to calculate the <i>Banzhaf below</i> power index (`BZB`) based on the <i>raw Banzhaf below</i> power index.
+ * Implementing the ItfPowerIndex interface to calculate the <i>Banzhaf</i> power index from below (`BZB`) based on the <i>RawBanzhaf</i> power index from below.
  *
  * Let \f$\nu\f$ be a simple \f$n\f$-player mGame and \f$\eta_i(\nu)\f$ the number of coalitions for which \f$i\f$ is a critical player.
  * Then the <i>Banzhaf</i> index of player \f$i\f$ is defined as
@@ -29,7 +29,7 @@ namespace epic::index {
 class BanzhafBelow : public RawBanzhafBelow {
 public:
 	/**
-	 * Construct the Banzhaf object
+	 * Construct the BanzhafBelow object
 	 *
 	 * @param g The Game for which the Banzhaf index should be calculated.
 	 * @param approx A specialized approximation object to approximate the largest needed numbers.
