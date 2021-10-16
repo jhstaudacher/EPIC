@@ -62,8 +62,6 @@ std::vector<epic::bigFloat> epic::index::RawShapleyShubikBelow::calculate() {
 	/*
 	 * DELETE
 	 */
-
-	// delete ssi
 	mCalculator->free_largeNumberArray(ssi.getArrayPointer());
 	delete[] factorial_s_ns1;
 
@@ -97,7 +95,6 @@ epic::longUInt epic::index::RawShapleyShubikBelow::getMemoryRequirement() {
 	return ret;
 }
 
-// n_lc must be zero-initialized
 void epic::index::RawShapleyShubikBelow::numberOfLosingCoalitionsPerWeightAndCardinality(Array2d<lint::LargeNumber>& n_lc) {
 	mCalculator->assign_one(n_lc(0, 0));
 
@@ -112,7 +109,6 @@ void epic::index::RawShapleyShubikBelow::numberOfLosingCoalitionsPerWeightAndCar
 	}
 }
 
-// raw_ssi must be zero-initialized
 void epic::index::RawShapleyShubikBelow::swingsPerPlayerAndCardinality(Array2d<lint::LargeNumber>& raw_ssi) {
 	Array2d<lint::LargeNumber> n_lc(mGame.getQuota(), mNonZeroPlayerCount + 1);
 	mCalculator->allocInit_largeNumberArray(n_lc.getArrayPointer(), n_lc.getNumberOfElements());
