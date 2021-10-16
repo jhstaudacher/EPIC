@@ -8,7 +8,7 @@
 namespace epic::index {
 
 /**
- * Implementing the ItfPowerIndex interface to calculate the <i>Shapley Shubik</i> power index (`SH`) based on the <i>raw Shapley Shubik</i> power index.
+ * Implementing the ItfPowerIndex interface to calculate the <i>Shapley Shubik</i> power index from below (`SHB`) based on the <i>raw Shapley Shubik</i> power index from below.
  *
  * Let \f$\nu\f$ be a simple \f$n\f$-player mGame and \f$\eta_i(\nu)\f$ the number of coalitions for which \f$i\f$ is a critical player.
  * Then the <i>Shapley Shubik</i> index of player \f$i\f$ is defined as
@@ -26,7 +26,7 @@ namespace epic::index {
 class ShapleyShubikBelow : public RawShapleyShubikBelow {
 public:
 	/**
-	 * Construct the ShapleyShubik object
+	 * Construct the ShapleyShubikBelow object
 	 *
 	 * @param g The Game for which the ShapleyShubik index should be calculated.
 	 * @param approx A specialized approximation object to approximate the largest needed numbers.
