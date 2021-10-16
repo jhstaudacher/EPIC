@@ -8,7 +8,7 @@
 namespace epic::index {
 
 /**
- * Implementing the ItfPowerIndex interface to calculate the <i>raw Banzhaf</i> power index (`RBZ`) from below.
+ * Implementing the ItfPowerIndex interface to calculate the <i>raw Banzhaf</i> power index (`RBZB`) from below.
  *
  * Let \f$\nu\f$ be a simple \f$n\f$-player mGame and \f$\eta_i(\nu)\f$ the number of coalitions for which \f$i\f$ is a critical player.
  * Then the <i>raw Banzhaf</i> index of player \f$i\f$ is defined as
@@ -40,32 +40,37 @@ protected:
 	/**
 	 * Calculating how often each player is a swing player.
 	 *
-	 * @param n_sp A return array. n_sp[x] will be the number how often player x is a swing player. The array must have enough memory for at least mNonZeroPlayerCount entries. Each entry must be initialized with zero!
+	 * @param n_sp A return array. n_sp[x] will be the number how often player x is a swing player. The array must be allocated and zero-initialized at least in the range [0, mNonZeroPlayerCount - 1]!
 	 */
 	void numberOfTimesPlayerIsSwingPlayer(lint::LargeNumber n_sp[]);
 
 	/**
 	 * Calculating how often each player is a swing player.
 	 *
-	 * This function is the same as numberOfTimesPlayerIsSwingPlayer(lint::ChineseNumber n_sp[]) but here you can pass the n_wc array. This is useful if the n_wc values are needed outside this function as well and is therefore already calculated.
-	 * The n_wc array must be filled in the range [quota, weightsum].
+	 * This function is the same as numberOfTimesPlayerIsSwingPlayer(lint::LargeNumber n_sp[]) but here you can pass the n_lc array. This is useful if the n_lc values are needed outside this function as well and is therefore already calculated.
+	 * The n_lc array must be filled in the range [0, quota - 1].
 	 *
-	 * @param n_wc The array containing the number of winning coalitions. n_wc[x]: number of winning coalitions of weight x. The array must be filled in the range [quota, weightsum]!
-	 * @param n_sp A return array. n_sp[x] will be the number how often player x is a swing player. The array must have enough memory for at least mNonZeroPlayerCount entries. Each entry must be initialized with zero!
+	 * @param n_lc The array containing the number of losing coalitions. n_lc[x]: number of losing coalitions of weight x. The array must be filled in the range [0, quota - 1]!
+	 * @param n_sp A return array. n_sp[x] will be the number how often player x is a swing player. The array must be allocated and zero-initialized at least in the range [0, mNonZeroPlayerCount - 1]!
 	 */
 	void numberOfTimesPlayerIsSwingPlayer(lint::LargeNumber n_lc[], lint::LargeNumber n_sp[]);
 
 	/**
-	 * Calculating the total number of all swings
+	 * Calculating the total number of all swing players
 	 *
-	 * This function sums up the array calculated by one of the numberOfTimesPlayerIsSwingPlayer() functions.
+	 * This function calculates the sum over the n_sp array writing the result to total_sp.
 	 *
-	 * @param n_sp An Array containing the number of swing players. n_sp[x]: number of times player x is a swing player. This array must be filled in the range [0, mNonZeroPlayerCount].
-	 * @param total_sp A return parameter containing the calculated sum
+	 * @param n_sp An Array containing the number of swing players. n_sp[x]: number of times player x is a swing player. This array must be filled in the range [0, mNonZeroPlayerCount - 1].
+	 * @param total_sp A return variable containing the calculated sum
 	 */
 	void numberOfSwingPlayer(lint::LargeNumber n_sp[], lint::LargeNumber& total_sp);
 
 private:
+	/**
+	 * Calculating the number of losing coalitions per coalition-weight.
+	 *
+	 * @param n_lc An array to store the calculation results. This array must be allocated and zero-initialized at least in the range [0, quota - 1]!
+	 */
 	void numberOfLosingCoalitionsPerWeight(lint::LargeNumber n_lc[]);
 };
 

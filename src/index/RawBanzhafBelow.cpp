@@ -70,7 +70,6 @@ void epic::index::RawBanzhafBelow::numberOfTimesPlayerIsSwingPlayer(lint::LargeN
 	mCalculator->free_largeNumberArray(n_lc);
 }
 
-// n_sp must be zero-initialized
 void epic::index::RawBanzhafBelow::numberOfTimesPlayerIsSwingPlayer(lint::LargeNumber n_lc[], lint::LargeNumber n_sp[]) {
 	// helper:: helper array for n_lc
 	auto helper = new lint::LargeNumber[mGame.getQuota()];
@@ -80,7 +79,8 @@ void epic::index::RawBanzhafBelow::numberOfTimesPlayerIsSwingPlayer(lint::LargeN
 		// wi: weight of player i (the current player)
 		longUInt wi = mGame.getWeights()[i];
 
-		for (longUInt k = 0; k < wi && k < mGame.getQuota(); ++k) {
+		longUInt m = std::min(wi, mGame.getQuota());
+		for (longUInt k = 0; k < m; ++k) {
 			mCalculator->assign(helper[k], n_lc[k]);
 		}
 
@@ -88,7 +88,7 @@ void epic::index::RawBanzhafBelow::numberOfTimesPlayerIsSwingPlayer(lint::LargeN
 			mCalculator->minus(helper[k], n_lc[k], helper[k - wi]);
 		}
 
-		longUInt m = std::max(mGame.getQuota() - wi, 0UL);
+		m = wi > mGame.getQuota() ? 0UL : mGame.getQuota() - wi;
 		for (longUInt k = m; k < mGame.getQuota(); ++k) {
 			mCalculator->plusEqual(n_sp[i], helper[k]);
 		}
@@ -103,7 +103,6 @@ void epic::index::RawBanzhafBelow::numberOfSwingPlayer(lint::LargeNumber n_sp[],
 	}
 }
 
-// n_lc must be zero-initialized
 void epic::index::RawBanzhafBelow::numberOfLosingCoalitionsPerWeight(lint::LargeNumber n_lc[]) {
 	// initialize the empty coalition (weight = 0) with 1, since it is always losing
 	mCalculator->assign_one(n_lc[0]);
@@ -113,13 +112,10 @@ void epic::index::RawBanzhafBelow::numberOfLosingCoalitionsPerWeight(lint::Large
 		// wi: weight of player i
 		longUInt wi = mGame.getWeights()[i];
 
-		/* Iterate over the array starting at the value of game.getQuota() - weight of player i - 1
-		 *	-> this value is the starting position in the array from where on player i is no swing player (swing players turn losing into winning coalitions). Then iterate over all possible combinations of the existing losing coalitions in the array with the new player.
+		/* Reverse-iterate over the array starting at the value of game.getQuota() - weight of player i - 1
+		 *	-> this value is the starting position in the array from where on player i is no swing player. Then iterate over all possible combinations of the existing losing coalitions in the array including the new player.
 		 *
-		 * The empty coalition plus the player is always a new losing coalition (if the player is no veto player)
-		 *	-> that's why the empty coalition + the player is always a new losing coalition
-		 *
-		 * From there we can continue this recursive scheme: If a losing coalition exists with weight k, at least one coalition with k + weight_of_player_i exists and is losing. (in range of quota - weight_of_player_i - 1 to 0). This works by adding the number of losing coalitions of weight k to the number of possible losing coalitions of weight k + weight of player i.
+		 * If a losing coalition exists with weight k, at least one coalition with k + weight_of_player_i exists and is losing. (in range of quota - weight_of_player_i - 1 to 0). This works by adding the number of losing coalitions of weight k to the number of possible losing coalitions of weight k + weight of player i.
 		 */
 		for (longInt k = mGame.getQuota() - wi - 1; k >= 0; --k) {
 			mCalculator->plusEqual(n_lc[k + wi], n_lc[k]);
