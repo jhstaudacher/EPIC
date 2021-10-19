@@ -83,6 +83,12 @@ private:
     */
 	std::string mWeightsFile;
 
+    /**
+    * Structure of precoalitions
+    */
+	std::vector<std::vector<int>> mPrecoalitions;
+    //std::string mPrecoalitions;
+
 	/**
     * Method used to validate the entered output type/channel
     */
@@ -98,6 +104,11 @@ private:
     * This Method also sets the mTestFlag to true if the previous validation succeeds
     */
 	bool handleQuotaFromWeightfile(const std::string& fileName);
+
+    /**
+    * !TODO
+    */
+	bool handlePrecoalitions(const std::string& precoalitions);
 
 	/**
     * Method used to validate the entered quota
@@ -140,6 +151,12 @@ public:
      * --weights \<filename.csv\>
      */
 	std::vector<longUInt>& getWeights();
+
+    /**
+     * Method to return the vector of precoalitions
+     *
+     */
+	std::vector<std::vector<int>>& getPrecoalitions();
 
 	/**
      * Method to return the quota

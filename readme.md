@@ -66,6 +66,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `APG` | Absolute Public Good |
 | `APIG` | Absolute Power Index G (based on the Dubey-Shapley identity) |
 | `BZ` | Banzhaf |
+| `BZO` | Banzhaf Owen |
 | `CC` | Coleman Collective |
 | `CI` | Coleman Initiative |
 | `CP` | Coleman Preventive |
@@ -95,6 +96,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `RPIG` | Raw Power Index G |
 | `RPIF` | Raw Power Index F |
 | `RSH` | Raw Shapley Shubik |
+| `SCO` | Symmetric Coalitional Banzhaf |
 | `SH` | Shapley Shubik |
 | `T` | Tijs |
 | `W` | Number of winning coalitions|

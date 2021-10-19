@@ -58,6 +58,7 @@ private:
 		APG,		   /**< absolute Public Good*/
 		APIG,		   /**< absolute null-player-free Power Index G (based on the Dubey-Shapley identity)*/
 		BZ,			   /**< Banzhaf */
+		BZO,		   /**< Banzhaf-Owen */		
 		CC,			   /**< Coleman collective */
 		CI,			   /**< Coleman initiative */
 		CP,			   /**< Coleman preventive */
@@ -87,6 +88,7 @@ private:
 		RPIG,		   /**< raw null-player-free Power Index G (based on the Dubey-Shapley identity) */
 		RPIF,		   /**< raw null-player-free Power Index F */
 		RSH,		   /**< raw Shapley Shubik */
+		SCO,		   /**< symmetric Coalitional Banzhaf */
 		SH,			   /**< Shapley Shubik */
 		T,			   /**< Tijs */
 		W,			   /**< The number of winning coalitions */

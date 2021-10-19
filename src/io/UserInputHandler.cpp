@@ -18,6 +18,7 @@ epic::io::UserInputHandler::UserInputHandler(const std::string& index, const std
 	mFilterNullPlayers = filterNullPlayers;
 	mIntRepresentation = DEFAULT;
 	mWeightsFile = "";
+	mPrecoalitions.clear();
 }
 
 epic::io::UserInputHandler::UserInputHandler() {
@@ -31,6 +32,7 @@ epic::io::UserInputHandler::UserInputHandler() {
 	mFilterNullPlayers = false;
 	mIntRepresentation = DEFAULT;
 	mWeightsFile = "";
+	mPrecoalitions.clear();
 }
 
 bool epic::io::UserInputHandler::handleWeightsAndQuota(const std::string& fileName) {
@@ -69,6 +71,54 @@ bool epic::io::UserInputHandler::handleQuotaFromWeightfile(const std::string& fi
 	}
 
 	mTestFlag = true;
+	return true;
+}
+
+bool epic::io::UserInputHandler::handlePrecoalitions(const std::string& sPrecoalitions) {	
+	std::string delimiter = ",";
+	std::string delimiter2 = "+";
+	std::vector<std::string> precoalitions;
+
+
+	size_t last = 0; 
+	size_t next = 0; 
+	while ((next = sPrecoalitions.find(delimiter, last)) != std::string::npos){   
+		precoalitions.push_back(sPrecoalitions.substr(last, next-last));
+
+		//log::out << sPrecoalitions.substr(last, next-last) << log::endl;   
+
+		last = next + 1; 
+	} 
+	precoalitions.push_back(sPrecoalitions.substr(last));
+	//log::out << sPrecoalitions.substr(last) << log::endl;
+
+	for(auto it = std::begin(precoalitions); it != std::end(precoalitions); ++it){
+		//log::out << *it << log::endl;
+
+		std::vector<int> pushVector;
+		size_t last = 0; 
+		size_t next = 0; 
+		while ((next = (*it).find(delimiter2, last)) != std::string::npos){   
+			pushVector.push_back(std::stoi((*it).substr(last, next-last)));
+
+			//log::out << (*it).substr(last, next-last) << log::endl;   
+
+		last = next + 1; 
+		} 
+		pushVector.push_back(std::stoi((*it).substr(last)));
+		mPrecoalitions.push_back(pushVector);
+		//log::out << (*it).substr(last) << log::endl;
+
+	}
+
+	//for(auto& row:mPrecoalitions){
+  	//	for(auto& col:row){
+	//		  log::out << col << ", ";
+	//	}
+	//	log::out << " " << log::endl;
+	//}
+
+
 	return true;
 }
 
@@ -127,7 +177,7 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 	while (true) {
 		int index = -1;
 		//struct option * opt = 0;
-		int result = getopt_long(numberOfArguments, vectorOfArguments, ":i:w:q:vfmh", long_options, &index);
+		int result = getopt_long(numberOfArguments, vectorOfArguments, ":i:w:q:p:vfmh", long_options, &index);
 
 		if (result == -1) {
 			if (arg_count < 3) {
@@ -195,6 +245,11 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 				std::cout << "Index abbreviations:" << std::endl;
 				index::IndexFactory::printIndexList();
 				exit(-1);
+			
+			case 'p':
+				handlePrecoalitions(optarg);
+				arg_count++;
+				break;
 
 			case OPT_GMP:
 				if (mIntRepresentation == DEFAULT) {
@@ -248,6 +303,10 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 
 std::vector<epic::longUInt>& epic::io::UserInputHandler::getWeights() {
 	return mWeights;
+}
+
+std::vector<std::vector<int>>& epic::io::UserInputHandler::getPrecoalitions() {
+	return mPrecoalitions;
 }
 
 epic::longUInt epic::io::UserInputHandler::getQuota() const {

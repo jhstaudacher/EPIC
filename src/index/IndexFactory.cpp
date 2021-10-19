@@ -5,6 +5,7 @@
 #include "index/AbsolutePowerIndexG.h"
 #include "index/AbsolutePublicGood.h"
 #include "index/Banzhaf.h"
+#include "index/BanzhafOwen.h"
 #include "index/ColemanCollective.h"
 #include "index/ColemanInitiative.h"
 #include "index/ColemanPreventive.h"
@@ -34,6 +35,7 @@
 #include "index/RawPublicHelpTheta.h"
 #include "index/RawPublicHelpThetaSD.h"
 #include "index/RawShapleyShubik.h"
+#include "index/SymmetricCoalitionalBanzhaf.h"
 #include "index/ShapleyShubik.h"
 #include "index/SingleValueW.h"
 #include "index/SingleValueWM.h"
@@ -46,6 +48,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{APG, {"APG", "absolute Public Good"}},
 	{APIG, {"APIG", "absolute null-player-free Power Index G (based on the Dubey-Shapley identity)"}},
 	{BZ, {"BZ", "Banzhaf"}},
+	{BZO, {"BZO", "Banzhaf-Owen"}},
 	{CC, {"CC", "Coleman collective"}},
 	{CI, {"CI", "Coleman initiative"}},
 	{CP, {"CP", "Coleman preventive"}},
@@ -75,6 +78,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{RPIG, {"RPIG", "raw null-player-free Power Index G (based on the Dubey-Shapley identity)"}},
 	{RPIF, {"RPIF", "raw null-player-free Power Index F"}},
 	{RSH, {"RSH", "raw Shapley Shubik"}},
+	{SCO, {"SCO", "Symmetric Coalitional Banzhaf"}},
 	{SH, {"SH", "Shapley Shubik"}},
 	{T, {"T", "Tijs"}},
 	{W, {"W", "Number of winning coalitions"}},
@@ -93,6 +97,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::INVALID_INDEX: index = nullptr; break;
 		case IndexType::ABZ: index = new AbsoluteBanzhaf(g, approx, int_representation); break;
 		case IndexType::BZ: index = new Banzhaf(g, approx, int_representation); break;
+		case IndexType::BZO: index = new BanzhafOwen(g, approx, int_representation); break;
 		case IndexType::APG: index = new AbsolutePublicGood(g, approx, int_representation); break;
 		case IndexType::APIG: index = new AbsolutePowerIndexG(g, approx, int_representation); break;
 		case IndexType::CC: index = new ColemanCollective(g, approx, int_representation); break;
@@ -124,6 +129,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::RPIG: index = new RawPowerIndexG(g, approx, int_representation); break;
 		case IndexType::RPIF: index = new RawPowerIndexF(g, approx, int_representation); break;
 		case IndexType::RSH: index = new RawShapleyShubik(g, approx, int_representation); break;
+		case IndexType::SCO: index = new SymmetricCoalitionalBanzhaf(g, approx, int_representation); break;
 		case IndexType::SH: index = new ShapleyShubik(g, approx, int_representation); break;
 		case IndexType::T: index = new Tijs(g); break;
 		case IndexType::W: index = new SingleValueW(g, approx, int_representation); break;

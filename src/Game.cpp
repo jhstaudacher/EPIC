@@ -5,10 +5,17 @@
 #include <algorithm>
 #include <stdexcept>
 
-epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool flag_withoutNullPlayers) {
+epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool flag_withoutNullPlayers, std::vector<std::vector<int>> &precoalitions) {
 	this->quota = quota;
 	this->solution = {};
 	this->flag_null_player_handling = flag_withoutNullPlayers;
+	this->precoalitions = precoalitions;
+	//for(auto& row:precoalitions){
+  	//	for(auto& col:row){
+	//		  log::out << col << ",";
+	//	}
+	//	log::out << "" << log::endl;
+	//}
 
 	//sort players by weight
 	weights = untreated_weights;
@@ -77,6 +84,10 @@ epic::longUInt epic::Game::getNumberOfVetoPlayers() const {
 
 std::vector<epic::bigFloat> epic::Game::getSolution() const {
 	return solution;
+}
+
+std::vector<std::vector<int>> epic::Game::getPrecoalitions() const {
+	return precoalitions;
 }
 
 void epic::Game::setSolution(const std::vector<bigFloat>& pre_solution) {
