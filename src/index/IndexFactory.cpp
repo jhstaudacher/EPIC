@@ -17,6 +17,7 @@
 #include "index/KoenigBraeuningerPH.h"
 #include "index/Nevison.h"
 #include "index/NevisonPH.h"
+#include "index/Owen.h"
 #include "index/PowerIndexF.h"
 #include "index/PowerIndexG.h"
 #include "index/PowerIndexGPH.h"
@@ -60,6 +61,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{KBPH, {"KBPH", "Koenig Braeuninger (based on raw Public Help theta)"}},
 	{N, {"N", "Nevison (based on the Dubey-Shapley identity)"}},
 	{NPH, {"NPH", "Nevsion (based on raw Public Help theta)"}},
+	{O, {"O", "Owen"}},
 	{PG, {"PG", "Public Good"}},
 	{PHT, {"PHT", "Public Help theta (based on the Dubey-Shapley identity)"}},
 	{PHTPH, {"PHTPH", "Public Help theta (based on the raw Public Help theta)"}},
@@ -111,6 +113,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::KBPH: index = new KoenigBraeuningerPH(g, approx, int_representation); break;
 		case IndexType::N: index = new Nevison(g, approx, int_representation); break;
 		case IndexType::NPH: index = new NevisonPH(g, approx, int_representation); break;
+		case IndexType::O: index = new Owen(g, approx, int_representation); break;
 		case IndexType::PG: index = new PublicGood(g, approx, int_representation); break;
 		case IndexType::PHT: index = new PublicHelpTheta(g, approx, int_representation); break;
 		case IndexType::PHTPH: index = new PublicHelpThetaPH(g, approx, int_representation); break;
