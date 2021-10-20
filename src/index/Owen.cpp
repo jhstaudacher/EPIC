@@ -39,13 +39,15 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 	auto owenIndices = new bigFloat[mGame.getNumberOfPlayers()]();
 	auto owenIndicesCheck = new bigFloat[mGame.getNumberOfPlayers()]();
 
-	Array2d<longUInt> cc(mGame.getWeightSum() + 1, nbPartitions, true);
+	Array2d<lint::LargeNumber> cc(mGame.getWeightSum() + 1, nbPartitions);
+	mCalculator->allocInit_largeNumberArray(cc.getArrayPointer(), cc.getNumberOfElements());
 	backwardCountingPerWeightAndCardinality(cc, partW);
 
-	Array2d<longUInt> cw(mGame.getWeightSum() + 1, nbPartitions, true);
+	Array2d<lint::LargeNumber> cw(mGame.getWeightSum() + 1, nbPartitions);
+	mCalculator->allocInit_largeNumberArray(cw.getArrayPointer(), cw.getNumberOfElements());
 	for (longUInt w = mGame.getQuota(); w <= mGame.getWeightSum(); ++w) {
 		for (longUInt c = 0; c < nbPartitions; ++c) {
-			cw(w, c) = cc(w, c);
+			mCalculator->assign(cw(w, c), cc(w, c));
 		}
 	}
 
@@ -54,7 +56,7 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 	for (longUInt x = 1; x <= mGame.getWeightSum(); ++x) {
 		std::cout << "[" << x << ", ]";
 		for (longUInt y = 0; y < nbPartitions; ++y) {
-			std::cout << "\t" << cw(x, y);
+			std::cout << "\t" << mCalculator->to_string(cw(x, y));
 		}
 		std::cout << std::endl;
 	}
@@ -79,14 +81,14 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 	for (longUInt i = 0; i < nbPartitions; ++i) {
 		for (longUInt x = mGame.getQuota(); x <= mGame.getWeightSum(); ++x) {
 			for (longUInt z = 0; z < nbPartitions; ++z) {
-				cw(x, z) = cc(x, z);
+				mCalculator->assign(cw(x, z), cc(x, z));
 			}
 		}
 
 		if (mGame.getWeightSum() - partW[i] >= mGame.getQuota()) {
 			for (longUInt x = mGame.getWeightSum() - partW[i]; x >= mGame.getQuota(); --x) {
 				for (longUInt s = 1; s < nbPartitions; ++s) {
-					cw(x, nbPartitions - s - 1) = cc(x, nbPartitions - s - 1) - cw(x + partW[i], nbPartitions - s);
+					mCalculator->minus(cw(x, nbPartitions - s - 1), cc(x, nbPartitions - s - 1), cw(x + partW[i], nbPartitions - s));
 				}
 			}
 		}
@@ -97,13 +99,14 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 		for (longUInt x = 1; x <= mGame.getWeightSum(); ++x) {
 			std::cout << "[" << x << ", ]";
 			for (longUInt y = 0; y < nbPartitions; ++y) {
-				std::cout << "\t" << cw(x, y);
+				std::cout << "\t" << mCalculator->to_string(cw(x, y));
 			}
 			std::cout << std::endl;
 		}
 
 		longUInt nbPlayersInParti = mGame.getPrecoalitions()[i].size();
-		Array2d<longUInt> cw2(mGame.getWeightSum() + 1, nbPlayersInParti, false);
+		Array2d<lint::LargeNumber> cw2(mGame.getWeightSum() + 1, nbPlayersInParti);
+		mCalculator->allocInit_largeNumberArray(cw2.getArrayPointer(), cw2.getNumberOfElements());
 
 		auto winternal = new longUInt[nbPlayersInParti];
 		for (longUInt z = 0; z < nbPlayersInParti; ++z) {
@@ -121,35 +124,37 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 			mCalculator->alloc_largeNumber(factor);
 			mCalculator->mul(factor, factorial[s + 1], factorial[nbPartitions - s - 2]);
 
-			longUInt tmp_sum = 0;
+			lint::LargeNumber tmp_sum;
+			mCalculator->allocInit_largeNumber(tmp_sum);
 			longUInt tmp_min = std::min(mGame.getQuota() + partW[i] - 1, mGame.getWeightSum());
 			for (longUInt z = mGame.getQuota(); z <= tmp_min; ++z) {
-				tmp_sum += cw(z, s + 1);
+				mCalculator->plusEqual(tmp_sum, cw(z, s + 1));
 			}
 			mCalculator->mul(tmp, factor, tmp_sum);
 			mCalculator->plusEqual(shapleysExternalGame[i], tmp);
+			mCalculator->free_largeNumber(tmp_sum);
 
 			if (nbPlayersInParti > 1) {
 				for (longUInt x = 1; x <= mGame.getWeightSum(); ++x) {
 					for (longUInt y = 0; y < nbPlayersInParti - 1; ++y) {
-						cw2(x, y) = 0;
+						mCalculator->assign_zero(cw2(x, y));
 					}
 				}
 				for (longUInt x = 1; x <= mGame.getWeightSum(); ++x) {
-					cw2(x, nbPlayersInParti - 1) = cw(x, s + 1);
+					mCalculator->assign(cw2(x, nbPlayersInParti - 1), cw(x, s + 1));
 				}
 
 				// DEBUG
 				std::cout << "s+1 -- with s being index from loop over number of precoalitions: " << s+1 << std::endl;
 				std::cout << "cw2[q:capitalC,nbPlayersInParti-1]" << std::endl;
 				for (longUInt z = mGame.getQuota(); z <= mGame.getWeightSum(); ++z) {
-					std::cout << "[" << z << ", " << nbPlayersInParti-1 << "] = " << cw2(z, nbPlayersInParti-1) << std::endl;
+					std::cout << "[" << z << ", " << nbPlayersInParti-1 << "] = " << mCalculator->to_string(cw2(z, nbPlayersInParti-1)) << std::endl;
 				}
 
 				for (longUInt ii = 0; ii < nbPlayersInParti; ++ii) {
 					for (longUInt x = mGame.getQuota() + winternal[ii]; x <= mGame.getWeightSum(); ++x) {
 						for (longUInt m = nbPlayersInParti - 1; m > 0; --m) {
-							cw2(x - winternal[ii], m - 1) = cw2(x, m) + cw2(x - winternal[ii], m - 1);
+							mCalculator->plus(cw2(x - winternal[ii], m - 1), cw2(x, m), cw2(x - winternal[ii], m - 1));
 						}
 					}
 				}
@@ -159,27 +164,28 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 				for (longUInt x = 1; x <= mGame.getWeightSum(); ++x) {
 					std::cout << "[" << x << ", ]";
 					for (longUInt y = 0; y < nbPlayersInParti; ++y) {
-						std::cout << "\t" << cw2(x, y);
+						std::cout << "\t" << mCalculator->to_string(cw2(x, y));
 					}
 					std::cout << std::endl;
 				}
 
-				Array2d<longUInt> cwi(mGame.getWeightSum() + 1, nbPlayersInParti);
+				Array2d<lint::LargeNumber> cwi(mGame.getWeightSum() + 1, nbPlayersInParti);
+				mCalculator->alloc_largeNumberArray(cwi.getArrayPointer(), cwi.getNumberOfElements());
 				for (longUInt x = 0; x <= mGame.getWeightSum(); ++x) {
 					for (longUInt y = 0; y < nbPlayersInParti; ++y) {
-						cwi(x, y) = cw2(x, y);
+						mCalculator->assign(cwi(x, y), cw2(x, y));
 					}
 				}
 				for (longUInt ii = 0; ii < nbPlayersInParti; ++ii) {
 					for (longUInt x = mGame.getQuota(); x <= mGame.getWeightSum(); ++x) {
 						for (longUInt y = 0; y < nbPlayersInParti; ++y) {
-							cwi(x, y) = cw2(x, y);
+							mCalculator->assign(cwi(x, y), cw2(x, y));
 						}
 					}
 					if (mGame.getWeightSum() - winternal[ii] >= mGame.getQuota()) {
 						for (longUInt x = mGame.getWeightSum() - winternal[ii]; x >= mGame.getQuota(); --x) {
 							for (longUInt sinternal = 0; sinternal <= nbPlayersInParti; ++sinternal) {
-								cwi(x, nbPlayersInParti - sinternal - 1) = cw2(x, nbPlayersInParti - sinternal - 1) - cwi(x + winternal[ii], nbPlayersInParti - sinternal);
+								mCalculator->minus(cwi(x, nbPlayersInParti - sinternal - 1), cw2(x, nbPlayersInParti - sinternal - 1), cwi(x + winternal[ii], nbPlayersInParti - sinternal));
 							}
 						}
 					}
@@ -189,7 +195,7 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 					for (longUInt x = 1; x <= mGame.getWeightSum(); ++x) {
 						std::cout << "[" << x << ", ]";
 						for (longUInt y = 0; y < nbPlayersInParti; ++y) {
-							std::cout << "\t" << cwi(x, y);
+							std::cout << "\t" << mCalculator->to_string(cwi(x, y));
 						}
 						std::cout << std::endl;
 					}
@@ -197,9 +203,10 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 					for (longUInt sinternal = 0; sinternal < nbPlayersInParti; ++sinternal) { // ! Using sinternal increased by 1
 						mCalculator->mul(tmp, factorial[sinternal], factorial[nbPlayersInParti - sinternal - 1]);
 
-						longUInt tmp_sum = 0;
+						lint::LargeNumber tmp_sum;
+						mCalculator->allocInit_largeNumber(tmp_sum);
 						for (longUInt w = mGame.getQuota(); w <= mGame.getQuota() + winternal[ii] - 1; ++w) {
-							tmp_sum += cwi(w, sinternal);
+							mCalculator->plusEqual(tmp_sum, cwi(w, sinternal));
 						}
 
 						// shapleysInternal[ii] += tmp * tmp_sum * factor
@@ -207,12 +214,15 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 						mCalculator->mulEqual(tmp, factor);
 						mCalculator->plusEqual(shapleysInternal[ii], tmp);
 
+						mCalculator->free_largeNumber(tmp_sum);
+
 						mCalculator->assign(rawShapleysInternal[ii], shapleysInternal[ii]);
 
 						// DEBUG
 						std::cout << "rawShapleysInternal[ii]: " << mCalculator->to_string(rawShapleysInternal[ii]) << std::endl;
 					}
 				}
+				mCalculator->free_largeNumberArray(cwi.getArrayPointer());
 			} else {
 				mCalculator->assign(shapleysInternal[0], shapleysExternalGame[i]);
 				mCalculator->assign(rawShapleysInternal[0], shapleysInternal[0]);
@@ -226,6 +236,7 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 			}
 
 			mCalculator->free_largeNumber(factor);
+			mCalculator->free_largeNumberArray(cw2.getArrayPointer());
 		}
 
 		// DEBUG
@@ -306,6 +317,8 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 	mCalculator->free_largeNumber(tmp);
 
 	delete[] partW;
+	mCalculator->free_largeNumberArray(cc.getArrayPointer());
+	mCalculator->free_largeNumberArray(cw.getArrayPointer());
 
 	delete[] big_shapleysExternalGame;
 	mCalculator->free_largeNumberArray(shapleysExternalGame);
@@ -327,14 +340,14 @@ epic::longUInt epic::index::Owen::getMemoryRequirement() {
 }
 
 // ! c must be allocated and zero-initialized in the range [0, capitalC] x [0, nbPartitions - 1]
-void epic::index::Owen::backwardCountingPerWeightAndCardinality(Array2d<longUInt>& c, longUInt* partW) {
+void epic::index::Owen::backwardCountingPerWeightAndCardinality(Array2d<lint::LargeNumber>& c, longUInt* partW) {
 	longUInt n = mGame.getPrecoalitions().size();
 
-	c(mGame.getWeightSum(), n - 1) = 1;
+	mCalculator->assign_one(c(mGame.getWeightSum(), n -1));
 	for (longUInt i = 0; i < n; ++i) {
 		for (longUInt x = mGame.getQuota() + partW[i]; x <= mGame.getWeightSum(); ++x) {
 			for (longUInt m = 1; m < n; ++m) {
-				c(x - partW[i], m - 1) = c(x, m) + c(x - partW[i], m - 1);
+				mCalculator->plus(c(x - partW[i], m - 1), c(x, m), c(x - partW[i], m - 1));
 			}
 		}
 	}

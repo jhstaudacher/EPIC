@@ -17,7 +17,7 @@ public:
 	longUInt getMemoryRequirement() override;
 
 private:
-	void backwardCountingPerWeightAndCardinality(Array2d<longUInt>& cc, longUInt* partition_weights);
+	void backwardCountingPerWeightAndCardinality(Array2d<lint::LargeNumber>& cc, longUInt* partition_weights);
 };
 
 } /* namespace epic::index */
