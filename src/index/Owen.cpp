@@ -37,7 +37,6 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 	mCalculator->allocInit_largeNumberArray(shapleysExternalGame, nbPartitions);
 
 	auto owenIndices = new bigFloat[mGame.getNumberOfPlayers()]();
-	auto owenIndicesCheck = new bigFloat[mGame.getNumberOfPlayers()]();
 
 	Array2dOffset<lint::LargeNumber> cc(mGame.getWeightSum() + 1, nbPartitions, mGame.getQuota(), 0);
 	mCalculator->allocInit_largeNumberArray(cc.getArrayPointer(), cc.getNumberOfElements());
@@ -115,9 +114,6 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 
 		auto shapleysInternal = new lint::LargeNumber[nbPlayersInParti];
 		mCalculator->allocInit_largeNumberArray(shapleysInternal, nbPlayersInParti);
-
-		auto rawShapleysInternal = new lint::LargeNumber[nbPlayersInParti];
-		mCalculator->allocInit_largeNumberArray(rawShapleysInternal, nbPlayersInParti);
 
 		for (longUInt s = 0; s < nbPartitions - 1; ++s) {
 			lint::LargeNumber factor;
@@ -215,25 +211,15 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 						mCalculator->plusEqual(shapleysInternal[ii], tmp);
 
 						mCalculator->free_largeNumber(tmp_sum);
-
-						mCalculator->assign(rawShapleysInternal[ii], shapleysInternal[ii]);
-
-						// DEBUG
-						std::cout << "rawShapleysInternal[ii]: " << mCalculator->to_string(rawShapleysInternal[ii]) << std::endl;
 					}
 				}
 				mCalculator->free_largeNumberArray(cwi.getArrayPointer());
 			} else {
 				mCalculator->assign(shapleysInternal[0], shapleysExternalGame[i]);
-				mCalculator->assign(rawShapleysInternal[0], shapleysInternal[0]);
 			}
 
 			// DEBUG
 			std::cout << "s: " << s << std::endl;
-			std::cout << "rawShapleysInternal: " << std::endl;
-			for (longUInt z = 0; z < nbPlayersInParti; ++z) {
-				std::cout << "[" << z << "]\t" << mCalculator->to_string(rawShapleysInternal[z]) << std::endl;
-			}
 
 			mCalculator->free_largeNumber(factor);
 			mCalculator->free_largeNumberArray(cw2.getArrayPointer());
@@ -254,12 +240,6 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 		// DEBUG
 		std::cout << "shapleysExternalGame[i]: " << big_shapleysExternalGame[i] << std::endl;
 
-		lint::LargeNumber sumRawShapleysInternal;
-		mCalculator->allocInit_largeNumber(sumRawShapleysInternal);
-		for (longUInt x = 0; x < nbPlayersInParti; ++x) {
-			mCalculator->plusEqual(sumRawShapleysInternal, rawShapleysInternal[x]);
-		}
-
 		for (longUInt ii = 0; ii < nbPlayersInParti; ++ii) {
 			// owenIndices[player] = shapleysInternal[ii] / (factorial[nbPlayersInParti] * factorial[nbPartitions]);
 			mCalculator->to_bigInt(&big1, factorial[nbPlayersInParti]);
@@ -268,23 +248,13 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 			mCalculator->to_bigInt(&big2, shapleysInternal[ii]);
 			owenIndices[player] = bigFloat(big2) / big1;
 
-			// owenIndicesCheck[player] = shapleysExternalGame[i] * rawShapleysInternal[ii] / sumRawShapleysInternal
-			mCalculator->to_bigInt(&big1, rawShapleysInternal[ii]);
-			mCalculator->to_bigInt(&big2, sumRawShapleysInternal);
-			owenIndicesCheck[player] = big_shapleysExternalGame[i] * big1;
-			owenIndicesCheck[player] /= big2;
-
 			// DEBUG
 			std::cout << "player number: " << player << std::endl;
 			std::cout << "Owen index of player: " << owenIndices[player] << std::endl;
-			std::cout << "Check for Owen index of player: " << owenIndicesCheck[player] << std::endl;
 
 			++player;
 		}
 
-		mCalculator->free_largeNumber(sumRawShapleysInternal);
-		mCalculator->free_largeNumberArray(rawShapleysInternal);
-		delete[] rawShapleysInternal;
 		mCalculator->free_largeNumberArray(shapleysInternal);
 		delete[] shapleysInternal;
 		delete[] winternal;
@@ -304,11 +274,6 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 		std::cout << "[" << x << "]\t" << owenIndices[x] << std::endl;
 	}
 
-	std::cout << "owenIndicesCheck:" << std::endl;
-	for (longUInt x = 0; x < mGame.getNumberOfPlayers(); ++x) {
-		std::cout << "[" << x << "]\t" << owenIndicesCheck[x] << std::endl;
-	}
-
 	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
 	for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
 		solution[i] = owenIndices[i];
@@ -325,7 +290,6 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 	delete[] shapleysExternalGame;
 
 	delete[] owenIndices;
-	delete[] owenIndicesCheck;
 
 
 	return solution;
