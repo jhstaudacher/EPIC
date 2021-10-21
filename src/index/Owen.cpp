@@ -14,7 +14,7 @@ epic::index::Owen::Owen(Game& g, ItfUpperBoundApproximation* approx, IntRepresen
 }
 
 epic::index::Owen::~Owen() {
-
+	lint::ItfLargeNumberCalculator::delete_calculator(mCalculator);
 }
 
 std::vector<epic::bigFloat> epic::index::Owen::calculate() {
