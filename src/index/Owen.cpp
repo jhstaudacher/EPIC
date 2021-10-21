@@ -32,28 +32,6 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 		}
 	}
 
-	Array2dOffset<lint::LargeNumber> cc(mGame.getWeightSum() + 1, nbPartitions, mGame.getQuota(), 0);
-	mCalculator->allocInit_largeNumberArray(cc.getArrayPointer(), cc.getNumberOfElements());
-	backwardCountingPerWeightAndCardinality(cc, partW);
-
-	Array2dOffset<lint::LargeNumber> cw(mGame.getWeightSum() + 1, nbPartitions, mGame.getQuota(), 0);
-	mCalculator->allocInit_largeNumberArray(cw.getArrayPointer(), cw.getNumberOfElements());
-	for (longUInt w = mGame.getQuota(); w <= mGame.getWeightSum(); ++w) {
-		for (longUInt c = 0; c < nbPartitions; ++c) {
-			mCalculator->assign(cw(w, c), cc(w, c));
-		}
-	}
-
-	// DEBUG
-	std::cout << "cw untouched:" << std::endl;
-	for (longUInt x = mGame.getQuota(); x <= mGame.getWeightSum(); ++x) {
-		std::cout << "[" << x << ", ]";
-		for (longUInt y = 0; y < nbPartitions; ++y) {
-			std::cout << "\t" << mCalculator->to_string(cw(x, y));
-		}
-		std::cout << std::endl;
-	}
-
 	lint::LargeNumber* factorial;
 	{
 		longUInt size = std::max(maxMembersInPartition, nbPartitions);
@@ -67,14 +45,33 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 		}
 	}
 
-	lint::LargeNumber tmp;
-	mCalculator->alloc_largeNumber(tmp);
+	Array2dOffset<lint::LargeNumber> cc(mGame.getWeightSum() + 1, nbPartitions, mGame.getQuota(), 0);
+	mCalculator->allocInit_largeNumberArray(cc.getArrayPointer(), cc.getNumberOfElements());
+	backwardCountingPerWeightAndCardinality(cc, partW);
+
+	Array2dOffset<lint::LargeNumber> cw(mGame.getWeightSum() + 1, nbPartitions, mGame.getQuota(), 0);
+	mCalculator->allocInit_largeNumberArray(cw.getArrayPointer(), cw.getNumberOfElements());
 
 	auto shapleysInternal = new lint::LargeNumber[mGame.getNumberOfPlayers()];
 	mCalculator->allocInit_largeNumberArray(shapleysInternal, mGame.getNumberOfPlayers());
 
-	for (longUInt i = 0; i < nbPartitions; ++i) {
+	Array2dOffset<lint::LargeNumber> cw2(mGame.getWeightSum() + 1, maxMembersInPartition, mGame.getQuota(), 0);
+	mCalculator->allocInit_largeNumberArray(cw2.getArrayPointer(), cw2.getNumberOfElements());
 
+	Array2dOffset<lint::LargeNumber> cwi(mGame.getWeightSum() + 1, maxMembersInPartition, mGame.getQuota(), 0);
+	mCalculator->alloc_largeNumberArray(cwi.getArrayPointer(), cwi.getNumberOfElements());
+
+	auto winternal = new longUInt[maxMembersInPartition];
+
+	lint::LargeNumber tmp, tmp2;
+	mCalculator->alloc_largeNumber(tmp);
+	mCalculator->alloc_largeNumber(tmp2);
+	lint::LargeNumber factor;
+	mCalculator->alloc_largeNumber(factor);
+
+
+	for (longUInt i = 0; i < nbPartitions; ++i) {
+		// initialize cw
 		for (longUInt x = mGame.getQuota(); x <= mGame.getWeightSum(); ++x) {
 			for (longUInt z = 0; z < nbPartitions; ++z) {
 				mCalculator->assign(cw(x, z), cc(x, z));
@@ -101,17 +98,13 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 		}
 
 		longUInt nbPlayersInParti = mGame.getPrecoalitions()[i].size();
-		Array2dOffset<lint::LargeNumber> cw2(mGame.getWeightSum() + 1, nbPlayersInParti, mGame.getQuota(), 0);
-		mCalculator->allocInit_largeNumberArray(cw2.getArrayPointer(), cw2.getNumberOfElements());
 
-		auto winternal = new longUInt[nbPlayersInParti];
+		// initialize winternal
 		for (longUInt z = 0; z < nbPlayersInParti; ++z) {
 			winternal[z] = mGame.getWeights()[mGame.getPrecoalitions()[i][z]];
 		}
 
 		for (longUInt s = 0; s < nbPartitions - 1; ++s) {
-			lint::LargeNumber factor;
-			mCalculator->alloc_largeNumber(factor);
 			mCalculator->mul(factor, factorial[s + 1], factorial[nbPartitions - s - 2]);
 
 			if (nbPlayersInParti > 1) {
@@ -149,8 +142,6 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 					std::cout << std::endl;
 				}
 
-				Array2dOffset<lint::LargeNumber> cwi(mGame.getWeightSum() + 1, nbPlayersInParti, mGame.getQuota(), 0);
-				mCalculator->alloc_largeNumberArray(cwi.getArrayPointer(), cwi.getNumberOfElements());
 				for (longUInt x = mGame.getQuota(); x <= mGame.getWeightSum(); ++x) {
 					for (longUInt y = 0; y < nbPlayersInParti; ++y) {
 						mCalculator->assign(cwi(x, y), cw2(x, y));
@@ -183,49 +174,39 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 					for (longUInt sinternal = 0; sinternal < nbPlayersInParti; ++sinternal) { // ! Using sinternal increased by 1
 						mCalculator->mul(tmp, factorial[sinternal], factorial[nbPlayersInParti - sinternal - 1]);
 
-						lint::LargeNumber tmp_sum;
-						mCalculator->allocInit_largeNumber(tmp_sum);
+						mCalculator->assign_zero(tmp2);
 						for (longUInt w = mGame.getQuota(); w <= mGame.getQuota() + winternal[ii] - 1; ++w) {
-							mCalculator->plusEqual(tmp_sum, cwi(w, sinternal));
+							mCalculator->plusEqual(tmp2, cwi(w, sinternal));
 						}
 
 						// shapleysInternal[mGame.getPrecoalitions()[i][ii] - 1] += tmp * tmp_sum * factor
-						mCalculator->mul(tmp, tmp, tmp_sum);
+						mCalculator->mul(tmp, tmp, tmp2);
 						mCalculator->mulEqual(tmp, factor);
 						mCalculator->plusEqual(shapleysInternal[mGame.getPrecoalitions()[i][ii]], tmp);
-
-						mCalculator->free_largeNumber(tmp_sum);
 					}
 				}
 				mCalculator->free_largeNumberArray(cwi.getArrayPointer());
 			} else {
 				// shapleysInternal[mGame.getPrecoalitions()[i][0] - 1] += factor * sum(cw[q:tmp_min, s+1])
-				lint::LargeNumber tmp_sum;
-				mCalculator->allocInit_largeNumber(tmp_sum);
+				mCalculator->assign_zero(tmp2);
 				longUInt tmp_min = std::min(mGame.getQuota() + partW[i] - 1, mGame.getWeightSum());
 				for (longUInt z = mGame.getQuota(); z <= tmp_min; ++z) {
-					mCalculator->plusEqual(tmp_sum, cw(z, s + 1));
+					mCalculator->plusEqual(tmp2, cw(z, s + 1));
 				}
-				mCalculator->mul(tmp, factor, tmp_sum);
+				mCalculator->mul(tmp, factor, tmp2);
 				mCalculator->plusEqual(shapleysInternal[mGame.getPrecoalitions()[i][0]], tmp);
-				mCalculator->free_largeNumber(tmp_sum);
 			}
 
 			// DEBUG
 			std::cout << "s: " << s << std::endl;
-
-			mCalculator->free_largeNumber(factor);
-			mCalculator->free_largeNumberArray(cw2.getArrayPointer());
 		}
 
 		// DEBUG
 		std::cout << "i (after external Shapley loop for precoalitions): " << i << std::endl;
 		std::cout << "factorial[nbPartitions] = " << mCalculator->to_string(factorial[nbPartitions]) << std::endl;
-
-		delete[] winternal;
 	}
 
-	auto owenIndices = new bigFloat[mGame.getNumberOfPlayers()]();
+	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
 	{
 		bigInt shapleys_internal;
 		bigInt factor;
@@ -238,14 +219,14 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 			factor *= factorial_nbPartitions;
 
 			for (longUInt i = 0; i < nbPlayersInParti; ++i) {
-				// owenIndices[player] = shapleysInternal[player] / (factorial[nbPlayersInParti] * factorial[nbPartitions]);
+				// solution[player] = shapleysInternal[player] / (factorial[nbPlayersInParti] * factorial[nbPartitions]);
 				longUInt player = mGame.getPrecoalitions()[part][i];
 				mCalculator->to_bigInt(&shapleys_internal, shapleysInternal[player]);
-				owenIndices[player] = bigFloat(shapleys_internal) / factor;
+				solution[player] = bigFloat(shapleys_internal) / factor;
 
 				// DEBUG
 				std::cout << "player number: " << player << std::endl;
-				std::cout << "Owen index of player: " << owenIndices[player] << std::endl;
+				std::cout << "Owen index of player: " << solution[player] << std::endl;
 			}
 		}
 	}
@@ -260,22 +241,19 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 	// DEBUG
 	std::cout << "owenIndices:" << std::endl;
 	for (longUInt x = 0; x < mGame.getNumberOfPlayers(); ++x) {
-		std::cout << "[" << x << "]\t" << owenIndices[x] << std::endl;
-	}
-
-	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
-	for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
-		solution[i] = owenIndices[i];
+		std::cout << "[" << x << "]\t" << solution[x] << std::endl;
 	}
 
 	mCalculator->free_largeNumber(tmp);
+	mCalculator->free_largeNumber(tmp2);
+	mCalculator->free_largeNumber(factor);
 
 	delete[] partW;
 	mCalculator->free_largeNumberArray(cc.getArrayPointer());
 	mCalculator->free_largeNumberArray(cw.getArrayPointer());
-
-	delete[] owenIndices;
-
+	mCalculator->free_largeNumberArray(cw2.getArrayPointer());
+	mCalculator->free_largeNumberArray(cwi.getArrayPointer());
+	delete[] winternal;
 
 	return solution;
 }
