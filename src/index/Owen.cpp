@@ -32,8 +32,6 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 		}
 	}
 
-	auto owenIndices = new bigFloat[mGame.getNumberOfPlayers()]();
-
 	Array2dOffset<lint::LargeNumber> cc(mGame.getWeightSum() + 1, nbPartitions, mGame.getQuota(), 0);
 	mCalculator->allocInit_largeNumberArray(cc.getArrayPointer(), cc.getNumberOfElements());
 	backwardCountingPerWeightAndCardinality(cc, partW);
@@ -72,8 +70,12 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 	lint::LargeNumber tmp;
 	mCalculator->alloc_largeNumber(tmp);
 
-	longUInt player = 0;
+	auto shapleysInternal = new lint::LargeNumber[mGame.getNumberOfPlayers()];
+	mCalculator->allocInit_largeNumberArray(shapleysInternal, mGame.getNumberOfPlayers());
+
+	longUInt firstPlayerInPartI = 0;
 	for (longUInt i = 0; i < nbPartitions; ++i) {
+
 		for (longUInt x = mGame.getQuota(); x <= mGame.getWeightSum(); ++x) {
 			for (longUInt z = 0; z < nbPartitions; ++z) {
 				mCalculator->assign(cw(x, z), cc(x, z));
@@ -107,9 +109,6 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 		for (longUInt z = 0; z < nbPlayersInParti; ++z) {
 			winternal[z] = mGame.getWeights()[mGame.getPrecoalitions()[i][z]];
 		}
-
-		auto shapleysInternal = new lint::LargeNumber[nbPlayersInParti];
-		mCalculator->allocInit_largeNumberArray(shapleysInternal, nbPlayersInParti);
 
 		for (longUInt s = 0; s < nbPartitions - 1; ++s) {
 			lint::LargeNumber factor;
@@ -191,17 +190,17 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 							mCalculator->plusEqual(tmp_sum, cwi(w, sinternal));
 						}
 
-						// shapleysInternal[ii] += tmp * tmp_sum * factor
+						// shapleysInternal[firstPlayerInPartI + ii] += tmp * tmp_sum * factor
 						mCalculator->mul(tmp, tmp, tmp_sum);
 						mCalculator->mulEqual(tmp, factor);
-						mCalculator->plusEqual(shapleysInternal[ii], tmp);
+						mCalculator->plusEqual(shapleysInternal[firstPlayerInPartI + ii], tmp);
 
 						mCalculator->free_largeNumber(tmp_sum);
 					}
 				}
 				mCalculator->free_largeNumberArray(cwi.getArrayPointer());
 			} else {
-				// shapleysInternal[0] += factor * sum(cw[q:tmp_min, s+1])
+				// shapleysInternal[firstPlayerInPartI] += factor * sum(cw[q:tmp_min, s+1])
 				lint::LargeNumber tmp_sum;
 				mCalculator->allocInit_largeNumber(tmp_sum);
 				longUInt tmp_min = std::min(mGame.getQuota() + partW[i] - 1, mGame.getWeightSum());
@@ -209,7 +208,7 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 					mCalculator->plusEqual(tmp_sum, cw(z, s + 1));
 				}
 				mCalculator->mul(tmp, factor, tmp_sum);
-				mCalculator->plusEqual(shapleysInternal[0], tmp);
+				mCalculator->plusEqual(shapleysInternal[firstPlayerInPartI], tmp);
 				mCalculator->free_largeNumber(tmp_sum);
 			}
 
@@ -222,29 +221,40 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 
 		// DEBUG
 		std::cout << "i (after external Shapley loop for precoalitions): " << i << std::endl;
-
 		std::cout << "factorial[nbPartitions] = " << mCalculator->to_string(factorial[nbPartitions]) << std::endl;
 
-		bigInt big1, big2;
-		for (longUInt ii = 0; ii < nbPlayersInParti; ++ii) {
-			// owenIndices[player] = shapleysInternal[ii] / (factorial[nbPlayersInParti] * factorial[nbPartitions]);
-			mCalculator->to_bigInt(&big1, factorial[nbPlayersInParti]);
-			mCalculator->to_bigInt(&big2, factorial[nbPartitions]);
-			big1 *= big2;
-			mCalculator->to_bigInt(&big2, shapleysInternal[ii]);
-			owenIndices[player] = bigFloat(big2) / big1;
-
-			// DEBUG
-			std::cout << "player number: " << player << std::endl;
-			std::cout << "Owen index of player: " << owenIndices[player] << std::endl;
-
-			++player;
-		}
-
-		mCalculator->free_largeNumberArray(shapleysInternal);
-		delete[] shapleysInternal;
 		delete[] winternal;
+
+		firstPlayerInPartI += nbPlayersInParti;
 	}
+
+	auto owenIndices = new bigFloat[mGame.getNumberOfPlayers()]();
+	{
+		bigInt big1, big2;
+		bigInt factorial_nbPartitions;
+		mCalculator->to_bigInt(&factorial_nbPartitions, factorial[nbPartitions]);
+		longUInt player = 0;
+		for (longUInt part = 0; part < nbPartitions; ++part) {
+			longUInt nbPlayersInParti = mGame.getPrecoalitions()[part].size();
+			for (longUInt i = 0; i < nbPlayersInParti; ++i) {
+				// owenIndices[player] = shapleysInternal[player] / (factorial[nbPlayersInParti] * factorial[nbPartitions]);
+				mCalculator->to_bigInt(&big1, factorial[nbPlayersInParti]);
+				big1 *= factorial_nbPartitions;
+				mCalculator->to_bigInt(&big2, shapleysInternal[player]);
+				owenIndices[player] = bigFloat(big2) / big1;
+
+				// DEBUG
+				std::cout << "player number: " << player << std::endl;
+				std::cout << "Owen index of player: " << owenIndices[player] << std::endl;
+
+				++player;
+			}
+		}
+	}
+
+
+	mCalculator->free_largeNumberArray(shapleysInternal);
+	delete[] shapleysInternal;
 
 	mCalculator->free_largeNumberArray(factorial);
 	delete[] factorial;
