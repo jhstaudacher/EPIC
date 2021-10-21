@@ -184,7 +184,7 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 					}
 					if (mGame.getWeightSum() - winternal[ii] >= mGame.getQuota()) {
 						for (longUInt x = mGame.getWeightSum() - winternal[ii]; x >= mGame.getQuota(); --x) {
-							for (longUInt sinternal = 0; sinternal <= nbPlayersInParti; ++sinternal) {
+							for (longUInt sinternal = 1; sinternal < nbPlayersInParti; ++sinternal) {
 								mCalculator->minus(cwi(x, nbPlayersInParti - sinternal - 1), cw2(x, nbPlayersInParti - sinternal - 1), cwi(x + winternal[ii], nbPlayersInParti - sinternal));
 							}
 						}
