@@ -44,6 +44,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | required? | option | argument | description |
 | -------- | ------ | -------- | ----------- |
 | yes | `-i` / `--index` | index shortcut | the index to compute |
+| no | `-p` / `--precoalitions` | has to be set when working with precoalitions | the structure of the precoalitions (*3)|
 | yes | `-w` / `--weights` | .csv file | the player weights for the weighted voting mGame (*1) |
 | yes | `-q` / `--quota` | integer or float | the quota for the weighted voting mGame (*2)|
 | no | `-v` / `--verbose` | no argument | adds extra output |
@@ -57,6 +58,8 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 (*1) The .csv file must contain one weight per line. The weights must all be integers unless you set the --float flag.
 
 (*2) When setting the quota to `0`, the first line of the weights file will be interpreted as the quota to use. This might be useful for automated program calls.
+
+(*3) Has to be before -w. When setting the precoalitions to `0`, the precoalitions will be read from the weightsfile. This also means that the weightsfile has to be written accordingly. 
 
 ## Available indices
 

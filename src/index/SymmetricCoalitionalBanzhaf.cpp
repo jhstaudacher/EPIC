@@ -43,7 +43,7 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 	for(auto& row:mGame.getPrecoalitions()){
 		longUInt weight = 0;
 		for(auto& col:row){
-			  weight += mGame.getWeights().at(col-1);
+			  weight += mGame.getWeights().at(col);
 			  if (maxMembersInPartition < row.size()){
 				  maxMembersInPartition = row.size();
 			  }
@@ -123,7 +123,7 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 			//cw2(mGame.getWeightSum(), nbPlayersInParti).uint = 1;
 			mCalculator->assign_one(cw2(mGame.getWeightSum(), nbPlayersInParti));
 			for (int ii = 0; ii < nbPlayersInParti; ii++){
-				longUInt x = mGame.getQuota() + mGame.getWeights()[mGame.getPrecoalitions()[i][ii]-1];
+				longUInt x = mGame.getQuota() + mGame.getWeights()[mGame.getPrecoalitions()[i][ii]];
 				//log::out << "capitcalC: " << mGame.getWeightSum() << log::endl;
 				//log::out << "x: " << x << log::endl;
 				//log::out << "mGame.getWeights()[mGame.getPrecoalitions()[i][ii]]: " << mGame.getWeights()[mGame.getPrecoalitions()[i][ii]] << log::endl;
@@ -133,7 +133,7 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 					while (m>1){
 						//cw2[x-winternal[ii],m-1] = cw2[x,m] + cw2[x-winternal[ii],m-1]
 						//cw2(x - mGame.getWeights()[mGame.getPrecoalitions()[i][ii]], m-1).uint = cw2(x, m).uint + cw2(x-mGame.getWeights()[mGame.getPrecoalitions()[i][ii]], m-1).uint;
-						mCalculator->plus(cw2(x - mGame.getWeights()[mGame.getPrecoalitions()[i][ii]-1], m-1), cw2(x, m), cw2(x-mGame.getWeights()[mGame.getPrecoalitions()[i][ii]-1], m-1));	
+						mCalculator->plus(cw2(x - mGame.getWeights()[mGame.getPrecoalitions()[i][ii]], m-1), cw2(x, m), cw2(x-mGame.getWeights()[mGame.getPrecoalitions()[i][ii]], m-1));	
 						//log::out << "x-winternal[ii]: " << x - mGame.getWeights()[mGame.getPrecoalitions()[i][ii]-1] << log::endl;
 						//log::out << "m-1: " << m-1 << log::endl;
 						//log::out << "x: " << x << log::endl;
@@ -164,14 +164,14 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 					}
 				}
 				//if ((sum(w)-winternal[ii]) >= q){
-				if ((mGame.getWeightSum()-mGame.getWeights()[mGame.getPrecoalitions()[i][ii]-1]) >= mGame.getQuota()){
+				if ((mGame.getWeightSum()-mGame.getWeights()[mGame.getPrecoalitions()[i][ii]]) >= mGame.getQuota()){
 					//for (x in seq(from = (sum(w)-winternal[ii]), to=q, by=-1)){
-					for(longUInt x = (mGame.getWeightSum() - mGame.getWeights()[mGame.getPrecoalitions()[i][ii]-1]); x >= mGame.getQuota(); x = x - 1){
+					for(longUInt x = (mGame.getWeightSum() - mGame.getWeights()[mGame.getPrecoalitions()[i][ii]]); x >= mGame.getQuota(); x = x - 1){
 						int sinternal = 1;
 						//log::out << "x: " << x << log::endl;
 						while (sinternal < nbPlayersInParti){
 							//cwi(x, nbPlayersInparti-sinternal) = cw2(x, nbPlayersInParti-sinternal) - cwi(x+mGame.getWeights()[mGame.getPrecoalitions()[i][ii]-1], nbPlayersInParti-sinternal+1);
-							mCalculator->minus(cwi(x, nbPlayersInParti-sinternal), cw2(x, nbPlayersInParti-sinternal), cwi(x+mGame.getWeights()[mGame.getPrecoalitions()[i][ii]-1], nbPlayersInParti-sinternal+1));
+							mCalculator->minus(cwi(x, nbPlayersInParti-sinternal), cw2(x, nbPlayersInParti-sinternal), cwi(x+mGame.getWeights()[mGame.getPrecoalitions()[i][ii]], nbPlayersInParti-sinternal+1));
 							sinternal = sinternal + 1;
 						}
 					}
@@ -234,7 +234,7 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 					factor = factorial_nb * factorial_s;
 					//shapleysInternal[ii] = shapleysInternal[ii] + (factor * sum(cwi[(q:(q+winternal[ii]-1)),s+1]))
 					bigInt sum = 0;
-					for (longUInt iii = mGame.getQuota(); iii < (mGame.getQuota() + mGame.getWeights()[mGame.getPrecoalitions()[i][ii]-1]); iii++){
+					for (longUInt iii = mGame.getQuota(); iii < (mGame.getQuota() + mGame.getWeights()[mGame.getPrecoalitions()[i][ii]]); iii++){
 						//mCalculator->plus(sum, sum, cwi(iii, s+1));
 						sum = sum + cwi(iii, s+1).uint;
 						//log::out << "------cwi: " << cwi(iii, s+1).uint << log::endl;
@@ -269,7 +269,7 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 						delete[] factorial;
 					}
 				}				
-				solution[mGame.getPrecoalitions()[i][ii]-1] = ExternalMultiplier * shapleysInternal[ii] / factorial_nbPlayersInParti;
+				solution[mGame.getPrecoalitions()[i][ii]] = ExternalMultiplier * shapleysInternal[ii] / factorial_nbPlayersInParti;
 				log::out << "player: " << player << log::endl;
 				player++;
 				log::out << "--------------------" << log::endl;
@@ -281,12 +281,12 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 
 			//z193
 			for (int ii = 0; ii < nbPlayersInParti; ii++){
-				scbIndicesCheck[mGame.getPrecoalitions()[i][ii]-1] = ExternalMultiplier * banzhafsExternalGame[i].uint * rawShapleysInternal[ii] / sumRawShapleysInternal;
+				scbIndicesCheck[mGame.getPrecoalitions()[i][ii]] = ExternalMultiplier * banzhafsExternalGame[i].uint * rawShapleysInternal[ii] / sumRawShapleysInternal;
 			}
 		}
 		else{
-			solution[mGame.getPrecoalitions()[i][0]-1] = ExternalMultiplier * banzhafsExternalGame[i].uint;
-			scbIndicesCheck[mGame.getPrecoalitions()[i][0]-1] = ExternalMultiplier * banzhafsExternalGame[i].uint;
+			solution[mGame.getPrecoalitions()[i][0]] = ExternalMultiplier * banzhafsExternalGame[i].uint;
+			scbIndicesCheck[mGame.getPrecoalitions()[i][0]] = ExternalMultiplier * banzhafsExternalGame[i].uint;
 		}
 
 	}

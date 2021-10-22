@@ -61,6 +61,11 @@ private:
     */
 	bool mTestFlag;
 
+    /**
+    * Internal flag set if precoalitions are declared in weight.csv
+    */
+	bool mPrecoalitionFlag;
+
 	/**
     * Internal flag used for the input of float weights
     */

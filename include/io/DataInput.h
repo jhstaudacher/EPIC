@@ -19,7 +19,7 @@ public:
 	 * @param testFlag If set the first line gets skipped (contains the quota)
 	 * @return A vector of longUInt integer values read from the .csv file
 	 */
-	static std::vector<longUInt> inputCSV(const std::string& filePath, bool testFlag);
+	static std::vector<longUInt> inputCSV(const std::string& filePath, std::vector<std::vector<int>>& precoalitions, bool testFlag, bool pFlag);
 
 	/**
 	 * Read values line by line (one value per line) as floats from a given .csv file.
@@ -28,7 +28,7 @@ public:
 	 * @param testFlag If set the first line gets skipped (conatins the quota)
 	 * @return A vector of float values read from the .csv file
 	 */
-	static std::vector<double> inputFloatCSV(const std::string& filePath, bool testFlag);
+	static std::vector<double> inputFloatCSV(const std::string& filePath, std::vector<std::vector<int>>& precoalitions, bool testFlag, bool pFlag);
 
 	/**
 	 * Read the quota from a given .csv file

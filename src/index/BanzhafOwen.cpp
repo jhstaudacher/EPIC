@@ -40,7 +40,7 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 	for(auto& row:mGame.getPrecoalitions()){
 		longUInt weight = 0;
 		for(auto& col:row){
-			  weight += mGame.getWeights().at(col-1);
+			  weight += mGame.getWeights().at(col);
 		}
 		partitionWeights.push_back(weight);
 	}
@@ -102,7 +102,7 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 			
 			InternalMultiplier = 1/(pow(2, nbPlayersInParti-1));
 			for (int ii = 0; ii < nbPlayersInParti; ii++){
-				longUInt wii = mGame.getWeights()[mGame.getPrecoalitions()[i][ii]-1];
+				longUInt wii = mGame.getWeights()[mGame.getPrecoalitions()[i][ii]];
 				for (longUInt iii = (mGame.getQuota() + wii); iii <= totalWeight; iii++){
 					mCalculator->plusEqual(cw2[iii - wii], cw2[iii]);					
 				}
@@ -117,7 +117,7 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 			mCalculator->allocInit_largeNumberArray(cwi.getArrayPointer(), cwi.getNumberOfElements());
 
 			for (int ii = 0; ii < nbPlayersInParti; ii++){
-				longUInt wii = mGame.getWeights()[mGame.getPrecoalitions()[i][ii]-1];
+				longUInt wii = mGame.getWeights()[mGame.getPrecoalitions()[i][ii]];
 				//replicate vector cw2 onto cwi
 				for (longUInt i = mGame.getQuota(); i < (totalWeight + 1); i++){
 					cwi[i] = cw2[i];
@@ -137,12 +137,12 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 				}
 				//log::out << "banzhafsInternal: " << banzhafsInternal[ii].uint << log::endl;
 
-				solution[mGame.getPrecoalitions()[i][ii]-1] = ExternalMultiplier * InternalMultiplier * banzhafsInternal[ii].uint;
+				solution[mGame.getPrecoalitions()[i][ii]] = ExternalMultiplier * InternalMultiplier * banzhafsInternal[ii].uint;
 			}
 
 		}
 		else{
-			solution[mGame.getPrecoalitions()[i][0]-1] = ExternalMultiplier * banzhafsExternalGame[i].uint;
+			solution[mGame.getPrecoalitions()[i][0]] = ExternalMultiplier * banzhafsExternalGame[i].uint;
 			log::out << "banzhafsExternalGame[i].uint: " << banzhafsExternalGame[i].uint << log::endl;
 		}
 
