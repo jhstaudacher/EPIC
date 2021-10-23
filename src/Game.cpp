@@ -129,14 +129,16 @@ std::vector<epic::longUInt> epic::Game::sortWeights(std::vector<longUInt>& weigh
 	std::sort(weight_index_pair.begin(), weight_index_pair.end(), std::greater<>());
 
 	std::vector<longUInt> permutation(weights.size());
+	std::vector<longUInt> inv_permutation(weights.size());
 	for (longUInt i = 0; i < weights.size(); ++i) {
 		weights[i] = weight_index_pair[i].first;
 		permutation[i] = weight_index_pair[i].second;
+		inv_permutation[permutation[i]] = i;
 	}
 
 	for (auto& coal : precoalitions) {
-        for (auto& it : coal) {
-			it = permutation[it];
+		for (auto& it : coal) {
+			it = inv_permutation[it];
 		}
 	}
 
