@@ -117,13 +117,13 @@ bool epic::io::UserInputHandler::handlePrecoalitions(const std::string& sPrecoal
 		size_t last = 0; 
 		size_t next = 0; 
 		while ((next = (*it).find(delimiter2, last)) != std::string::npos){   
-			pushVector.push_back(std::stoi((*it).substr(last, next-last)));
+			pushVector.push_back(std::stoi((*it).substr(last, next-last)) - 1);
 
 			//log::out << (*it).substr(last, next-last) << log::endl;   
 
 		last = next + 1; 
 		} 
-		pushVector.push_back(std::stoi((*it).substr(last)));
+		pushVector.push_back(std::stoi((*it).substr(last)) - 1);
 		mPrecoalitions.push_back(pushVector);
 		//log::out << (*it).substr(last) << log::endl;
 
