@@ -136,7 +136,7 @@ std::vector<epic::longUInt> epic::Game::sortWeights(std::vector<longUInt>& weigh
 
 	for (auto& coal : precoalitions) {
         for (auto& it : coal) {
-			it = permutation[it - 1];
+			it = permutation[it];
 		}
 	}
 
