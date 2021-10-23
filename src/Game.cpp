@@ -19,7 +19,7 @@ epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool 
 
 	//sort players by weight
 	weights = untreated_weights;
-	sortingPermutation = sortWeights(weights);
+	sortingPermutation = sortWeights(weights, this->precoalitions);
 
 	//handleDummyPlayers(flag_withoutNullPlayers);	//handle dummy-/null-player
 	numberOfNullPlayers = findNullPlayersFromBelow(flag_withoutNullPlayers);
@@ -121,7 +121,7 @@ epic::longUInt epic::Game::playerIndexToNumber(longUInt index) const {
 
 //---------- private methods -------------
 
-std::vector<epic::longUInt> epic::Game::sortWeights(std::vector<longUInt>& weights) {
+std::vector<epic::longUInt> epic::Game::sortWeights(std::vector<longUInt>& weights, std::vector<std::vector<int>>& precoalitions) {
 	std::vector<std::pair<longUInt, longUInt>> weight_index_pair(weights.size());
 	for (longUInt i = 0; i < weights.size(); ++i) {
 		weight_index_pair[i] = std::make_pair(weights[i], i);
@@ -132,6 +132,12 @@ std::vector<epic::longUInt> epic::Game::sortWeights(std::vector<longUInt>& weigh
 	for (longUInt i = 0; i < weights.size(); ++i) {
 		weights[i] = weight_index_pair[i].first;
 		permutation[i] = weight_index_pair[i].second;
+	}
+
+	for (auto& coal : precoalitions) {
+        for (auto& it : coal) {
+			it = permutation[it - 1];
+		}
 	}
 
 	return permutation;

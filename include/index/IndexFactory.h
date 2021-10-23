@@ -70,6 +70,7 @@ private:
 		KBPH,		   /**< Koenig Braeuninger (based on raw Public Help theta) */
 		N,			   /**< Nevison (based on the Dubey-Shapley identity)*/
 		NPH,		   /**< Nevison (based on raw Public Help theta) */
+		O,			   /**< Owen */
 		PG,			   /**< Public Good */
 		PHT,		   /**< Public Help theta (based on the Dubey-Shapley identity)*/
 		PHTPH,		   /**< Public Help theta (based on raw Public Help theta) */

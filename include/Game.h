@@ -190,7 +190,7 @@ private:
 	 * @param weights containing the (unsorted) weights
 	 * @return the permutation (return[x] = the pre-sorted index of sorted index x)
 	 */
-	static std::vector<longUInt> sortWeights(std::vector<longUInt>& weights);
+	static std::vector<longUInt> sortWeights(std::vector<longUInt>& weights, std::vector<std::vector<int>>& precoalitions);
 
 	/**
 	 * A function to sort out the player, who are in no minimum winning coalitions

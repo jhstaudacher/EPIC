@@ -82,6 +82,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `KBPH` | Koenig Braeuninger (based on Raw Public Help Theta) |
 | `N` | Nevison (based on the Dubey-Shapley identity)|
 | `NPH` | Nevison (based on Raw Public Help Theta) |
+| `O` | Owen |
 | `PG` | Public Good |
 | `PHT` | Public Help Theta (based on the Dubey-Shapley identity) |
 | `PHTPH` | Public Help Theta (based on Raw Public Help Theta) |
