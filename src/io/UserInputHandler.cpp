@@ -14,6 +14,7 @@ epic::io::UserInputHandler::UserInputHandler(const std::string& index, const std
 	mFloatQuota = 0.0;
 	mOutputType = outputType;
 	mTestFlag = false;
+	mPrecoalitionFlag = false;
 	mInputFloatWeights = false;
 	mFilterNullPlayers = filterNullPlayers;
 	mIntRepresentation = DEFAULT;
@@ -28,6 +29,7 @@ epic::io::UserInputHandler::UserInputHandler() {
 	mFloatQuota = 0.0;
 	mOutputType = screen;
 	mTestFlag = false;
+	mPrecoalitionFlag = false;
 	mInputFloatWeights = false;
 	mFilterNullPlayers = false;
 	mIntRepresentation = DEFAULT;
@@ -38,7 +40,7 @@ epic::io::UserInputHandler::UserInputHandler() {
 bool epic::io::UserInputHandler::handleWeightsAndQuota(const std::string& fileName) {
 	if (mInputFloatWeights) {
 		std::vector<double> floatWeights;
-		floatWeights = DataInput::inputFloatCSV(fileName, mTestFlag);
+		floatWeights = DataInput::inputFloatCSV(fileName, mPrecoalitions, mTestFlag, mPrecoalitionFlag);
 		floatWeights.push_back(mFloatQuota);
 		UpscaleFloatToIntAndReturnMultiplicator(floatWeights, mWeights);
 		mQuota = mWeights.back();
@@ -50,7 +52,17 @@ bool epic::io::UserInputHandler::handleWeightsAndQuota(const std::string& fileNa
 			std::cout << "Float quota specified without the --float flag." << std::endl;
 			return false;
 		}
-		mWeights = DataInput::inputCSV(fileName, mTestFlag);
+		mWeights = DataInput::inputCSV(fileName, mPrecoalitions, mTestFlag, mPrecoalitionFlag);
+
+		//test coalition structure
+		//std::vector< std::vector<int> >::iterator row;
+		//std::vector<int>::iterator col;
+		//for (row = mPrecoalitions.begin(); row != mPrecoalitions.end(); row++) {
+		//    for (col = row->begin(); col != row->end(); col++) {
+		//        std::cout << *col << ", ";
+		//    }
+		//	std::cout << std::endl;
+		//}
 	}
 
 	if (mWeights.empty()) {
@@ -75,6 +87,12 @@ bool epic::io::UserInputHandler::handleQuotaFromWeightfile(const std::string& fi
 }
 
 bool epic::io::UserInputHandler::handlePrecoalitions(const std::string& sPrecoalitions) {	
+	std::cout << "arg: " << sPrecoalitions << std::endl;
+	if (sPrecoalitions.size() == 0){
+		mPrecoalitionFlag = true;
+		std::cout << "precoalitions are in weightfile" << std::endl;
+		return true;
+	}
 	std::string delimiter = ",";
 	std::string delimiter2 = "+";
 	std::vector<std::string> precoalitions;
@@ -99,13 +117,13 @@ bool epic::io::UserInputHandler::handlePrecoalitions(const std::string& sPrecoal
 		size_t last = 0; 
 		size_t next = 0; 
 		while ((next = (*it).find(delimiter2, last)) != std::string::npos){   
-			pushVector.push_back(std::stoi((*it).substr(last, next-last)));
+			pushVector.push_back(std::stoi((*it).substr(last, next-last)) - 1);
 
 			//log::out << (*it).substr(last, next-last) << log::endl;   
 
 		last = next + 1; 
 		} 
-		pushVector.push_back(std::stoi((*it).substr(last)));
+		pushVector.push_back(std::stoi((*it).substr(last)) - 1);
 		mPrecoalitions.push_back(pushVector);
 		//log::out << (*it).substr(last) << log::endl;
 
@@ -247,9 +265,18 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 				exit(-1);
 			
 			case 'p':
-				handlePrecoalitions(optarg);
-				arg_count++;
-				break;
+				if (std::stof(optarg) == 0) {
+					//No precoalitions specified -> set flag to search for it in weightfile
+					mPrecoalitionFlag = true;
+					arg_count++;
+					break;
+				}
+				else{
+					handlePrecoalitions(optarg);
+					arg_count++;
+					break;
+				}
+				
 
 			case OPT_GMP:
 				if (mIntRepresentation == DEFAULT) {
