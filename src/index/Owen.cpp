@@ -48,7 +48,7 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 		{
 			longUInt size = std::max(mMaxPartSize, mNbPart);
 			factorial = new lint::LargeNumber[size + 1];
-			mCalculator->alloc_largeNumberArray(factorial, size);
+			mCalculator->alloc_largeNumberArray(factorial, size + 1);
 
 			mCalculator->assign_one(factorial[0]);
 			mCalculator->assign_one(factorial[1]);
