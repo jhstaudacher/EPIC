@@ -79,14 +79,15 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 	
 	//replicate vector cc onto cw
 	for (longUInt i = mGame.getQuota(); i < (totalWeight + 1); i++){
-		cw[i] = cc[i];
+		mCalculator->assign(cw[i], cc[i]);
 	}
 
 	bigFloat ExternalMultiplier = 1 / (pow(2, (mNbPart)-1));
 	for (longUInt i = 0; i < mNbPart; i++){
 		log::out << "partition: " << i << log::endl;
 		for (longUInt ii = mGame.getQuota(); ii < (totalWeight + 1); ii++){
-			cw[ii] = cc[ii];
+			//cw[ii] = cc[ii];
+			mCalculator->assign(cw[ii], cc[ii]);
 		}
 
 		if ((totalWeight-mPartW[i]) >= mGame.getQuota()){
@@ -107,7 +108,8 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 
 		//replicate vector cw onto cw2[]
 		for (longUInt i = mGame.getQuota(); i < (totalWeight + 1); i++){
-			cw2(i, nbPlayersInParti) = cw[i];
+			//cw2(i, nbPlayersInParti) = cw[i];
+			mCalculator->assign(cw2(i, nbPlayersInParti), cw[i]);
 		}
 
 		if (nbPlayersInParti > 1){
@@ -145,7 +147,8 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 				//replicate cw2 onto cwi
 				for (longUInt x = mGame.getQuota(); x <= mGame.getWeightSum(); x++){
 					for (int xx = 0; xx <= nbPlayersInParti; xx++){
-						cwi(x, xx) = cw2(x, xx);
+						//cwi(x, xx) = cw2(x, xx);
+						mCalculator->assign(cwi(x, xx), cw2(x, xx));
 					}
 				}
 				//if ((sum(w)-winternal[ii]) >= q){
@@ -214,7 +217,7 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 		}
 		mCalculator->free_largeNumberArray(cw2.getArrayPointer());
 	}
-	
+
 	mCalculator->free_largeNumberArray(cc.getArrayPointer());
 	mCalculator->free_largeNumberArray(cw.getArrayPointer());
 	mCalculator->free_largeNumberArray(banzhafsExternalGame);

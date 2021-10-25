@@ -128,8 +128,8 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 				mCalculator->to_bigInt(&banzhafs_internal, banzhafsInternal[ii]);
 				solution[mGame.getPrecoalitions()[i][ii]] = ExternalMultiplier * InternalMultiplier * banzhafs_internal;
 			}
-			//mCalculator->free_largeNumberArray(cwi.getArrayPointer());
-			//mCalculator->free_largeNumberArray(banzhafsInternal);
+			mCalculator->free_largeNumberArray(cwi.getArrayPointer());
+			mCalculator->free_largeNumberArray(banzhafsInternal);
 			delete[] banzhafsInternal;
 		}
 		else{
@@ -137,9 +137,9 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 			mCalculator->to_bigInt(&banzhafs_external, banzhafsExternalGame[i]);
 			solution[mGame.getPrecoalitions()[i][0]] = ExternalMultiplier * banzhafs_external;
 		}
-		//mCalculator->free_largeNumberArray(cw2.getArrayPointer());
+		mCalculator->free_largeNumberArray(cw2.getArrayPointer());
 	}
-	//mCalculator->free_largeNumberArray(c.getArrayPointer());
+	mCalculator->free_largeNumberArray(c.getArrayPointer());
 	mCalculator->free_largeNumberArray(cw.getArrayPointer());
 	mCalculator->free_largeNumberArray(banzhafsExternalGame);
 	delete[] banzhafsExternalGame;
