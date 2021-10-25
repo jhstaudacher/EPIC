@@ -14,6 +14,7 @@ epic::index::Owen::Owen(Game& g, ItfUpperBoundApproximation* approx, IntRepresen
 
 	mNbPart = mGame.getPrecoalitions().size();
 	mPartW = new longUInt[mNbPart]();
+	mMaxPartSize = 0;
 	for (longUInt i = 0; i < mNbPart; ++i) {
 		longUInt partSize = mGame.getPrecoalitions()[i].size();
 		for (longUInt p = 0; p < partSize; ++p) {
