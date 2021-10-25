@@ -175,7 +175,20 @@ std::string epic::index::Owen::getFullName() {
 }
 
 epic::longUInt epic::index::Owen::getMemoryRequirement() {
-	return 0;
+	bigInt memory = mNbPart * c_sizeof_longUInt; // mPartW
+	memory += std::max(mMaxPartSize, mNbPart) * mCalculator->getLargeNumberSize(); // factorial
+	memory += (mGame.getWeightSum() + 1 - mGame.getQuota()) * mNbPart * mCalculator->getLargeNumberSize() * 2; // cc, cw
+	memory += mGame.getNumberOfPlayers() * mCalculator->getLargeNumberSize(); // shapleysInternal
+	memory += (mGame.getWeightSum() + 1 - mGame.getQuota()) * mMaxPartSize * mCalculator->getLargeNumberSize() * 2; // cw2, cwi
+	memory += mMaxPartSize * c_sizeof_longUInt; // winternal
+
+	memory /= cMemUnit_factor;
+	longUInt ret = 0;
+	if (memory.fits_ulong_p()) {
+		ret = memory.get_ui();
+	}
+
+	return ret;
 }
 
 // ! c must be allocated and zero-initialized in the range [quota, capitalC] x [0, nbPartitions - 1]
