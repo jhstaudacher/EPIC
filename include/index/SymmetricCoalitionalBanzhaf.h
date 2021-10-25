@@ -21,6 +21,12 @@ public:
 	std::vector<bigFloat> calculate() override;
 	std::string getFullName() override;
 	longUInt getMemoryRequirement() override;
+
+private:
+	longUInt* mPartW; 		// Partition weights, mPartW[x]: weightsum of the precoalition x
+	longUInt mNbPart; 		// amount of precoalitions
+	longUInt mMaxPartSize; 	// the maximum amount of players inside a single precoalition
+
 };
 
 } // namespace epic::index
