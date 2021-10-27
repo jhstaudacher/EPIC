@@ -21,7 +21,8 @@ public:
 	longUInt getMemoryRequirement() override;
 
 private:
-	lint::LargeNumber tmp;
+	lint::LargeNumber mTmp;
+	bigInt mBigTmp;
 };
 
 } // namespace epic::index
