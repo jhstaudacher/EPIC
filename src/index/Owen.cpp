@@ -6,30 +6,15 @@
 
 
 epic::index::Owen::Owen(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
-	: ItfPowerIndex(g) {
+	: PowerIndexWithPrecoalitions(g) {
 	bigInt max_value = approx->upperBound_swingPlayerPerCardinality();
-	mCalculator = lint::ItfLargeNumberCalculator::new_calculator(max_value, lint::Operation::multiplication, int_representation);
-
-	mNbPart = mGame.getPrecoalitions().size();
-	mPartW = new longUInt[mNbPart]();
-	mMaxPartSize = 0;
-	for (longUInt i = 0; i < mNbPart; ++i) {
-		longUInt partSize = mGame.getPrecoalitions()[i].size();
-		for (longUInt p = 0; p < partSize; ++p) {
-			mPartW[i] += mGame.getWeights()[mGame.getPrecoalitions()[i][p]];
-		}
-
-		if (partSize > mMaxPartSize) {
-			mMaxPartSize = partSize;
-		}
-	}
+	mCalculator = lint::ItfLargeNumberCalculator::new_calculator(max_value, lint::Operation::addition, int_representation);
 
 	mCalculator->alloc_largeNumber(mTmp);
 }
 
 epic::index::Owen::~Owen() {
 	mCalculator->free_largeNumber(mTmp);
-	delete[] mPartW;
 	lint::ItfLargeNumberCalculator::delete_calculator(mCalculator);
 }
 
@@ -169,30 +154,6 @@ epic::longUInt epic::index::Owen::getMemoryRequirement() {
 	}
 
 	return ret;
-}
-
-void epic::index::Owen::coalitionsCardinalityContainingPlayerFromAbove(Array2dOffset<lint::LargeNumber>& cw, Array2dOffset<lint::LargeNumber>& cc, longUInt n_player, longUInt player, longUInt* weights) {
-	for (longUInt x = mGame.getQuota(); x <= mGame.getWeightSum(); ++x) {
-		for (longUInt y = 0; y < n_player; ++y) {
-			mCalculator->assign(cw(x, y), cc(x, y));
-		}
-	}
-
-	for (longUInt x = mGame.getWeightSum() - weights[player]; x >= mGame.getQuota(); --x) {
-		for (longUInt s = 1; s < n_player; ++s) {
-			mCalculator->minus(cw(x, n_player - s - 1), cc(x, n_player - s - 1), cw(x + weights[player], n_player - s));
-		}
-	}
-}
-
-void epic::index::Owen::generalizedBackwardCountingPerWeightCardinality(Array2dOffset<lint::LargeNumber>& cw2, longUInt*  weights, longUInt n) {
-	for (longUInt i = 0; i < n; ++i) {
-		for (longUInt x = mGame.getQuota() + weights[i]; x <= mGame.getWeightSum(); ++x) {
-			for (longUInt m = 1; m < n; ++m) {
-				mCalculator->plusEqual(cw2(x - weights[i], m - 1), cw2(x, m));
-			}
-		}
-	}
 }
 
 void epic::index::Owen::updateInternalShapleyShubik(bigInt* internal_ssi, Array2dOffset<lint::LargeNumber>& cwi, longUInt precoalition, longUInt player, longUInt* weights, bigInt* factorial, bigInt& scale_factor) {

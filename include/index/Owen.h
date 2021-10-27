@@ -1,13 +1,13 @@
 #ifndef EPIC_INDEX_OWEN_H_
 #define EPIC_INDEX_OWEN_H_
 
-#include "ItfPowerIndex.h"
+#include "PowerIndexWithPrecoalitions.h"
 #include "ItfUpperBoundApproximation.h"
 #include "Array.h"
 
 namespace epic::index {
 
-class Owen : public ItfPowerIndex {
+class Owen : public PowerIndexWithPrecoalitions {
 public:
 	Owen(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
 	~Owen() override;
@@ -17,15 +17,9 @@ public:
 	longUInt getMemoryRequirement() override;
 
 private:
-	longUInt* mPartW; // Partition weights, mPartW[x]: weightsum of the precoalition x
-	longUInt mNbPart; // amount of precoalitions
-	longUInt mMaxPartSize; // the maximum amount of players inside a single precoalition
-
 	lint::LargeNumber mTmp;
 	bigInt mBigTmp;
 
-	void coalitionsCardinalityContainingPlayerFromAbove(Array2dOffset<lint::LargeNumber>& cw, Array2dOffset<lint::LargeNumber>& cc, longUInt n_player, longUInt player, longUInt* weights);
-	void generalizedBackwardCountingPerWeightCardinality(Array2dOffset<lint::LargeNumber>& cw2, longUInt* weights, longUInt n);
 	void updateInternalShapleyShubik(bigInt* internal_ssi, Array2dOffset<lint::LargeNumber>& cwi, longUInt precoalition, longUInt player, longUInt* weights, bigInt* factorial, bigInt& scale_factor);
 };
 
