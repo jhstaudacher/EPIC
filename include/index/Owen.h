@@ -1,13 +1,13 @@
 #ifndef EPIC_INDEX_OWEN_H_
 #define EPIC_INDEX_OWEN_H_
 
-#include "ItfPowerIndex.h"
+#include "PowerIndexWithPrecoalitions.h"
 #include "ItfUpperBoundApproximation.h"
 #include "Array.h"
 
 namespace epic::index {
 
-class Owen : public ItfPowerIndex {
+class Owen : public PowerIndexWithPrecoalitions {
 public:
 	Owen(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
 	~Owen() override;
@@ -17,7 +17,17 @@ public:
 	longUInt getMemoryRequirement() override;
 
 private:
-	void backwardCountingPerWeightAndCardinality(Array2dOffset<lint::LargeNumber>& cc, longUInt* partition_weights);
+	/**
+	 * temporary variable - avoids temporary allocations inside the loops.
+	 */
+	lint::LargeNumber mTmp;
+
+	/**
+	 * temporary variable - avoids temporary allocations inside the loops.
+	 */
+	bigInt mBigTmp;
+
+	void updateInternalShapleyShubik(bigInt* internal_ssi, Array2dOffset<lint::LargeNumber>& cwi, longUInt precoalition, longUInt player, longUInt* weights, bigInt* factorial, bigInt& scale_factor);
 };
 
 } /* namespace epic::index */
