@@ -36,9 +36,8 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 
 	bigFloat ExternalMultiplier;
 	{
-		bigInt tmp;
-		mpz_ui_pow_ui(tmp.get_mpz_t(), 2, mNbPart - 1);
-		ExternalMultiplier = 1 / bigFloat(tmp);
+		mpz_ui_pow_ui(mBigTmp.get_mpz_t(), 2, mNbPart - 1);
+		ExternalMultiplier = 1 / bigFloat(mBigTmp);
 	}
 
 	auto winternal = new longUInt[mMaxPartSize];
