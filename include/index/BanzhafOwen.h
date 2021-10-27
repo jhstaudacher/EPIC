@@ -1,16 +1,14 @@
 #ifndef EPIC_INDEX_NEWINDEX_H_
 #define EPIC_INDEX_NEWINDEX_H_
 
-#include "ItfPowerIndex.h"
-#include "../ItfUpperBoundApproximation.h"
-#include "PowerIndexWithWinningCoalitions.h"
+#include "PowerIndexWithPrecoalitions.h"
 
 namespace epic::index {
 
 /**
  * Add here a description of the new power index for the Doxygen documentation generator.
  */
-class BanzhafOwen : public ItfPowerIndex {
+class BanzhafOwen : public PowerIndexWithPrecoalitions {
 /*
  * Implement the ItfPowerIndex interface:
  */
@@ -21,10 +19,6 @@ public:
 	std::vector<bigFloat> calculate() override;
 	std::string getFullName() override;
 	longUInt getMemoryRequirement() override;
-
-private:
-	longUInt* mPartW; 		// Partition weights, mPartW[x]: weightsum of the precoalition x
-	longUInt mNbPart; 		// amount of precoalitions
 };
 
 } // namespace epic::index

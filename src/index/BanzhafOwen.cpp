@@ -2,36 +2,17 @@
 #include "Logging.h"
 #include <cmath>
 
-epic::index::BanzhafOwen::BanzhafOwen(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation) : ItfPowerIndex(g) {
+epic::index::BanzhafOwen::BanzhafOwen(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation) : PowerIndexWithPrecoalitions(g) {
 	/*
 	 * Initialize the protected ItfPowerIndex::mCalculator object. This gets used to do all large integer calculations later.
 	 * For an approximation of the maximum value needed for the calculations the approx object can get used.
 	 */
 	bigInt max_value = approx->upperBound_totalNumberOfSwingPlayer();
 	mCalculator = lint::ItfLargeNumberCalculator::new_calculator(max_value, lint::Operation::addition, int_representation);
-
-	mNbPart = mGame.getPrecoalitions().size();
-	mPartW = new longUInt[mNbPart]();
-	for (longUInt i = 0; i < mNbPart; ++i) {
-		longUInt partSize = mGame.getPrecoalitions()[i].size();
-		for (longUInt p = 0; p < partSize; ++p) {
-			mPartW[i] += mGame.getWeights()[mGame.getPrecoalitions()[i][p]];
-		}
-	}
-	/*
-	 * If needed add additional initializations below
-	 */
 }
 
 epic::index::BanzhafOwen::~BanzhafOwen() {
-	/*
-	 * Delete the mCalculator object
-	 */
 	lint::ItfLargeNumberCalculator::delete_calculator(mCalculator);
-
-	/**
-	 * If needed do additional cleanup below
-	 */
 }
 
 std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
