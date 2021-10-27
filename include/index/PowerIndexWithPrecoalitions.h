@@ -30,8 +30,25 @@ protected:
 	 */
 	longUInt mMaxPartSize;
 
+
+	/**
+	 * Calculating the number of coalitions containing player <i>i</i>
+	 *
+	 * @param cw return array containing the calculated results
+	 * @param cc number of coalitions per weight (like calculated by generalizedBackwardCountingPerWeight()-method)
+	 * @param wi the weight of player <i>i</i>
+	 */
 	void coalitionsContainingPlayerFromAbove(ArrayOffset<lint::LargeNumber>& cw, ArrayOffset<lint::LargeNumber>& cc, longUInt wi);
 
+	/**
+	 * Calculating the number of coalitions per weight
+	 *
+	 * c[x]: number of coalitions of weight <i>x</i>
+	 *
+	 * @param c return array containing the calculated results
+	 * @param weights array of player weights - must be allocated and filled in the range [0, n-1]
+	 * @param n player amount
+	 */
 	void generalizedBackwardCountingPerWeight(ArrayOffset<lint::LargeNumber>& c, longUInt* weights, longUInt n);
 
 	/**
