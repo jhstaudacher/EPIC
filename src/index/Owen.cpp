@@ -89,15 +89,15 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 				winternal[z] = mGame.getWeights()[mGame.getPrecoalitions()[i][z]];
 			}
 
-			for (longUInt s = 0; s < mNbPart - 1; ++s) {
-				mCalculator->mul(factor, factorial[s + 1], factorial[mNbPart - s - 2]);
+			for (longUInt s = 0; s <= mNbPart - 1; ++s) {
+				mCalculator->mul(factor, factorial[s], factorial[mNbPart - s - 1]);
 
 				if (nbPlayersInPartI > 1) {
 					for (longUInt x = mGame.getQuota(); x <= mGame.getWeightSum(); ++x) {
 						for (longUInt y = 0; y < nbPlayersInPartI - 1; ++y) {
 							mCalculator->assign_zero(cw2(x, y));
 						}
-						mCalculator->assign(cw2(x, nbPlayersInPartI - 1), cw(x, s + 1));
+						mCalculator->assign(cw2(x, nbPlayersInPartI - 1), cw(x, s));
 					}
 
 					updateNumberOfWinningCoalitionsPerWeightAndCardinality(cw2, i, winternal);
@@ -113,11 +113,11 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 						updateInternalShapleyShubik(shapleysInternal, cwi, i, ii, winternal, factorial, factor);
 					}
 				} else {
-					// shapleysInternal[mGame.getPrecoalitions()[i][0] - 1] += factor * sum(cw[q:tmp_min, s+1])
+					// shapleysInternal[mGame.getPrecoalitions()[i][0] - 1] += factor * sum(cw[q:tmp_min, s])
 					mCalculator->assign_zero(mTmp2);
 					longUInt tmp_min = std::min(mGame.getQuota() + mPartW[i] - 1, mGame.getWeightSum());
 					for (longUInt z = mGame.getQuota(); z <= tmp_min; ++z) {
-						mCalculator->plusEqual(mTmp2, cw(z, s + 1));
+						mCalculator->plusEqual(mTmp2, cw(z, s));
 					}
 					mCalculator->mul(mTmp, factor, mTmp2);
 					mCalculator->plusEqual(shapleysInternal[mGame.getPrecoalitions()[i][0]], mTmp);
