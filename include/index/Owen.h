@@ -17,7 +17,14 @@ public:
 	longUInt getMemoryRequirement() override;
 
 private:
+	/**
+	 * temporary variable - avoids temporary allocations inside the loops.
+	 */
 	lint::LargeNumber mTmp;
+
+	/**
+	 * temporary variable - avoids temporary allocations inside the loops.
+	 */
 	bigInt mBigTmp;
 
 	void updateInternalShapleyShubik(bigInt* internal_ssi, Array2dOffset<lint::LargeNumber>& cwi, longUInt precoalition, longUInt player, longUInt* weights, bigInt* factorial, bigInt& scale_factor);

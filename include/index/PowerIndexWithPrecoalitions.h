@@ -34,7 +34,7 @@ protected:
 	 * Calculates the number of coalitions and cardinalities containing player <i>i</i>.
 	 *
 	 * @param cw return matrix containing the calculated results
-	 * @param cc
+	 * @param cc number of coalitions per weight and cardinality (like calculated by generalizedBackwardCountingPerWeightAndCardinality()-method)
 	 * @param n player amount
 	 * @param p player index - must be in the range [0; n-1]
 	 * @param weights array of player weights - must be allocated and filled in the range [0; n-1]
@@ -44,9 +44,11 @@ protected:
 	void coalitionsCardinalityContainingPlayerFromAbove(Array2dOffset<lint::LargeNumber>& cw, Array2dOffset<lint::LargeNumber>& cc, longUInt n, longUInt p, longUInt* weights);
 
 	/**
-	 * TODO
+	 * Calculates the number of coalitions per weight and cardinality
 	 *
-	 * @param cc return matrix containing the caolculated results
+	 * cc(x, y): number of coalitions of weight <i>x</i> and cardinality <i>y</i>
+	 *
+	 * @param cc return matrix containing the calculated results
 	 * @param weights array of player weights - must be allocated and filled in the range [0; n-1]
 	 * @param n player amount
 	 */
