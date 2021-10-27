@@ -48,7 +48,7 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 
 	//backward counting per weight
 	for (longUInt i = 0; i < mNbPart; i++) {
-		int wi = mPartW[i];
+		longUInt wi = mPartW[i];
 		for (longUInt k = mGame.getQuota() + wi; k <= mGame.getWeightSum(); ++k) {
 			mCalculator->plusEqual(c[k - wi], c[k]);
 		}
@@ -92,21 +92,21 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 		}
 		
 
-		int nbPlayersInParti = mGame.getPrecoalitions()[i].size();		
+		longUInt nbPlayersInParti = mGame.getPrecoalitions()[i].size();
 		bigFloat ExternalMultiplier = 1 / (pow(2, (mNbPart)-1));
 		if (nbPlayersInParti > 1){
 			//std::vector<lint::LargeNumber> banzhafsInternal(mGame.getPrecoalitions()[i].size());
-			auto banzhafsInternal = new lint::LargeNumber[mGame.getPrecoalitions()[i].size()];
-			mCalculator->allocInit_largeNumberArray(banzhafsInternal, mGame.getPrecoalitions()[i].size());
+			auto banzhafsInternal = new lint::LargeNumber[nbPlayersInParti];
+			mCalculator->allocInit_largeNumberArray(banzhafsInternal, nbPlayersInParti);
 			
-			for (int ii = 0; ii < nbPlayersInParti; ii++){
+			for (longUInt ii = 0; ii < nbPlayersInParti; ii++){
 				longUInt wii = mGame.getWeights()[mGame.getPrecoalitions()[i][ii]];
 				for (longUInt iii = (mGame.getQuota() + wii); iii <= mGame.getWeightSum(); iii++){
 					mCalculator->plusEqual(cw2[iii - wii], cw2[iii]);					
 				}
 			}
 
-			for (int ii = 0; ii < nbPlayersInParti; ii++){
+			for (longUInt ii = 0; ii < nbPlayersInParti; ii++){
 				longUInt wii = mGame.getWeights()[mGame.getPrecoalitions()[i][ii]];
 				//replicate vector cw2 onto cwi
 				for (longUInt iii = mGame.getQuota(); iii < (mGame.getWeightSum() + 1); iii++){
