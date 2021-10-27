@@ -23,8 +23,6 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 	 * Use mGame and mCalculator to calculate the power index and return the results.
 	 */
 	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
-	auto banzhafsExternalGame = new lint::LargeNumber[mNbPart];
-	mCalculator->allocInit_largeNumberArray(banzhafsExternalGame, mNbPart);
 
 	ArrayOffset<lint::LargeNumber> c(mGame.getWeightSum() + 1, mGame.getQuota());
 	mCalculator->allocInit_largeNumberArray(c.getArrayPointer(), c.getNumberOfElements());
@@ -58,12 +56,6 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 	// Work out number of swings on level of precoalitions
 	for (longUInt i = 0; i < mNbPart; i++){
 		coalitionsContainingPlayerFromAbove(cw, c, mPartW[i]);
-
-		//get sum of vector
-		longUInt min = std::min(mGame.getQuota() + mPartW[i] - 1, mGame.getWeightSum());
-		for (longUInt ii = mGame.getQuota(); ii <= min; ++ii){
-			mCalculator->plusEqual(banzhafsExternalGame[i], cw[ii]);
-		}
 		
 		//replicate vector c onto cw
 		for (longUInt ii = mGame.getQuota(); ii < (mGame.getWeightSum() + 1); ii++){
@@ -90,7 +82,7 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 
 
 				bigFloat InternalMultiplier;
-				{
+				{ // InternalMultiplier = 2^{nbPlayerInParti - 1}
 					bigInt tmp;
 					mpz_ui_pow_ui(tmp.get_mpz_t(), 2, nbPlayersInParti - 1);
 					InternalMultiplier = 1 / bigFloat(tmp);
@@ -100,8 +92,14 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 				solution[mGame.getPrecoalitions()[i][ii]] = ExternalMultiplier * InternalMultiplier * banzhafs_internal;
 			}
 		} else{
+			//get sum of vector
+			mCalculator->assign_zero(tmp);
+			longUInt min = std::min(mGame.getQuota() + mPartW[i] - 1, mGame.getWeightSum());
+			for (longUInt ii = mGame.getQuota(); ii <= min; ++ii){
+				mCalculator->plusEqual(tmp, cw[ii]);
+			}
 			bigInt banzhafs_external;
-			mCalculator->to_bigInt(&banzhafs_external, banzhafsExternalGame[i]);
+			mCalculator->to_bigInt(&banzhafs_external, tmp);
 			solution[mGame.getPrecoalitions()[i][0]] = ExternalMultiplier * banzhafs_external;
 		}
 	}
@@ -114,8 +112,6 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 	mCalculator->free_largeNumberArray(cwi.getArrayPointer());
 	mCalculator->free_largeNumberArray(c.getArrayPointer());
 	mCalculator->free_largeNumberArray(cw.getArrayPointer());
-	mCalculator->free_largeNumberArray(banzhafsExternalGame);
-	delete[] banzhafsExternalGame;
 
 	return solution;
 }
