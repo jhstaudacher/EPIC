@@ -46,7 +46,7 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 
 	ArrayOffset<lint::LargeNumber> c(totalWeight + 1, mGame.getQuota());
 	mCalculator->allocInit_largeNumberArray(c.getArrayPointer(), c.getNumberOfElements());
-	mCalculator->assign_one(c[totalWeight]);
+	mCalculator->assign_one(c[totalWeight]);	
 
 	//backward counting per weight
 	for (longUInt i = 0; i < mNbPart; i++) {
@@ -58,7 +58,14 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 
 	ArrayOffset<lint::LargeNumber> cw(totalWeight + 1, mGame.getQuota());
 	mCalculator->allocInit_largeNumberArray(cw.getArrayPointer(), cw.getNumberOfElements());
-	
+
+	//create cw2
+	ArrayOffset<lint::LargeNumber> cw2(totalWeight + 1, mGame.getQuota());
+	mCalculator->allocInit_largeNumberArray(cw2.getArrayPointer(), cw2.getNumberOfElements());
+
+	ArrayOffset<lint::LargeNumber> cwi(totalWeight + 1, mGame.getQuota());
+	mCalculator->allocInit_largeNumberArray(cwi.getArrayPointer(), cwi.getNumberOfElements());
+
 	//replicate vector c onto cw
 	for (longUInt i = mGame.getQuota(); i < (totalWeight + 1); i++){
 		//cw[i] = c[i];
@@ -79,10 +86,6 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 		for (longUInt ii = mGame.getQuota(); ii < (mGame.getQuota() + mPartW[i]); ii++){
 			mCalculator->plusEqual(banzhafsExternalGame[i], cw[ii]);
 		}
-
-		//create cw2
-		ArrayOffset<lint::LargeNumber> cw2(totalWeight + 1, mGame.getQuota());
-		mCalculator->allocInit_largeNumberArray(cw2.getArrayPointer(), cw2.getNumberOfElements());
 		
 		//replicate vector c onto cw
 		for (longUInt ii = mGame.getQuota(); ii < (totalWeight + 1); ii++){
@@ -105,9 +108,6 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 				}
 			}
 
-			ArrayOffset<lint::LargeNumber> cwi(totalWeight + 1, mGame.getQuota());
-			mCalculator->allocInit_largeNumberArray(cwi.getArrayPointer(), cwi.getNumberOfElements());
-
 			for (int ii = 0; ii < nbPlayersInParti; ii++){
 				longUInt wii = mGame.getWeights()[mGame.getPrecoalitions()[i][ii]];
 				//replicate vector cw2 onto cwi
@@ -128,7 +128,6 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 				mCalculator->to_bigInt(&banzhafs_internal, banzhafsInternal[ii]);
 				solution[mGame.getPrecoalitions()[i][ii]] = ExternalMultiplier * InternalMultiplier * banzhafs_internal;
 			}
-			mCalculator->free_largeNumberArray(cwi.getArrayPointer());
 			mCalculator->free_largeNumberArray(banzhafsInternal);
 			delete[] banzhafsInternal;
 		}
@@ -137,8 +136,9 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 			mCalculator->to_bigInt(&banzhafs_external, banzhafsExternalGame[i]);
 			solution[mGame.getPrecoalitions()[i][0]] = ExternalMultiplier * banzhafs_external;
 		}
-		mCalculator->free_largeNumberArray(cw2.getArrayPointer());
 	}
+	mCalculator->free_largeNumberArray(cw2.getArrayPointer());
+	mCalculator->free_largeNumberArray(cwi.getArrayPointer());
 	mCalculator->free_largeNumberArray(c.getArrayPointer());
 	mCalculator->free_largeNumberArray(cw.getArrayPointer());
 	mCalculator->free_largeNumberArray(banzhafsExternalGame);
