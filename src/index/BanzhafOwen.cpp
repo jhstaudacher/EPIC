@@ -51,6 +51,9 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 		mCalculator->assign(cw[i], c[i]);
 	}
 
+	auto banzhafsInternal = new lint::LargeNumber[mMaxPartSize];
+	mCalculator->alloc_largeNumberArray(banzhafsInternal, mMaxPartSize);
+
 	// Work out number of swings on level of precoalitions
 	for (longUInt i = 0; i < mNbPart; i++){
 		for (longUInt ii = mGame.getQuota(); ii < (mGame.getWeightSum() + 1); ii++){
@@ -76,9 +79,9 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 		longUInt nbPlayersInParti = mGame.getPrecoalitions()[i].size();
 		bigFloat ExternalMultiplier = 1 / (pow(2, (mNbPart)-1));
 		if (nbPlayersInParti > 1){
-			//std::vector<lint::LargeNumber> banzhafsInternal(mGame.getPrecoalitions()[i].size());
-			auto banzhafsInternal = new lint::LargeNumber[nbPlayersInParti];
-			mCalculator->allocInit_largeNumberArray(banzhafsInternal, nbPlayersInParti);
+			for (longUInt x = 0; x < nbPlayersInParti; ++x) {
+				mCalculator->assign_zero(banzhafsInternal[x]);
+			}
 			
 			for (longUInt ii = 0; ii < nbPlayersInParti; ii++){
 				longUInt wii = mGame.getWeights()[mGame.getPrecoalitions()[i][ii]];
@@ -107,14 +110,16 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 				mCalculator->to_bigInt(&banzhafs_internal, banzhafsInternal[ii]);
 				solution[mGame.getPrecoalitions()[i][ii]] = ExternalMultiplier * InternalMultiplier * banzhafs_internal;
 			}
-			mCalculator->free_largeNumberArray(banzhafsInternal);
-			delete[] banzhafsInternal;
 		} else{
 			bigInt banzhafs_external;
 			mCalculator->to_bigInt(&banzhafs_external, banzhafsExternalGame[i]);
 			solution[mGame.getPrecoalitions()[i][0]] = ExternalMultiplier * banzhafs_external;
 		}
 	}
+
+	mCalculator->free_largeNumberArray(banzhafsInternal);
+	delete[] banzhafsInternal;
+
 	mCalculator->free_largeNumberArray(cw2.getArrayPointer());
 	mCalculator->free_largeNumberArray(cwi.getArrayPointer());
 	mCalculator->free_largeNumberArray(c.getArrayPointer());
