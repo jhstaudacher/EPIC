@@ -109,6 +109,7 @@ epic::longUInt epic::index::BanzhafOwen::getMemoryRequirement() {
 	bigInt memory = (mGame.getWeightSum() + 1 - mGame.getQuota()) * mCalculator->getLargeNumberSize() * 4; // c, cw, cw2, cwi
 	memory += mMaxPartSize * mCalculator->getLargeNumberSize(); // banzhafInternal
 	memory += mMaxPartSize * c_sizeof_longUInt; // winternal
+	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {
