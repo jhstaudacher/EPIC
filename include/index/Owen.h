@@ -22,11 +22,11 @@ private:
 	longUInt mMaxPartSize; // the maximum amount of players inside a single precoalition
 
 	lint::LargeNumber mTmp;
-	lint::LargeNumber mTmp2;
+	bigInt mBigTmp;
 
 	void coalitionsCardinalityContainingPlayerFromAbove(Array2dOffset<lint::LargeNumber>& cw, Array2dOffset<lint::LargeNumber>& cc, longUInt n_player, longUInt player, longUInt* weights);
 	void generalizedBackwardCountingPerWeightCardinality(Array2dOffset<lint::LargeNumber>& cw2, longUInt* weights, longUInt n);
-	void updateInternalShapleyShubik(lint::LargeNumber* internal_ssi, Array2dOffset<lint::LargeNumber>& cwi, longUInt precoalition, longUInt player, longUInt* weights, lint::LargeNumber* factorial, lint::LargeNumber& scale_factor);
+	void updateInternalShapleyShubik(bigInt* internal_ssi, Array2dOffset<lint::LargeNumber>& cwi, longUInt precoalition, longUInt player, longUInt* weights, bigInt* factorial, bigInt& scale_factor);
 };
 
 } /* namespace epic::index */
