@@ -4,8 +4,6 @@
 
 #include <numeric>
 
-// DEBUG
-#include <iostream>
 
 epic::index::Owen::Owen(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
 	: ItfPowerIndex(g) {
@@ -146,13 +144,6 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 
 		delete[] factorial;
 		delete[] shapleysInternal;
-	}
-
-
-	// DEBUG
-	std::cout << "owenIndices:" << std::endl;
-	for (longUInt x = 0; x < mGame.getNumberOfPlayers(); ++x) {
-		std::cout << "[" << x << "]\t" << solution[x] << std::endl;
 	}
 
 	return solution;
