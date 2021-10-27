@@ -24,9 +24,8 @@ private:
 	lint::LargeNumber mTmp;
 	lint::LargeNumber mTmp2;
 
-	void backwardCountingPerWeightAndCardinality(Array2dOffset<lint::LargeNumber>& cc);
-	void countCoalitionsPerPlayer(Array2dOffset<lint::LargeNumber>& cw, Array2dOffset<lint::LargeNumber>& cc, longUInt n_player, longUInt player, longUInt* weights);
-	void updateNumberOfWinningCoalitionsPerWeightAndCardinality(Array2dOffset<lint::LargeNumber>& cw2, longUInt precoalition, longUInt* weights);
+	void coalitionsCardinalityContainingPlayerFromAbove(Array2dOffset<lint::LargeNumber>& cw, Array2dOffset<lint::LargeNumber>& cc, longUInt n_player, longUInt player, longUInt* weights);
+	void generalizedBackwardCountingPerWeightCardinality(Array2dOffset<lint::LargeNumber>& cw2, longUInt* weights, longUInt n);
 	void updateInternalShapleyShubik(lint::LargeNumber* internal_ssi, Array2dOffset<lint::LargeNumber>& cwi, longUInt precoalition, longUInt player, longUInt* weights, lint::LargeNumber* factorial, lint::LargeNumber& scale_factor);
 };
 

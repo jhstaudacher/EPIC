@@ -60,7 +60,8 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 
 		Array2dOffset<lint::LargeNumber> cc(mGame.getWeightSum() + 1, mNbPart, mGame.getQuota(), 0);
 		mCalculator->allocInit_largeNumberArray(cc.getArrayPointer(), cc.getNumberOfElements());
-		backwardCountingPerWeightAndCardinality(cc);
+		mCalculator->assign_one(cc(mGame.getWeightSum(), mNbPart - 1));
+		generalizedBackwardCountingPerWeightCardinality(cc, mPartW, mNbPart);
 
 		Array2dOffset<lint::LargeNumber> cw(mGame.getWeightSum() + 1, mNbPart, mGame.getQuota(), 0);
 		mCalculator->allocInit_largeNumberArray(cw.getArrayPointer(), cw.getNumberOfElements());
@@ -82,7 +83,7 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 		for (longUInt i = 0; i < mNbPart; ++i) {
 			longUInt nbPlayersInPartI = mGame.getPrecoalitions()[i].size();
 
-			countCoalitionsPerPlayer(cw, cc, mNbPart, i, mPartW);
+			coalitionsCardinalityContainingPlayerFromAbove(cw, cc, mNbPart, i, mPartW);
 
 			// initialize winternal
 			for (longUInt z = 0; z < nbPlayersInPartI; ++z) {
@@ -100,7 +101,7 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 						mCalculator->assign(cw2(x, nbPlayersInPartI - 1), cw(x, s));
 					}
 
-					updateNumberOfWinningCoalitionsPerWeightAndCardinality(cw2, i, winternal);
+					generalizedBackwardCountingPerWeightCardinality(cw2, winternal, nbPlayersInPartI);
 
 					for (longUInt x = mGame.getQuota(); x <= mGame.getWeightSum(); ++x) {
 						for (longUInt y = 0; y < nbPlayersInPartI; ++y) {
@@ -109,7 +110,7 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate() {
 					}
 
 					for (longUInt ii = 0; ii < nbPlayersInPartI; ++ii) {
-						countCoalitionsPerPlayer(cwi, cw2, nbPlayersInPartI, ii, winternal);
+						coalitionsCardinalityContainingPlayerFromAbove(cwi, cw2, nbPlayersInPartI, ii, winternal);
 						updateInternalShapleyShubik(shapleysInternal, cwi, i, ii, winternal, factorial, factor);
 					}
 				} else {
@@ -192,21 +193,7 @@ epic::longUInt epic::index::Owen::getMemoryRequirement() {
 	return ret;
 }
 
-// ! c must be allocated and zero-initialized in the range [quota, capitalC] x [0, nbPartitions - 1]
-void epic::index::Owen::backwardCountingPerWeightAndCardinality(Array2dOffset<lint::LargeNumber>& c) {
-	longUInt n = mGame.getPrecoalitions().size();
-
-	mCalculator->assign_one(c(mGame.getWeightSum(), n -1));
-	for (longUInt i = 0; i < n; ++i) {
-		for (longUInt x = mGame.getQuota() + mPartW[i]; x <= mGame.getWeightSum(); ++x) {
-			for (longUInt m = 1; m < n; ++m) {
-				mCalculator->plusEqual(c(x - mPartW[i], m - 1), c(x, m));
-			}
-		}
-	}
-}
-
-void epic::index::Owen::countCoalitionsPerPlayer(Array2dOffset<lint::LargeNumber>& cw, Array2dOffset<lint::LargeNumber>& cc, longUInt n_player, longUInt player, longUInt* weights) {
+void epic::index::Owen::coalitionsCardinalityContainingPlayerFromAbove(Array2dOffset<lint::LargeNumber>& cw, Array2dOffset<lint::LargeNumber>& cc, longUInt n_player, longUInt player, longUInt* weights) {
 	for (longUInt x = mGame.getQuota(); x <= mGame.getWeightSum(); ++x) {
 		for (longUInt y = 0; y < n_player; ++y) {
 			mCalculator->assign(cw(x, y), cc(x, y));
@@ -220,13 +207,11 @@ void epic::index::Owen::countCoalitionsPerPlayer(Array2dOffset<lint::LargeNumber
 	}
 }
 
-void epic::index::Owen::updateNumberOfWinningCoalitionsPerWeightAndCardinality(Array2dOffset<lint::LargeNumber>& cw2, longUInt precoalition, longUInt* weights) {
-	longUInt n = mGame.getPrecoalitions()[precoalition].size();
-
+void epic::index::Owen::generalizedBackwardCountingPerWeightCardinality(Array2dOffset<lint::LargeNumber>& cw2, longUInt*  weights, longUInt n) {
 	for (longUInt i = 0; i < n; ++i) {
 		for (longUInt x = mGame.getQuota() + weights[i]; x <= mGame.getWeightSum(); ++x) {
-			for (longUInt m = n - 1; m > 0; --m) {
-				mCalculator->plus(cw2(x - weights[i], m - 1), cw2(x, m), cw2(x - weights[i], m - 1));
+			for (longUInt m = 1; m < n; ++m) {
+				mCalculator->plusEqual(cw2(x - weights[i], m - 1), cw2(x, m));
 			}
 		}
 	}
