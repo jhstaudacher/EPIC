@@ -30,6 +30,10 @@ protected:
 	 */
 	longUInt mMaxPartSize;
 
+	void coalitionsContainingPlayerFromAbove(ArrayOffset<lint::LargeNumber>& cw, ArrayOffset<lint::LargeNumber>& cc, longUInt wi);
+
+	void generalizedBackwardCountingPerWeight(ArrayOffset<lint::LargeNumber>& c, longUInt* weights, longUInt n);
+
 	/**
 	 * Calculates the number of coalitions and cardinalities containing player <i>i</i>.
 	 *
