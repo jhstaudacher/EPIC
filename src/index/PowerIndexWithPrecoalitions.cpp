@@ -20,6 +20,24 @@ epic::index::PowerIndexWithPrecoalitions::~PowerIndexWithPrecoalitions() {
 	delete[] mPartW;
 }
 
+void epic::index::PowerIndexWithPrecoalitions::coalitionsContainingPlayerFromAbove(ArrayOffset<lint::LargeNumber>& cw, ArrayOffset<lint::LargeNumber>& cc, longUInt wi) {
+    for (longUInt i = mGame.getQuota(); i <= mGame.getWeightSum(); ++i) {
+		mCalculator->assign(cw[i], cc[i]);
+	}
+
+	for (longUInt i = mGame.getWeightSum() - wi; i >= mGame.getQuota(); --i) {
+		mCalculator->minus(cw[i], cc[i], cw[i + wi]);
+	}
+}
+
+void epic::index::PowerIndexWithPrecoalitions::generalizedBackwardCountingPerWeight(ArrayOffset<lint::LargeNumber>& c, longUInt* weights, longUInt n) {
+	for (longUInt i = 0; i < n; ++i) {
+        for (longUInt x = mGame.getQuota() + weights[i]; x <= mGame.getWeightSum(); ++x) {
+            mCalculator->plusEqual(c[x - weights[i]], c[x]);
+        }
+	}
+}
+
 void epic::index::PowerIndexWithPrecoalitions::coalitionsCardinalityContainingPlayerFromAbove(Array2dOffset<lint::LargeNumber>& cw, Array2dOffset<lint::LargeNumber>& cc, longUInt n, longUInt p, longUInt* weights) {
 	for (longUInt x = mGame.getQuota(); x <= mGame.getWeightSum(); ++x) {
 		for (longUInt y = 0; y < n; ++y) {
