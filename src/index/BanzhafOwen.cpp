@@ -9,9 +9,12 @@ epic::index::BanzhafOwen::BanzhafOwen(Game& g, ItfUpperBoundApproximation* appro
 	 */
 	bigInt max_value = approx->upperBound_totalNumberOfSwingPlayer();
 	mCalculator = lint::ItfLargeNumberCalculator::new_calculator(max_value, lint::Operation::addition, int_representation);
+
+	mCalculator->alloc_largeNumber(tmp);
 }
 
 epic::index::BanzhafOwen::~BanzhafOwen() {
+	mCalculator->free_largeNumber(tmp);
 	lint::ItfLargeNumberCalculator::delete_calculator(mCalculator);
 }
 

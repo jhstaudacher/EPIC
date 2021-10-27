@@ -19,6 +19,9 @@ public:
 	std::vector<bigFloat> calculate() override;
 	std::string getFullName() override;
 	longUInt getMemoryRequirement() override;
+
+private:
+	lint::LargeNumber tmp;
 };
 
 } // namespace epic::index
