@@ -69,7 +69,6 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 					mCalculator->plusEqual(banzhafsInternal[ii], cwi[iii]);
 				}
 
-
 				bigFloat InternalMultiplier;
 				{ // InternalMultiplier = 2^{nbPlayerInParti - 1}
 					mpz_ui_pow_ui(mBigTmp.get_mpz_t(), 2, nbPlayersInParti - 1);
@@ -108,7 +107,9 @@ std::string epic::index::BanzhafOwen::getFullName() {
 }
 
 epic::longUInt epic::index::BanzhafOwen::getMemoryRequirement() {
-	bigInt memory = 42; // write the needed memory into this variable
+	bigInt memory = (mGame.getWeightSum() + 1 - mGame.getQuota()) * mCalculator->getLargeNumberSize() * 4; // c, cw, cw2, cwi
+	memory += mMaxPartSize * mCalculator->getLargeNumberSize(); // banzhafInternal
+	memory += mMaxPartSize * c_sizeof_longUInt; // winternal
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {
