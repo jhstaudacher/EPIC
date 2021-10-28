@@ -27,6 +27,9 @@ private:
 	longUInt mNbPart; 		// amount of precoalitions
 	longUInt mMaxPartSize; 	// the maximum amount of players inside a single precoalition
 
+	void coalitionsCardinalityContainingPlayerFromAbove(Array2dOffset<lint::LargeNumber>& cw, Array2dOffset<lint::LargeNumber>& cc, longUInt n_player, longUInt player, longUInt* weights);
+	void generalizedBackwardCountingPerWeightCardinality(Array2dOffset<lint::LargeNumber>& cw2, longUInt*  weights, longUInt n);
+
 };
 
 } // namespace epic::index

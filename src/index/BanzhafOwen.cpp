@@ -16,19 +16,21 @@ epic::index::BanzhafOwen::~BanzhafOwen() {
 
 std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
+	longUInt totalWeight = mGame.getWeightSum();
+	longUInt quota = mGame.getQuota();
 
-	ArrayOffset<lint::LargeNumber> c(mGame.getWeightSum() + 1, mGame.getQuota());
+	ArrayOffset<lint::LargeNumber> c(totalWeight + 1,quota);
 	mCalculator->allocInit_largeNumberArray(c.getArrayPointer(), c.getNumberOfElements());
-	mCalculator->assign_one(c[mGame.getWeightSum()]);
+	mCalculator->assign_one(c[totalWeight]);
 	generalizedBackwardCountingPerWeight(c, mPartW, mNbPart);
 
-	ArrayOffset<lint::LargeNumber> cw(mGame.getWeightSum() + 1, mGame.getQuota());
+	ArrayOffset<lint::LargeNumber> cw(totalWeight + 1, quota);
 	mCalculator->allocInit_largeNumberArray(cw.getArrayPointer(), cw.getNumberOfElements());
 
-	ArrayOffset<lint::LargeNumber> cw2(mGame.getWeightSum() + 1, mGame.getQuota());
+	ArrayOffset<lint::LargeNumber> cw2(totalWeight + 1, quota);
 	mCalculator->alloc_largeNumberArray(cw2.getArrayPointer(), cw2.getNumberOfElements());
 
-	ArrayOffset<lint::LargeNumber> cwi(mGame.getWeightSum() + 1, mGame.getQuota());
+	ArrayOffset<lint::LargeNumber> cwi(totalWeight + 1, quota);
 	mCalculator->allocInit_largeNumberArray(cwi.getArrayPointer(), cwi.getNumberOfElements());
 
 	auto banzhafsInternal = new lint::LargeNumber[mMaxPartSize];
@@ -47,7 +49,7 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 		coalitionsContainingPlayerFromAbove(cw, c, mPartW[i]);
 		
 		//replicate vector c onto cw
-		for (longUInt ii = mGame.getQuota(); ii <= mGame.getWeightSum(); ii++){
+		for (longUInt ii = quota; ii <= totalWeight; ii++){
 			//cw2[i] = cw[i];
 			mCalculator->assign(cw2[ii], cw[ii]);
 		}
@@ -64,7 +66,7 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 			for (longUInt ii = 0; ii < nbPlayersInParti; ii++){
 				coalitionsContainingPlayerFromAbove(cwi, cw2, winternal[ii]);
 
-				for (longUInt iii = mGame.getQuota(); iii <= (mGame.getQuota() + winternal[ii] - 1); iii++){
+				for (longUInt iii = quota; iii <= (quota + winternal[ii] - 1); iii++){
 					mCalculator->plusEqual(banzhafsInternal[ii], cwi[iii]);
 				}
 
@@ -79,8 +81,8 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 		} else{
 			//get sum of vector
 			mCalculator->assign_zero(mTmp);
-			longUInt min = std::min(mGame.getQuota() + mPartW[i] - 1, mGame.getWeightSum());
-			for (longUInt ii = mGame.getQuota(); ii <= min; ++ii){
+			longUInt min = std::min(quota + mPartW[i] - 1, totalWeight);
+			for (longUInt ii = quota; ii <= min; ++ii){
 				mCalculator->plusEqual(mTmp, cw[ii]);
 			}
 			bigInt banzhafs_external;
