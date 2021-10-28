@@ -66,7 +66,8 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 			for (longUInt ii = 0; ii < nbPlayersInParti; ii++){
 				coalitionsContainingPlayerFromAbove(cwi, cw2, winternal[ii]);
 
-				for (longUInt iii = quota; iii <= (quota + winternal[ii] - 1); iii++){
+				longUInt min = std::min(quota + winternal[ii] - 1, totalWeight);
+				for (longUInt iii = quota; iii <= min; iii++){
 					mCalculator->plusEqual(banzhafsInternal[ii], cwi[iii]);
 				}
 

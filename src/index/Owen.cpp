@@ -161,7 +161,8 @@ void epic::index::Owen::updateInternalShapleyShubik(bigInt* internal_ssi, Array2
 
 	for (longUInt sinternal = 0; sinternal < n; ++sinternal) {
 		mCalculator->assign_zero(mTmp);
-		for (longUInt w = mGame.getQuota(); w <= mGame.getQuota() + weights[player] - 1; ++w) {
+		longUInt min = std::min(mGame.getQuota() + weights[player] - 1, mGame.getWeightSum());
+		for (longUInt w = mGame.getQuota(); w <= min; ++w) {
 			mCalculator->plusEqual(mTmp, cwi(w, sinternal));
 		}
 
