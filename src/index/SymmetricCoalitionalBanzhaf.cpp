@@ -110,6 +110,7 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 
 		//get sum of vector
 		longUInt min = std::min(mGame.getQuota() + mPartW[i] - 1, mGame.getWeightSum());
+		
 		for (longUInt iii = mGame.getQuota(); iii <= min ; iii++){
 			mCalculator->plusEqual(banzhafsExternalGame[i], cw[iii]);
 		}
@@ -153,13 +154,12 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 					mCalculator->alloc_largeNumber(sum);
 					mCalculator->assign_zero(sum);
 					min = std::min(mGame.getQuota() + winternal - 1, mGame.getWeightSum());
-					for (longUInt iii = mGame.getQuota(); iii < min; iii++){
+					for (longUInt iii = mGame.getQuota(); iii <= min; iii++){
 						mCalculator->plusEqual(sum, cwi(iii, s));
 					}
 					mCalculator->mulEqual(sum, factor);
 
 					mCalculator->plusEqual(shapleysInternal[ii], sum);
-					//rawShapleysInternal[ii] = shapleysInternal[ii];
 					mCalculator->free_largeNumber(factor);
 					mCalculator->free_largeNumber(sum);
 				}
