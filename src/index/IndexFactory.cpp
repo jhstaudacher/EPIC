@@ -80,7 +80,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{RPIG, {"RPIG", "raw null-player-free Power Index G (based on the Dubey-Shapley identity)"}},
 	{RPIF, {"RPIF", "raw null-player-free Power Index F"}},
 	{RSH, {"RSH", "raw Shapley Shubik"}},
-	{SCO, {"SCO", "Symmetric Coalitional Banzhaf"}},
+	{SCB, {"SCB", "Symmetric Coalitional Banzhaf"}},
 	{SH, {"SH", "Shapley Shubik"}},
 	{T, {"T", "Tijs"}},
 	{W, {"W", "Number of winning coalitions"}},
@@ -132,7 +132,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::RPIG: index = new RawPowerIndexG(g, approx, int_representation); break;
 		case IndexType::RPIF: index = new RawPowerIndexF(g, approx, int_representation); break;
 		case IndexType::RSH: index = new RawShapleyShubik(g, approx, int_representation); break;
-		case IndexType::SCO: index = new SymmetricCoalitionalBanzhaf(g, approx, int_representation); break;
+		case IndexType::SCB: index = new SymmetricCoalitionalBanzhaf(g, approx, int_representation); break;
 		case IndexType::SH: index = new ShapleyShubik(g, approx, int_representation); break;
 		case IndexType::T: index = new Tijs(g); break;
 		case IndexType::W: index = new SingleValueW(g, approx, int_representation); break;

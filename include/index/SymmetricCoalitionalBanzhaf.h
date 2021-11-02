@@ -1,16 +1,14 @@
 #ifndef EPIC_INDEX_SYMMETRICCOALITIONALBANZHAF_H_
 #define EPIC_INDEX_SYMMETRICCOALITIONALBANZHAF_H_
 
-#include "ItfPowerIndex.h"
-#include "../ItfUpperBoundApproximation.h"
-#include "PowerIndexWithWinningCoalitions.h"
+#include "PowerIndexWithPrecoalitions.h"
 
 namespace epic::index {
 
 /**
  * Add here a description of the new power index for the Doxygen documentation generator.
  */
-class SymmetricCoalitionalBanzhaf : public ItfPowerIndex {
+class SymmetricCoalitionalBanzhaf : public PowerIndexWithPrecoalitions {
 /*
  * Implement the ItfPowerIndex interface:
  */
@@ -23,12 +21,18 @@ public:
 	longUInt getMemoryRequirement() override;
 
 private:
-	longUInt* mPartW; 		// Partition weights, mPartW[x]: weightsum of the precoalition x
-	longUInt mNbPart; 		// amount of precoalitions
-	longUInt mMaxPartSize; 	// the maximum amount of players inside a single precoalition
+	/**
+	 * temporary variable - avoids temporary allocations inside the loops.
+	 */
+	lint::LargeNumber mTmp;
 
-	void coalitionsCardinalityContainingPlayerFromAbove(Array2dOffset<lint::LargeNumber>& cw, Array2dOffset<lint::LargeNumber>& cc, longUInt n_player, longUInt player, longUInt* weights);
-	void generalizedBackwardCountingPerWeightCardinality(Array2dOffset<lint::LargeNumber>& cw2, longUInt*  weights, longUInt n);
+	/**
+	 * temporary variable - avoids temporary allocations inside the loops.
+	 */
+	bigInt mBigTmp;
+
+
+	void updateInternalShapleyShubik(bigInt* internal_ssi, Array2dOffset<lint::LargeNumber>& cwi, longUInt precoalition, longUInt player, longUInt* weights, bigInt* factorial);
 
 };
 

@@ -87,10 +87,8 @@ bool epic::io::UserInputHandler::handleQuotaFromWeightfile(const std::string& fi
 }
 
 bool epic::io::UserInputHandler::handlePrecoalitions(const std::string& sPrecoalitions) {	
-	std::cout << "arg: " << sPrecoalitions << std::endl;
 	if (sPrecoalitions.size() == 0){
 		mPrecoalitionFlag = true;
-		std::cout << "precoalitions are in weightfile" << std::endl;
 		return true;
 	}
 	std::string delimiter = ",";
@@ -212,7 +210,7 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 					return false;
 				}
 				//check if -p is available for precoalition indices
-				if ((mIndex.compare("SCO") == 0) || (mIndex.compare("BZO") == 0) || (mIndex.compare("O") == 0)){
+				if ((mIndex.compare("SCB") == 0) || (mIndex.compare("BZO") == 0) || (mIndex.compare("O") == 0)){
 					std::string argument = "-p";
 					if (argument.compare(vectorOfArguments[optind]) != 0){
 						std::cout << "missing argument for precoalition games: -p" << std::endl;
