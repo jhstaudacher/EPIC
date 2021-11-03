@@ -58,7 +58,7 @@ private:
 		APG,		   /**< absolute Public Good*/
 		APIG,		   /**< absolute null-player-free Power Index G (based on the Dubey-Shapley identity)*/
 		BZ,			   /**< Banzhaf */
-		BZO,		   /**< Banzhaf-Owen */		
+		BO,		   	   /**< Banzhaf-Owen */		
 		CC,			   /**< Coleman collective */
 		CI,			   /**< Coleman initiative */
 		CP,			   /**< Coleman preventive */

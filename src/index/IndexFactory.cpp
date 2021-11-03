@@ -49,7 +49,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{APG, {"APG", "absolute Public Good"}},
 	{APIG, {"APIG", "absolute null-player-free Power Index G (based on the Dubey-Shapley identity)"}},
 	{BZ, {"BZ", "Banzhaf"}},
-	{BZO, {"BZO", "Banzhaf-Owen"}},
+	{BO, {"BO", "Banzhaf-Owen"}},
 	{CC, {"CC", "Coleman collective"}},
 	{CI, {"CI", "Coleman initiative"}},
 	{CP, {"CP", "Coleman preventive"}},
@@ -99,7 +99,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::INVALID_INDEX: index = nullptr; break;
 		case IndexType::ABZ: index = new AbsoluteBanzhaf(g, approx, int_representation); break;
 		case IndexType::BZ: index = new Banzhaf(g, approx, int_representation); break;
-		case IndexType::BZO: index = new BanzhafOwen(g, approx, int_representation); break;
+		case IndexType::BO: index = new BanzhafOwen(g, approx, int_representation); break;
 		case IndexType::APG: index = new AbsolutePublicGood(g, approx, int_representation); break;
 		case IndexType::APIG: index = new AbsolutePowerIndexG(g, approx, int_representation); break;
 		case IndexType::CC: index = new ColemanCollective(g, approx, int_representation); break;

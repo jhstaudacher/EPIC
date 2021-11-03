@@ -210,7 +210,7 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 					return false;
 				}
 				//check if -p is available for precoalition indices
-				if ((mIndex.compare("SCB") == 0) || (mIndex.compare("BZO") == 0) || (mIndex.compare("O") == 0)){
+				if ((mIndex.compare("SCB") == 0) || (mIndex.compare("BO") == 0) || (mIndex.compare("O") == 0)){
 					std::string argument = "-p";
 					if (argument.compare(vectorOfArguments[optind]) != 0){
 						std::cout << "missing argument for precoalition games: -p" << std::endl;

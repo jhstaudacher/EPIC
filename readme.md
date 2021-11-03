@@ -70,7 +70,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `APG` | Absolute Public Good |
 | `APIG` | Absolute Power Index G (based on the Dubey-Shapley identity) |
 | `BZ` | Banzhaf |
-| `BZO` | Banzhaf Owen |
+| `BO` | Banzhaf Owen |
 | `CC` | Coleman Collective |
 | `CI` | Coleman Initiative |
 | `CP` | Coleman Preventive |
