@@ -5,14 +5,15 @@
 #include <algorithm>
 #include <stdexcept>
 
-epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool flag_withoutNullPlayers) {
+epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool flag_withoutNullPlayers, std::vector<std::vector<int>>& precoalitions) {
 	this->quota = quota;
 	this->solution = {};
 	this->flag_null_player_handling = flag_withoutNullPlayers;
+	this->precoalitions = precoalitions;
 
 	//sort players by weight
 	weights = untreated_weights;
-	sortingPermutation = sortWeights(weights);
+	sortingPermutation = sortWeights(weights, this->precoalitions);
 
 	//handleDummyPlayers(flag_withoutNullPlayers);	//handle dummy-/null-player
 	numberOfNullPlayers = findNullPlayersFromBelow(flag_withoutNullPlayers);
@@ -31,7 +32,7 @@ epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool 
 	}
 	// Check if quota is greater or equal than half the weight sum, otherwise present a warning
 	if (this->quota < (this->weightSum + 1) / 2) {
-		log::out << log::warning << "The quota is less than half of the weight sum." << log::endl;		
+		log::out << log::warning << "The quota is less than half of the weight sum." << log::endl;
 	}
 
 	// Find out if there are veto players and if there are which
@@ -79,6 +80,10 @@ std::vector<epic::bigFloat> epic::Game::getSolution() const {
 	return solution;
 }
 
+std::vector<std::vector<int>> epic::Game::getPrecoalitions() const {
+	return precoalitions;
+}
+
 void epic::Game::setSolution(const std::vector<bigFloat>& pre_solution) {
 	solution.resize(weights.size() + excludedNullPlayer.size());
 
@@ -110,7 +115,7 @@ epic::longUInt epic::Game::playerIndexToNumber(longUInt index) const {
 
 //---------- private methods -------------
 
-std::vector<epic::longUInt> epic::Game::sortWeights(std::vector<longUInt>& weights) {
+std::vector<epic::longUInt> epic::Game::sortWeights(std::vector<longUInt>& weights, std::vector<std::vector<int>>& precoalitions) {
 	std::vector<std::pair<longUInt, longUInt>> weight_index_pair(weights.size());
 	for (longUInt i = 0; i < weights.size(); ++i) {
 		weight_index_pair[i] = std::make_pair(weights[i], i);
@@ -118,9 +123,17 @@ std::vector<epic::longUInt> epic::Game::sortWeights(std::vector<longUInt>& weigh
 	std::sort(weight_index_pair.begin(), weight_index_pair.end(), std::greater<>());
 
 	std::vector<longUInt> permutation(weights.size());
+	std::vector<longUInt> inv_permutation(weights.size());
 	for (longUInt i = 0; i < weights.size(); ++i) {
 		weights[i] = weight_index_pair[i].first;
 		permutation[i] = weight_index_pair[i].second;
+		inv_permutation[permutation[i]] = i;
+	}
+
+	for (auto& coal : precoalitions) {
+		for (auto& it : coal) {
+			it = inv_permutation[it];
+		}
 	}
 
 	return permutation;

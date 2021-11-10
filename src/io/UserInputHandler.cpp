@@ -14,10 +14,12 @@ epic::io::UserInputHandler::UserInputHandler(const std::string& index, const std
 	mFloatQuota = 0.0;
 	mOutputType = outputType;
 	mTestFlag = false;
+	mPrecoalitionFlag = false;
 	mInputFloatWeights = false;
 	mFilterNullPlayers = filterNullPlayers;
 	mIntRepresentation = DEFAULT;
 	mWeightsFile = "";
+	mPrecoalitions.clear();
 }
 
 epic::io::UserInputHandler::UserInputHandler() {
@@ -27,16 +29,18 @@ epic::io::UserInputHandler::UserInputHandler() {
 	mFloatQuota = 0.0;
 	mOutputType = screen;
 	mTestFlag = false;
+	mPrecoalitionFlag = false;
 	mInputFloatWeights = false;
 	mFilterNullPlayers = false;
 	mIntRepresentation = DEFAULT;
 	mWeightsFile = "";
+	mPrecoalitions.clear();
 }
 
 bool epic::io::UserInputHandler::handleWeightsAndQuota(const std::string& fileName) {
 	if (mInputFloatWeights) {
 		std::vector<double> floatWeights;
-		floatWeights = DataInput::inputFloatCSV(fileName, mTestFlag);
+		floatWeights = DataInput::inputFloatCSV(fileName, mPrecoalitions, mTestFlag, mPrecoalitionFlag);
 		floatWeights.push_back(mFloatQuota);
 		UpscaleFloatToIntAndReturnMultiplicator(floatWeights, mWeights);
 		mQuota = mWeights.back();
@@ -48,7 +52,17 @@ bool epic::io::UserInputHandler::handleWeightsAndQuota(const std::string& fileNa
 			std::cout << "Float quota specified without the --float flag." << std::endl;
 			return false;
 		}
-		mWeights = DataInput::inputCSV(fileName, mTestFlag);
+		mWeights = DataInput::inputCSV(fileName, mPrecoalitions, mTestFlag, mPrecoalitionFlag);
+
+		//test coalition structure
+		//std::vector< std::vector<int> >::iterator row;
+		//std::vector<int>::iterator col;
+		//for (row = mPrecoalitions.begin(); row != mPrecoalitions.end(); row++) {
+		//    for (col = row->begin(); col != row->end(); col++) {
+		//        std::cout << *col << ", ";
+		//    }
+		//	std::cout << std::endl;
+		//}
 	}
 
 	if (mWeights.empty()) {
@@ -69,6 +83,39 @@ bool epic::io::UserInputHandler::handleQuotaFromWeightfile(const std::string& fi
 	}
 
 	mTestFlag = true;
+	return true;
+}
+
+bool epic::io::UserInputHandler::handlePrecoalitions(const std::string& sPrecoalitions) {
+	if (sPrecoalitions.size() == 0) {
+		mPrecoalitionFlag = true;
+		return true;
+	}
+	std::string delimiter = ",";
+	std::string delimiter2 = "+";
+	std::vector<std::string> precoalitions;
+
+	size_t last = 0;
+	size_t next = 0;
+	while ((next = sPrecoalitions.find(delimiter, last)) != std::string::npos) {
+		precoalitions.push_back(sPrecoalitions.substr(last, next - last));
+
+		last = next + 1;
+	}
+	precoalitions.push_back(sPrecoalitions.substr(last));
+
+	for (auto it = std::begin(precoalitions); it != std::end(precoalitions); ++it) {
+		std::vector<int> pushVector;
+		size_t last = 0;
+		size_t next = 0;
+		while ((next = (*it).find(delimiter2, last)) != std::string::npos) {
+			pushVector.push_back(std::stoi((*it).substr(last, next - last)) - 1);
+			last = next + 1;
+		}
+		pushVector.push_back(std::stoi((*it).substr(last)) - 1);
+		mPrecoalitions.push_back(pushVector);
+	}
+
 	return true;
 }
 
@@ -127,7 +174,7 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 	while (true) {
 		int index = -1;
 		//struct option * opt = 0;
-		int result = getopt_long(numberOfArguments, vectorOfArguments, ":i:w:q:vfmh", long_options, &index);
+		int result = getopt_long(numberOfArguments, vectorOfArguments, ":i:w:q:p:vfmh", long_options, &index);
 
 		if (result == -1) {
 			if (arg_count < 3) {
@@ -142,6 +189,14 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 			case 'i':
 				if (!handleIndex(optarg)) {
 					return false;
+				}
+				//check if -p is available for precoalition indices
+				if ((mIndex.compare("SCB") == 0) || (mIndex.compare("BO") == 0) || (mIndex.compare("O") == 0)) {
+					std::string argument = "-p";
+					if (argument.compare(vectorOfArguments[optind]) != 0) {
+						std::cout << "missing argument for precoalition games: -p" << std::endl;
+						return false;
+					}
 				}
 				arg_count++;
 				break;
@@ -196,6 +251,18 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 				index::IndexFactory::printIndexList();
 				exit(-1);
 
+			case 'p':
+				if (std::stof(optarg) == 0) {
+					//No precoalitions specified -> set flag to search for it in weightfile
+					mPrecoalitionFlag = true;
+					arg_count++;
+					break;
+				} else {
+					handlePrecoalitions(optarg);
+					arg_count++;
+					break;
+				}
+
 			case OPT_GMP:
 				if (mIntRepresentation == DEFAULT) {
 					mIntRepresentation = GMP;
@@ -248,6 +315,10 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 
 std::vector<epic::longUInt>& epic::io::UserInputHandler::getWeights() {
 	return mWeights;
+}
+
+std::vector<std::vector<int>>& epic::io::UserInputHandler::getPrecoalitions() {
+	return mPrecoalitions;
 }
 
 epic::longUInt epic::io::UserInputHandler::getQuota() const {
