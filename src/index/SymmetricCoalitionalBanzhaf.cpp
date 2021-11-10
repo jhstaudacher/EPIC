@@ -130,10 +130,14 @@ std::string epic::index::SymmetricCoalitionalBanzhaf::getFullName() {
 }
 
 epic::longUInt epic::index::SymmetricCoalitionalBanzhaf::getMemoryRequirement() {
-	/*
-	 * Return an approximated value of the amount of memory needed for the power index calculation.
-	 */
-	bigInt memory = 42; // write the needed memory into this variable
+	bigInt memory = (mGame.getWeightSum() + 1 - mGame.getQuota()) * mCalculator->getLargeNumberSize() * 2; // cc, cw
+	memory += mNbPart * c_sizeof_longUInt; // mPartW
+	longUInt max = std::max(mMaxPartSize, mNbPart);
+	memory += max * GMPHelper::size_of_float(bigInt::factorial(max)); // factorial
+	memory += mGame.getNumberOfPlayers() * GMPHelper::size_of_int(bigInt::factorial(mMaxPartSize)); // shapleyInternal (only very rough approximation
+	memory += mGame.getNumberOfPlayers() * GMPHelper::size_of_int(bigInt::factorial(mNbPart)); // banzhafExternal
+	memory += (mGame.getWeightSum() + 1 - mGame.getQuota()) * mMaxPartSize * mCalculator->getLargeNumberSize() * 2; // cw2, cwi
+	memory += mMaxPartSize * c_sizeof_longUInt; // winternal
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {
