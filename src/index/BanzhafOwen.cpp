@@ -1,8 +1,11 @@
 #include "index/BanzhafOwen.h"
+
 #include "Logging.h"
+
 #include <cmath>
 
-epic::index::BanzhafOwen::BanzhafOwen(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation) : PowerIndexWithPrecoalitions(g) {
+epic::index::BanzhafOwen::BanzhafOwen(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
+	: PowerIndexWithPrecoalitions(g) {
 	bigInt max_value = approx->upperBound_totalNumberOfSwingPlayer();
 	mCalculator = lint::ItfLargeNumberCalculator::new_calculator(max_value, lint::Operation::addition, int_representation);
 
@@ -19,7 +22,7 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 	longUInt totalWeight = mGame.getWeightSum();
 	longUInt quota = mGame.getQuota();
 
-	ArrayOffset<lint::LargeNumber> c(totalWeight + 1,quota);
+	ArrayOffset<lint::LargeNumber> c(totalWeight + 1, quota);
 	mCalculator->allocInit_largeNumberArray(c.getArrayPointer(), c.getNumberOfElements());
 	mCalculator->assign_one(c[totalWeight]);
 	generalizedBackwardCountingPerWeight(c, mPartW, mNbPart);
@@ -45,17 +48,17 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 	auto winternal = new longUInt[mMaxPartSize];
 
 	// Work out number of swings on level of precoalitions
-	for (longUInt i = 0; i < mNbPart; i++){
+	for (longUInt i = 0; i < mNbPart; i++) {
 		coalitionsContainingPlayerFromAbove(cw, c, mPartW[i]);
-		
+
 		//replicate vector c onto cw
-		for (longUInt ii = quota; ii <= totalWeight; ii++){
+		for (longUInt ii = quota; ii <= totalWeight; ii++) {
 			//cw2[i] = cw[i];
 			mCalculator->assign(cw2[ii], cw[ii]);
 		}
 
 		longUInt nbPlayersInParti = mGame.getPrecoalitions()[i].size();
-		if (nbPlayersInParti > 1){
+		if (nbPlayersInParti > 1) {
 			for (longUInt x = 0; x < nbPlayersInParti; ++x) {
 				winternal[x] = mGame.getWeights()[mGame.getPrecoalitions()[i][x]];
 				mCalculator->assign_zero(banzhafsInternal[x]);
@@ -63,11 +66,11 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 
 			generalizedBackwardCountingPerWeight(cw2, winternal, nbPlayersInParti);
 
-			for (longUInt ii = 0; ii < nbPlayersInParti; ii++){
+			for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
 				coalitionsContainingPlayerFromAbove(cwi, cw2, winternal[ii]);
 
 				longUInt min = std::min(quota + winternal[ii] - 1, totalWeight);
-				for (longUInt iii = quota; iii <= min; iii++){
+				for (longUInt iii = quota; iii <= min; iii++) {
 					mCalculator->plusEqual(banzhafsInternal[ii], cwi[iii]);
 				}
 
@@ -79,11 +82,11 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate() {
 				mCalculator->to_bigInt(&mBigTmp, banzhafsInternal[ii]);
 				solution[mGame.getPrecoalitions()[i][ii]] = ExternalMultiplier * InternalMultiplier * mBigTmp;
 			}
-		} else{
+		} else {
 			//get sum of vector
 			mCalculator->assign_zero(mTmp);
 			longUInt min = std::min(quota + mPartW[i] - 1, totalWeight);
-			for (longUInt ii = quota; ii <= min; ++ii){
+			for (longUInt ii = quota; ii <= min; ++ii) {
 				mCalculator->plusEqual(mTmp, cw[ii]);
 			}
 			bigInt banzhafs_external;
@@ -110,8 +113,8 @@ std::string epic::index::BanzhafOwen::getFullName() {
 
 epic::longUInt epic::index::BanzhafOwen::getMemoryRequirement() {
 	bigInt memory = (mGame.getWeightSum() + 1 - mGame.getQuota()) * mCalculator->getLargeNumberSize() * 4; // c, cw, cw2, cwi
-	memory += mMaxPartSize * mCalculator->getLargeNumberSize(); // banzhafInternal
-	memory += mMaxPartSize * c_sizeof_longUInt; // winternal
+	memory += mMaxPartSize * mCalculator->getLargeNumberSize();											   // banzhafInternal
+	memory += mMaxPartSize * c_sizeof_longUInt;															   // winternal
 	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;

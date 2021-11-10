@@ -1,9 +1,9 @@
 #ifndef EPIC_INDEX_POWERINDEXWITHPRECOALITIONS_H_
 #define EPIC_INDEX_POWERINDEXWITHPRECOALITIONS_H_
 
+#include "Array.h"
 #include "ItfPowerIndex.h"
 #include "ItfUpperBoundApproximation.h"
-#include "Array.h"
 
 namespace epic::index {
 
@@ -29,7 +29,6 @@ protected:
 	 * The amount of players contained in the largest precoalition.
 	 */
 	longUInt mMaxPartSize;
-
 
 	/**
 	 * Calculating the number of coalitions containing player <i>i</i>

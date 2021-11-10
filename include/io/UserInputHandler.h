@@ -61,7 +61,7 @@ private:
     */
 	bool mTestFlag;
 
-    /**
+	/**
     * Internal flag set if precoalitions are declared in weight.csv
     */
 	bool mPrecoalitionFlag;
@@ -88,11 +88,11 @@ private:
     */
 	std::string mWeightsFile;
 
-    /**
+	/**
     * Structure of precoalitions
     */
 	std::vector<std::vector<int>> mPrecoalitions;
-    //std::string mPrecoalitions;
+	//std::string mPrecoalitions;
 
 	/**
     * Method used to validate the entered output type/channel
@@ -110,7 +110,7 @@ private:
     */
 	bool handleQuotaFromWeightfile(const std::string& fileName);
 
-    /**
+	/**
     * !TODO
     */
 	bool handlePrecoalitions(const std::string& precoalitions);
@@ -157,7 +157,7 @@ public:
      */
 	std::vector<longUInt>& getWeights();
 
-    /**
+	/**
      * Method to return the vector of precoalitions
      *
      */

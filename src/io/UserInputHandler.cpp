@@ -86,8 +86,8 @@ bool epic::io::UserInputHandler::handleQuotaFromWeightfile(const std::string& fi
 	return true;
 }
 
-bool epic::io::UserInputHandler::handlePrecoalitions(const std::string& sPrecoalitions) {	
-	if (sPrecoalitions.size() == 0){
+bool epic::io::UserInputHandler::handlePrecoalitions(const std::string& sPrecoalitions) {
+	if (sPrecoalitions.size() == 0) {
 		mPrecoalitionFlag = true;
 		return true;
 	}
@@ -95,45 +95,26 @@ bool epic::io::UserInputHandler::handlePrecoalitions(const std::string& sPrecoal
 	std::string delimiter2 = "+";
 	std::vector<std::string> precoalitions;
 
+	size_t last = 0;
+	size_t next = 0;
+	while ((next = sPrecoalitions.find(delimiter, last)) != std::string::npos) {
+		precoalitions.push_back(sPrecoalitions.substr(last, next - last));
 
-	size_t last = 0; 
-	size_t next = 0; 
-	while ((next = sPrecoalitions.find(delimiter, last)) != std::string::npos){   
-		precoalitions.push_back(sPrecoalitions.substr(last, next-last));
-
-		//log::out << sPrecoalitions.substr(last, next-last) << log::endl;   
-
-		last = next + 1; 
-	} 
+		last = next + 1;
+	}
 	precoalitions.push_back(sPrecoalitions.substr(last));
-	//log::out << sPrecoalitions.substr(last) << log::endl;
 
-	for(auto it = std::begin(precoalitions); it != std::end(precoalitions); ++it){
-		//log::out << *it << log::endl;
-
+	for (auto it = std::begin(precoalitions); it != std::end(precoalitions); ++it) {
 		std::vector<int> pushVector;
-		size_t last = 0; 
-		size_t next = 0; 
-		while ((next = (*it).find(delimiter2, last)) != std::string::npos){   
-			pushVector.push_back(std::stoi((*it).substr(last, next-last)) - 1);
-
-			//log::out << (*it).substr(last, next-last) << log::endl;   
-
-		last = next + 1; 
-		} 
+		size_t last = 0;
+		size_t next = 0;
+		while ((next = (*it).find(delimiter2, last)) != std::string::npos) {
+			pushVector.push_back(std::stoi((*it).substr(last, next - last)) - 1);
+			last = next + 1;
+		}
 		pushVector.push_back(std::stoi((*it).substr(last)) - 1);
 		mPrecoalitions.push_back(pushVector);
-		//log::out << (*it).substr(last) << log::endl;
-
 	}
-
-	//for(auto& row:mPrecoalitions){
-  	//	for(auto& col:row){
-	//		  log::out << col << ", ";
-	//	}
-	//	log::out << " " << log::endl;
-	//}
-
 
 	return true;
 }
@@ -210,9 +191,9 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 					return false;
 				}
 				//check if -p is available for precoalition indices
-				if ((mIndex.compare("SCB") == 0) || (mIndex.compare("BO") == 0) || (mIndex.compare("O") == 0)){
+				if ((mIndex.compare("SCB") == 0) || (mIndex.compare("BO") == 0) || (mIndex.compare("O") == 0)) {
 					std::string argument = "-p";
-					if (argument.compare(vectorOfArguments[optind]) != 0){
+					if (argument.compare(vectorOfArguments[optind]) != 0) {
 						std::cout << "missing argument for precoalition games: -p" << std::endl;
 						return false;
 					}
@@ -269,20 +250,18 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 				std::cout << "Index abbreviations:" << std::endl;
 				index::IndexFactory::printIndexList();
 				exit(-1);
-			
+
 			case 'p':
 				if (std::stof(optarg) == 0) {
 					//No precoalitions specified -> set flag to search for it in weightfile
 					mPrecoalitionFlag = true;
 					arg_count++;
 					break;
-				}
-				else{
+				} else {
 					handlePrecoalitions(optarg);
 					arg_count++;
 					break;
 				}
-				
 
 			case OPT_GMP:
 				if (mIntRepresentation == DEFAULT) {

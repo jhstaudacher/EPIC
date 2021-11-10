@@ -5,17 +5,11 @@
 #include <algorithm>
 #include <stdexcept>
 
-epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool flag_withoutNullPlayers, std::vector<std::vector<int>> &precoalitions) {
+epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool flag_withoutNullPlayers, std::vector<std::vector<int>>& precoalitions) {
 	this->quota = quota;
 	this->solution = {};
 	this->flag_null_player_handling = flag_withoutNullPlayers;
 	this->precoalitions = precoalitions;
-	//for(auto& row:precoalitions){
-  	//	for(auto& col:row){
-	//		  log::out << col << ",";
-	//	}
-	//	log::out << "" << log::endl;
-	//}
 
 	//sort players by weight
 	weights = untreated_weights;
@@ -38,7 +32,7 @@ epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool 
 	}
 	// Check if quota is greater or equal than half the weight sum, otherwise present a warning
 	if (this->quota < (this->weightSum + 1) / 2) {
-		log::out << log::warning << "The quota is less than half of the weight sum." << log::endl;		
+		log::out << log::warning << "The quota is less than half of the weight sum." << log::endl;
 	}
 
 	// Find out if there are veto players and if there are which

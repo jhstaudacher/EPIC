@@ -96,7 +96,7 @@ void epic::SystemControlUnit::createGamefromInputAndMinimiseWeights() {
 			weight /= m_gcd;
 		}
 	}
-	
+
 	mGame = new Game(mUserInputHandler->getQuota() / m_gcd, weights, mUserInputHandler->doFilterNullPlayers(), mUserInputHandler->getPrecoalitions());
 
 	log::out << log::info << "Game was created:" << log::endl;

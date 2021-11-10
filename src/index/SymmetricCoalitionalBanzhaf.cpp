@@ -1,8 +1,11 @@
 #include "index/SymmetricCoalitionalBanzhaf.h"
+
 #include "Logging.h"
+
 #include <cmath>
 
-epic::index::SymmetricCoalitionalBanzhaf::SymmetricCoalitionalBanzhaf(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation) : PowerIndexWithPrecoalitions(g) {
+epic::index::SymmetricCoalitionalBanzhaf::SymmetricCoalitionalBanzhaf(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
+	: PowerIndexWithPrecoalitions(g) {
 	bigInt max_value = approx->upperBound_totalNumberOfSwingPlayer();
 	mCalculator = lint::ItfLargeNumberCalculator::new_calculator(max_value, lint::Operation::addition, int_representation);
 
@@ -35,7 +38,7 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 			factorial[i] = factorial[i - 1] * i;
 		}
 	}
-	
+
 	int nbPlayers = mGame.getNumberOfPlayers();
 	longUInt totalWeight = mGame.getWeightSum();
 	std::vector<bigFloat> solution(nbPlayers);
@@ -54,11 +57,11 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 	mCalculator->allocInit_largeNumberArray(cwi.getArrayPointer(), cwi.getNumberOfElements());
 
 	auto winternal = new longUInt[mMaxPartSize];
-	
+
 	generalizedBackwardCountingPerWeight(cc, mPartW, mNbPart);
 
 	bigFloat ExternalMultiplier = 1 / (pow(2, (mNbPart)-1));
-	for (longUInt i = 0; i < mNbPart; i++){
+	for (longUInt i = 0; i < mNbPart; i++) {
 		int nbPlayersInParti = mGame.getPrecoalitions()[i].size();
 		//initialize winternal
 		for (int z = 0; z < nbPlayersInParti; ++z) {
@@ -68,8 +71,8 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 
 		//get sum of vector
 		longUInt min = std::min(mGame.getQuota() + mPartW[i] - 1, mGame.getWeightSum());
-		
-		for (longUInt iii = mGame.getQuota(); iii <= min ; iii++){
+
+		for (longUInt iii = mGame.getQuota(); iii <= min; iii++) {
 			mCalculator->plusEqual(banzhafsExternalGame[i], cw[iii]);
 		}
 
@@ -77,22 +80,20 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 		cw2.alloc(totalWeight + 1, mMaxPartSize + 1, mGame.getQuota(), 0);
 		mCalculator->allocInit_largeNumberArray(cw2.getArrayPointer(), cw2.getNumberOfElements());
 		//replicate vector cw onto cw2[]
-		for (longUInt i = mGame.getQuota(); i < (totalWeight + 1); i++){
-			mCalculator->assign(cw2(i, nbPlayersInParti-1), cw[i]);
+		for (longUInt i = mGame.getQuota(); i < (totalWeight + 1); i++) {
+			mCalculator->assign(cw2(i, nbPlayersInParti - 1), cw[i]);
 		}
 
-		if (nbPlayersInParti > 1){
+		if (nbPlayersInParti > 1) {
 			auto shapleysInternal = new bigInt[mGame.getPrecoalitions()[i].size()];
 			mCalculator->assign_one(cw2(totalWeight, nbPlayersInParti));
 
 			generalizedBackwardCountingPerWeightCardinality(cw2, winternal, nbPlayersInParti);
 
-			for (int ii = 0; ii < nbPlayersInParti; ii++){
-
-				if ((totalWeight-winternal[ii]) >= mGame.getQuota()){
+			for (int ii = 0; ii < nbPlayersInParti; ii++) {
+				if ((totalWeight - winternal[ii]) >= mGame.getQuota()) {
 					coalitionsCardinalityContainingPlayerFromAbove(cwi, cw2, nbPlayersInParti, ii, winternal);
-				}
-				else {
+				} else {
 					for (longUInt x = mGame.getQuota(); x <= mGame.getWeightSum(); ++x) {
 						for (int y = 0; y < nbPlayersInParti; ++y) {
 							mCalculator->assign(cwi(x, y), cw2(x, y));
@@ -101,11 +102,9 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 				}
 				updateInternalShapleyShubik(shapleysInternal, cwi, i, ii, winternal, factorial);
 				solution[mGame.getPrecoalitions()[i][ii]] = ExternalMultiplier * shapleysInternal[ii] / factorial[nbPlayersInParti];
-				
 			}
 			delete[] shapleysInternal;
-		}
-		else{
+		} else {
 			bigInt banzhafs_External;
 			mCalculator->to_bigInt(&banzhafs_External, banzhafsExternalGame[i]);
 			solution[mGame.getPrecoalitions()[i][0]] = ExternalMultiplier * banzhafs_External;
@@ -131,13 +130,13 @@ std::string epic::index::SymmetricCoalitionalBanzhaf::getFullName() {
 
 epic::longUInt epic::index::SymmetricCoalitionalBanzhaf::getMemoryRequirement() {
 	bigInt memory = (mGame.getWeightSum() + 1 - mGame.getQuota()) * mCalculator->getLargeNumberSize() * 2; // cc, cw
-	memory += mNbPart * c_sizeof_longUInt; // mPartW
+	memory += mNbPart * c_sizeof_longUInt;																   // mPartW
 	longUInt max = std::max(mMaxPartSize, mNbPart);
-	memory += max * GMPHelper::size_of_float(bigInt::factorial(max)); // factorial
-	memory += mGame.getNumberOfPlayers() * GMPHelper::size_of_int(bigInt::factorial(mMaxPartSize)); // shapleyInternal (only very rough approximation
-	memory += mGame.getNumberOfPlayers() * GMPHelper::size_of_int(bigInt::factorial(mNbPart)); // banzhafExternal
+	memory += max * GMPHelper::size_of_float(bigInt::factorial(max));												// factorial
+	memory += mGame.getNumberOfPlayers() * GMPHelper::size_of_int(bigInt::factorial(mMaxPartSize));					// shapleyInternal (only very rough approximation
+	memory += mGame.getNumberOfPlayers() * GMPHelper::size_of_int(bigInt::factorial(mNbPart));						// banzhafExternal
 	memory += (mGame.getWeightSum() + 1 - mGame.getQuota()) * mMaxPartSize * mCalculator->getLargeNumberSize() * 2; // cw2, cwi
-	memory += mMaxPartSize * c_sizeof_longUInt; // winternal
+	memory += mMaxPartSize * c_sizeof_longUInt;																		// winternal
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {
@@ -145,7 +144,6 @@ epic::longUInt epic::index::SymmetricCoalitionalBanzhaf::getMemoryRequirement() 
 	}
 	return ret;
 }
-
 
 void epic::index::SymmetricCoalitionalBanzhaf::updateInternalShapleyShubik(bigInt* internal_ssi, Array2dOffset<lint::LargeNumber>& cwi, longUInt precoalition, longUInt player, longUInt* weights, bigInt* factorial) {
 	longUInt n = mGame.getPrecoalitions()[precoalition].size();

@@ -1,6 +1,7 @@
 #include "index/PowerIndexWithPrecoalitions.h"
 
-epic::index::PowerIndexWithPrecoalitions::PowerIndexWithPrecoalitions(Game& g) : ItfPowerIndex(g) {
+epic::index::PowerIndexWithPrecoalitions::PowerIndexWithPrecoalitions(Game& g)
+	: ItfPowerIndex(g) {
 	mNbPart = mGame.getPrecoalitions().size();
 	mPartW = new longUInt[mNbPart]();
 	mMaxPartSize = 0;
@@ -21,7 +22,7 @@ epic::index::PowerIndexWithPrecoalitions::~PowerIndexWithPrecoalitions() {
 }
 
 void epic::index::PowerIndexWithPrecoalitions::coalitionsContainingPlayerFromAbove(ArrayOffset<lint::LargeNumber>& cw, ArrayOffset<lint::LargeNumber>& cc, longUInt wi) {
-    for (longUInt i = mGame.getQuota(); i <= mGame.getWeightSum(); ++i) {
+	for (longUInt i = mGame.getQuota(); i <= mGame.getWeightSum(); ++i) {
 		mCalculator->assign(cw[i], cc[i]);
 	}
 
@@ -32,9 +33,9 @@ void epic::index::PowerIndexWithPrecoalitions::coalitionsContainingPlayerFromAbo
 
 void epic::index::PowerIndexWithPrecoalitions::generalizedBackwardCountingPerWeight(ArrayOffset<lint::LargeNumber>& c, longUInt* weights, longUInt n) {
 	for (longUInt i = 0; i < n; ++i) {
-        for (longUInt x = mGame.getQuota() + weights[i]; x <= mGame.getWeightSum(); ++x) {
-            mCalculator->plusEqual(c[x - weights[i]], c[x]);
-        }
+		for (longUInt x = mGame.getQuota() + weights[i]; x <= mGame.getWeightSum(); ++x) {
+			mCalculator->plusEqual(c[x - weights[i]], c[x]);
+		}
 	}
 }
 

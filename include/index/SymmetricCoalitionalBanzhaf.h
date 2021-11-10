@@ -9,7 +9,7 @@ namespace epic::index {
  * Add here a description of the new power index for the Doxygen documentation generator.
  */
 class SymmetricCoalitionalBanzhaf : public PowerIndexWithPrecoalitions {
-/*
+	/*
  * Implement the ItfPowerIndex interface:
  */
 public:
@@ -31,9 +31,7 @@ private:
 	 */
 	bigInt mBigTmp;
 
-
 	void updateInternalShapleyShubik(bigInt* internal_ssi, Array2dOffset<lint::LargeNumber>& cwi, longUInt precoalition, longUInt player, longUInt* weights, bigInt* factorial);
-
 };
 
 } // namespace epic::index

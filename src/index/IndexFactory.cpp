@@ -36,11 +36,11 @@
 #include "index/RawPublicHelpTheta.h"
 #include "index/RawPublicHelpThetaSD.h"
 #include "index/RawShapleyShubik.h"
-#include "index/SymmetricCoalitionalBanzhaf.h"
 #include "index/ShapleyShubik.h"
 #include "index/SingleValueW.h"
 #include "index/SingleValueWM.h"
 #include "index/SingleValueWS.h"
+#include "index/SymmetricCoalitionalBanzhaf.h"
 #include "index/Tijs.h"
 
 const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std::string>> epic::index::IndexFactory::cIndexNames = {

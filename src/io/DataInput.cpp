@@ -21,7 +21,7 @@ std::vector<epic::longUInt> epic::io::DataInput::inputCSV(const std::string& fil
 	}
 
 	//no precoalitions
-	if (!pFlag){
+	if (!pFlag) {
 		for (longUInt line_no = 1; fstream >> tmp_str; ++line_no) {
 			try {
 				tmp_long = std::stoull(tmp_str);
@@ -35,33 +35,33 @@ std::vector<epic::longUInt> epic::io::DataInput::inputCSV(const std::string& fil
 	//with precoalitions
 	else {
 		int playerNr = 0;
-		std::vector <int> appendablePrecoalition;
-		for (longUInt line_no = 1; fstream >> tmp_str; ++line_no) {			
+		std::vector<int> appendablePrecoalition;
+		for (longUInt line_no = 1; fstream >> tmp_str; ++line_no) {
 			//cut multiple numbers seperated with "," into single numbers
 			std::string delimiter = ",";
-			size_t last = 0; 
+			size_t last = 0;
 			size_t next = 0;
-			while ((next = tmp_str.find(delimiter, last)) != std::string::npos){				
+			while ((next = tmp_str.find(delimiter, last)) != std::string::npos) {
 				//turn string to number
 				try {
-					tmp_long = std::stoull(tmp_str.substr(last, next-last));
+					tmp_long = std::stoull(tmp_str.substr(last, next - last));
 				} catch (std::exception& ex) {
-					throw std::invalid_argument("Unknown character(s) in input file at line: " + std::to_string(line_no) + " (\"" + tmp_str.substr(last, next-last) + "\")");
+					throw std::invalid_argument("Unknown character(s) in input file at line: " + std::to_string(line_no) + " (\"" + tmp_str.substr(last, next - last) + "\")");
 				}
-				
+
 				weights.push_back(tmp_long);
 				appendablePrecoalition.push_back(playerNr);
 
-				last = next + 1; 
+				last = next + 1;
 				playerNr++;
-			} 
+			}
 			//turn string to number
 			try {
 				tmp_long = std::stoull(tmp_str.substr(last));
 			} catch (std::exception& ex) {
 				throw std::invalid_argument("Unknown character(s) in input file at line: " + std::to_string(line_no) + " (\"" + tmp_str.substr(last) + "\")");
 			}
-			
+
 			weights.push_back(tmp_long);
 			appendablePrecoalition.push_back(playerNr);
 			precoalitions.push_back(appendablePrecoalition);
@@ -89,7 +89,7 @@ std::vector<double> epic::io::DataInput::inputFloatCSV(const std::string& filePa
 	}
 
 	//no precoalitions
-	if (!pFlag){
+	if (!pFlag) {
 		for (longUInt line_no = 1; fstream >> tmp_str; ++line_no) {
 			try {
 				tmp_float = std::atof(tmp_str.c_str());
@@ -103,33 +103,33 @@ std::vector<double> epic::io::DataInput::inputFloatCSV(const std::string& filePa
 	//with precoalitions
 	else {
 		int playerNr = 0;
-		std::vector <int> appendablePrecoalition;
+		std::vector<int> appendablePrecoalition;
 		for (longUInt line_no = 1; fstream >> tmp_str; ++line_no) {
 			//cut multiple numbers seperated with "," into single numbers
 			std::string delimiter = ",";
-			size_t last = 0; 
+			size_t last = 0;
 			size_t next = 0;
-			while ((next = tmp_str.find(delimiter, last)) != std::string::npos){   				
+			while ((next = tmp_str.find(delimiter, last)) != std::string::npos) {
 				//turn string to number
 				try {
-					tmp_float = std::atof(tmp_str.substr(last, next-last).c_str());
+					tmp_float = std::atof(tmp_str.substr(last, next - last).c_str());
 				} catch (std::exception& ex) {
-					throw std::invalid_argument("Unknown character(s) in input file at line: " + std::to_string(line_no) + " (\"" + tmp_str.substr(last, next-last) + "\")");
+					throw std::invalid_argument("Unknown character(s) in input file at line: " + std::to_string(line_no) + " (\"" + tmp_str.substr(last, next - last) + "\")");
 				}
-				
+
 				weights.push_back(tmp_float);
 				appendablePrecoalition.push_back(playerNr);
 
-				last = next + 1; 
+				last = next + 1;
 				playerNr++;
-			} 
+			}
 			//turn string to number
 			try {
 				tmp_float = std::atof(tmp_str.substr(last).c_str());
 			} catch (std::exception& ex) {
 				throw std::invalid_argument("Unknown character(s) in input file at line: " + std::to_string(line_no) + " (\"" + tmp_str.substr(last) + "\")");
 			}
-			
+
 			weights.push_back(tmp_float);
 			appendablePrecoalition.push_back(playerNr);
 			precoalitions.push_back(appendablePrecoalition);

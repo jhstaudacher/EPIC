@@ -25,7 +25,7 @@ public:
 	 * @param flag_verbose a flag causing extra verbose output if set.
 	 *
 	 */
-	Game(longUInt quota, std::vector<longUInt>& weights, bool flag_filterOutNullPlayers, std::vector<std::vector<int>> &precoalitions);
+	Game(longUInt quota, std::vector<longUInt>& weights, bool flag_filterOutNullPlayers, std::vector<std::vector<int>>& precoalitions);
 
 	/**
 	 * A function to get all weights

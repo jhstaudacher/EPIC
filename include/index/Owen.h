@@ -1,9 +1,9 @@
 #ifndef EPIC_INDEX_OWEN_H_
 #define EPIC_INDEX_OWEN_H_
 
-#include "PowerIndexWithPrecoalitions.h"
-#include "ItfUpperBoundApproximation.h"
 #include "Array.h"
+#include "ItfUpperBoundApproximation.h"
+#include "PowerIndexWithPrecoalitions.h"
 
 namespace epic::index {
 
