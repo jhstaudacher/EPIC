@@ -61,5 +61,5 @@ std::vector<epic::bigFloat> epic::index::BanzhafBelow::calculate() {
 }
 
 std::string epic::index::BanzhafBelow::getFullName() {
-	return "Banzhaf";
+	return "BanzhafBelow";
 }
