@@ -100,7 +100,7 @@ void epic::SystemControlUnit::createGamefromInputAndMinimiseWeights() {
 	mGame = new Game(mUserInputHandler->getQuota() / m_gcd, weights, mUserInputHandler->doFilterNullPlayers(), mUserInputHandler->getPrecoalitions());
 
 	log::out << log::info << "Game was created:" << log::endl;
-	log::out << " * quota: " << mGame->getQuota() << log::endl;
+	log::out << " * quota: " << mGame->getQuota() << " (~" << std::round(mGame->getQuota() * 100.0 / mGame->getWeightSum()) << "%)" << log::endl;
 	log::out << " * weight sum: " << mGame->getWeightSum() << log::endl;
 	log::out << " * player amount: " << mGame->getNumberOfPlayers() << log::endl;
 
