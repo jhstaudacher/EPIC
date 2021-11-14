@@ -71,6 +71,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `APIG` | Absolute Power Index G (based on the Dubey-Shapley identity) |
 | `BZ` | Banzhaf |
 | `BO` | Banzhaf Owen |
+| `BZB` | Banzhaf from below |
 | `CC` | Coleman Collective |
 | `CI` | Coleman Initiative |
 | `CP` | Coleman Preventive |
@@ -92,6 +93,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `PIGPH` | Power Index G (based on Raw Public Help Theta) |
 | `RA` | Rae |
 | `RBZ` | Raw Banzhaf |
+| `RBZB` | Raw Banzhaf from below |
 | `RDP` | Raw Deegan Packel |
 | `RFT` | Raw Felsenthal |
 | `RJ` | Raw Johnston |
@@ -102,7 +104,9 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `RPIF` | Raw Power Index F |
 | `RSH` | Raw Shapley Shubik |
 | `SCB` | Symmetric Coalitional Banzhaf |
+| `RSHB` | Raw Shapley Shubik from below |
 | `SH` | Shapley Shubik |
+| `SHB` | Shapley Shubik from below |
 | `T` | Tijs |
 | `W` | Number of winning coalitions|
 | `WM` | Number of minimal winning coalitions |

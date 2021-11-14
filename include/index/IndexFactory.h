@@ -59,6 +59,7 @@ private:
 		APIG,		   /**< absolute null-player-free Power Index G (based on the Dubey-Shapley identity)*/
 		BZ,			   /**< Banzhaf */
 		BO,			   /**< Banzhaf-Owen */
+		BZB,		   /**< Banzhaf below */
 		CC,			   /**< Coleman collective */
 		CI,			   /**< Coleman initiative */
 		CP,			   /**< Coleman preventive */
@@ -80,6 +81,7 @@ private:
 		PIGPH,		   /**< null-player-free Power Index G (based on raw Public Help theta) */
 		RA,			   /**< Rae */
 		RBZ,		   /**< raw Banzhaf */
+		RBZB,		   /**< raw Banzhaf from below */
 		RDP,		   /**< raw Deegan Packel */
 		RFT,		   /**< raw Felsenthal */
 		RJ,			   /**< raw Johnston */
@@ -90,7 +92,9 @@ private:
 		RPIF,		   /**< raw null-player-free Power Index F */
 		RSH,		   /**< raw Shapley Shubik */
 		SCB,		   /**< symmetric Coalitional Banzhaf */
+		RSHB,		   /**< raw Shapley Shubik from below */
 		SH,			   /**< Shapley Shubik */
+		SHB,		   /**< Shapley Shubik from below */
 		T,			   /**< Tijs */
 		W,			   /**< The number of winning coalitions */
 		WM,			   /**< The number of minimal winning coalitions */
