@@ -1,9 +1,9 @@
 #ifndef EPIC_INDEX_RAWBANZHAFBELOW_H_
 #define EPIC_INDEX_RAWBANZHAFBELOW_H_
 
-#include "ItfUpperBoundApproximation.h"
-#include "ItfPowerIndex.h"
 #include "Array.h"
+#include "ItfPowerIndex.h"
+#include "ItfUpperBoundApproximation.h"
 
 namespace epic::index {
 

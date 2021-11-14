@@ -102,7 +102,7 @@ void epic::index::RawShapleyShubikBelow::numberOfLosingCoalitionsPerWeightAndCar
 		longUInt wi = mGame.getWeights()[i];
 
 		for (longInt w = mGame.getQuota() - wi - 1; w >= 0; --w) { // w: weight
-			for (longUInt c = 0; c < mNonZeroPlayerCount; ++c) { // c: cardinality
+			for (longUInt c = 0; c < mNonZeroPlayerCount; ++c) {   // c: cardinality
 				mCalculator->plusEqual(n_lc(w + wi, c + 1), n_lc(w, c));
 			}
 		}
@@ -114,29 +114,29 @@ void epic::index::RawShapleyShubikBelow::swingsPerPlayerAndCardinality(Array2d<l
 	mCalculator->allocInit_largeNumberArray(n_lc.getArrayPointer(), n_lc.getNumberOfElements());
 	numberOfLosingCoalitionsPerWeightAndCardinality(n_lc);
 
-	 Array2d<lint::LargeNumber> helper(mGame.getQuota(), mNonZeroPlayerCount + 1);
-	 mCalculator->allocInit_largeNumberArray(helper.getArrayPointer(), helper.getNumberOfElements());
+	Array2d<lint::LargeNumber> helper(mGame.getQuota(), mNonZeroPlayerCount + 1);
+	mCalculator->allocInit_largeNumberArray(helper.getArrayPointer(), helper.getNumberOfElements());
 
 	for (longUInt i = 0; i < mNonZeroPlayerCount; ++i) { // i: player index
 		longUInt wi = mGame.getWeights()[i];
 
 		longUInt m = std::min(wi, mGame.getQuota());
-		for (longUInt w = 0; w < m; ++w) { // w: weight
+		for (longUInt w = 0; w < m; ++w) {						 // w: weight
 			for (longUInt c = 0; c < mNonZeroPlayerCount; ++c) { // c: cardinality
 				mCalculator->assign(helper(w, c), n_lc(w, c));
 			}
 		}
 
-		for (longUInt w = wi; w < mGame.getQuota(); ++w) { // w: weight
+		for (longUInt w = wi; w < mGame.getQuota(); ++w) {		  // w: weight
 			for (longUInt c = 1; c <= mNonZeroPlayerCount; ++c) { // c: cardinality
 				mCalculator->minus(helper(w, c), n_lc(w, c), helper(w - wi, c - 1));
 			}
 		}
 
 		m = wi > mGame.getQuota() ? 0UL : mGame.getQuota() - wi;
-		for (longUInt w = m; w < mGame.getQuota(); ++w) { // w: weight
+		for (longUInt w = m; w < mGame.getQuota(); ++w) {		 // w: weight
 			for (longUInt c = 0; c < mNonZeroPlayerCount; ++c) { // c: cardinality
-				mCalculator->plusEqual(raw_ssi(i, c+1), helper(w, c));
+				mCalculator->plusEqual(raw_ssi(i, c + 1), helper(w, c));
 			}
 		}
 	}

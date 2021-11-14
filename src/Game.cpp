@@ -31,7 +31,7 @@ epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool 
 	}
 	// Check if quota is greater or equal than half the weight sum, otherwise present a warning
 	if (this->quota < (this->weightSum + 1) / 2) {
-		log::out << log::warning << "The quota is less than half of the weight sum." << log::endl;		
+		log::out << log::warning << "The quota is less than half of the weight sum." << log::endl;
 	}
 
 	// Find out if there are veto players and if there are which

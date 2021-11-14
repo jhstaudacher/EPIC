@@ -1,10 +1,10 @@
 #ifndef EPIC_INDEX_RAWSHAPLEYSHUBIKBELOW_H_
 #define EPIC_INDEX_RAWSHAPLEYSHUBIKBELOW_H_
 
-#include "ItfUpperBoundApproximation.h"
-#include "ItfPowerIndex.h"
-#include "lint/ItfLargeNumberCalculator.h"
 #include "Array.h"
+#include "ItfPowerIndex.h"
+#include "ItfUpperBoundApproximation.h"
+#include "lint/ItfLargeNumberCalculator.h"
 
 namespace epic::index {
 
