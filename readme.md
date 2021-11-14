@@ -55,7 +55,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | no | `--float` | no argument | reads the weights and the quota as floating point numbers |
 | no | `--csv` | no argument | write the results into a .csv file |
 
-(*1) Has to be before -w. When setting the precoalitions to `0`, the precoalitions will be read from the weightsfile. This also means that the weightsfile has to be written accordingly. 
+(*1) Has to be before -w. When setting the precoalitions to `0`, the precoalitions will be read from the weightsfile. This also means that the weightsfile has to be written accordingly. If defined in the weightsfile, the players in the same precoalition should all be in the same line and seperated by ",". A new line is a new precoalition. If precoalitions are defined in the command line, playernumbers in a precoalition will be connected with a "+" and seperated with a ",". Playernumbers are from 1 to n. For example: "-p 1+3,2+4,5" would be a preacoalition between player 1 and 3, player 2 and 4 while player 5 is alone. 
 
 (*2) The .csv file must contain one weight per line. The weights must all be integers unless you set the --float flag.
 
