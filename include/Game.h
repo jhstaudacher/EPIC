@@ -25,7 +25,7 @@ public:
 	 * @param flag_verbose a flag causing extra verbose output if set.
 	 *
 	 */
-	Game(longUInt quota, std::vector<longUInt>& weights, bool flag_filterOutNullPlayers);
+	Game(longUInt quota, std::vector<longUInt>& weights, bool flag_filterOutNullPlayers, std::vector<std::vector<int>>& precoalitions);
 
 	/**
 	 * A function to get all weights
@@ -105,6 +105,12 @@ public:
 	bool getFlagNullPlayerHandling() const;
 
 	/**
+	 * A function to get the precoalition structure
+	 *
+	 */
+	std::vector<std::vector<int>> getPrecoalitions() const;
+
+	/**
 	 * Converting the player index (sorted weights) into the player number (input ordering).
 	 *
 	 * @note The indices are in the interval [0,n-1] while the player numbers are in the interval [1,n].
@@ -136,6 +142,11 @@ private:
 	 * The number of players/voters
 	 */
 	longUInt numberOfPlayers;
+
+	/**
+	 * Structure of precoalitions
+	 */
+	std::vector<std::vector<int>> precoalitions;
 
 	/**
 	 * A vector of booleans which holds which players are veto players
@@ -179,7 +190,7 @@ private:
 	 * @param weights containing the (unsorted) weights
 	 * @return the permutation (return[x] = the pre-sorted index of sorted index x)
 	 */
-	static std::vector<longUInt> sortWeights(std::vector<longUInt>& weights);
+	static std::vector<longUInt> sortWeights(std::vector<longUInt>& weights, std::vector<std::vector<int>>& precoalitions);
 
 	/**
 	 * A function to sort out the player, who are in no minimum winning coalitions

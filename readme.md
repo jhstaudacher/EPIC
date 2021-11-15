@@ -44,8 +44,9 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | required? | option | argument | description |
 | -------- | ------ | -------- | ----------- |
 | yes | `-i` / `--index` | index shortcut | the index to compute |
-| yes | `-w` / `--weights` | .csv file | the player weights for the weighted voting mGame (*1) |
-| yes | `-q` / `--quota` | integer or float | the quota for the weighted voting mGame (*2)|
+| no | `-p` / `--precoalitions` | has to be set when working with precoalitions | the structure of the precoalitions (*1)|
+| yes | `-w` / `--weights` | .csv file | the player weights for the weighted voting mGame (*2) |
+| yes | `-q` / `--quota` | integer or float | the quota for the weighted voting mGame (*3)|
 | no | `-v` / `--verbose` | no argument | adds extra output |
 | no | `--quiet` | no argument | reduces output to a minimum |
 | no | `-f` / `--filter-null` | no argument | excludes null player from the calculation (not compatible with all indices!) |
@@ -54,9 +55,12 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | no | `--float` | no argument | reads the weights and the quota as floating point numbers |
 | no | `--csv` | no argument | write the results into a .csv file |
 
-(*1) The .csv file must contain one weight per line. The weights must all be integers unless you set the --float flag.
+(*1) Has to be before -w. When setting the precoalitions to `0`, the precoalitions will be read from the weightsfile. This also means that the weightsfile has to be written accordingly. If defined in the weightsfile, the players in the same precoalition should all be in the same line and seperated by ",". A new line is a new precoalition. If precoalitions are defined in the command line, playernumbers in a precoalition will be connected with a "+" and seperated with a ",". Playernumbers are from 1 to n. For example: "-p 1+3,2+4,5" would be a preacoalition between player 1 and 3, player 2 and 4 while player 5 is alone. 
 
-(*2) When setting the quota to `0`, the first line of the weights file will be interpreted as the quota to use. This might be useful for automated program calls.
+(*2) The .csv file must contain one weight per line. The weights must all be integers unless you set the --float flag.
+
+(*3) When setting the quota to `0`, the first line of the weights file will be interpreted as the quota to use. This might be useful for automated program calls.
+
 
 ## Available indices
 
@@ -66,6 +70,8 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `APG` | Absolute Public Good |
 | `APIG` | Absolute Power Index G (based on the Dubey-Shapley identity) |
 | `BZ` | Banzhaf |
+| `BO` | Banzhaf Owen |
+| `BZB` | Banzhaf from below |
 | `CC` | Coleman Collective |
 | `CI` | Coleman Initiative |
 | `CP` | Coleman Preventive |
@@ -77,6 +83,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `KBPH` | Koenig Braeuninger (based on Raw Public Help Theta) |
 | `N` | Nevison (based on the Dubey-Shapley identity)|
 | `NPH` | Nevison (based on Raw Public Help Theta) |
+| `O` | Owen |
 | `PG` | Public Good |
 | `PHT` | Public Help Theta (based on the Dubey-Shapley identity) |
 | `PHTPH` | Public Help Theta (based on Raw Public Help Theta) |
@@ -86,6 +93,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `PIGPH` | Power Index G (based on Raw Public Help Theta) |
 | `RA` | Rae |
 | `RBZ` | Raw Banzhaf |
+| `RBZB` | Raw Banzhaf from below |
 | `RDP` | Raw Deegan Packel |
 | `RFT` | Raw Felsenthal |
 | `RJ` | Raw Johnston |
@@ -95,7 +103,10 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `RPIG` | Raw Power Index G |
 | `RPIF` | Raw Power Index F |
 | `RSH` | Raw Shapley Shubik |
+| `SCB` | Symmetric Coalitional Banzhaf |
+| `RSHB` | Raw Shapley Shubik from below |
 | `SH` | Shapley Shubik |
+| `SHB` | Shapley Shubik from below |
 | `T` | Tijs |
 | `W` | Number of winning coalitions|
 | `WM` | Number of minimal winning coalitions |
