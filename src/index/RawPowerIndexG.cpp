@@ -2,48 +2,48 @@
 
 #include "Array.h"
 #include "Logging.h"
+#include "lint/GlobalCalculator.h"
 
 #include <iostream>
 
-epic::index::RawPowerIndexG::RawPowerIndexG(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
-	: RawBanzhaf(g, approx, int_representation) {
-	if (mGame.getNumberOfNullPlayers() > 0 && !mGame.getFlagNullPlayerHandling()) {
+epic::index::RawPowerIndexG::RawPowerIndexG(Game& g) : RawBanzhaf() {
+	if (g.getNumberOfNullPlayers() > 0 && !g.getFlagNullPlayerHandling()) {
 		throw std::invalid_argument(log::missingFlagF);
 	}
 }
 
-std::vector<epic::bigFloat> epic::index::RawPowerIndexG::calculate() {
+std::vector<epic::bigFloat> epic::index::RawPowerIndexG::calculate(Game& g) {
 	// n_sp[x]: number of times player x is a swing player.
-	auto n_sp = new lint::LargeNumber[mGame.getNumberOfPlayers()];
-	mCalculator->allocInit_largeNumberArray(n_sp, mGame.getNumberOfPlayers());
+	auto n_sp = new lint::LargeNumber[g.getNumberOfPlayers()];
+	gCalculator->allocInit_largeNumberArray(n_sp, g.getNumberOfPlayers());
 
-	numberOfTimesPlayerIsSwingPlayer(n_sp);
+	numberOfTimesPlayerIsSwingPlayer(g, n_sp);
 
 	// n_wc[x]: number of winning coalitions of weight x.
-	ArrayOffset<lint::LargeNumber> n_wc(mGame.getWeightSum() + 1, mGame.getQuota());
-	mCalculator->allocInit_largeNumberArray(n_wc.getArrayPointer(), n_wc.getNumberOfElements());
+	ArrayOffset<lint::LargeNumber> n_wc(g.getWeightSum() + 1, g.getQuota());
+	gCalculator->allocInit_largeNumberArray(n_wc.getArrayPointer(), n_wc.getNumberOfElements());
 
-	numberOfWinningCoalitionsPerWeight(n_wc);
+	numberOfWinningCoalitionsPerWeight(g, n_wc);
 
 	// total_wc: the total number of winning coalitions.
 	lint::LargeNumber total_wc;
-	mCalculator->allocInit_largeNumber(total_wc);
-	numberOfWinningCoalitions(n_wc, total_wc);
+	gCalculator->allocInit_largeNumber(total_wc);
+	numberOfWinningCoalitions(g, n_wc, total_wc);
 
 	bigInt tmp;
-	mCalculator->to_bigInt(&tmp, total_wc);
+	gCalculator->to_bigInt(&tmp, total_wc);
 	bigFloat float_total_wc = tmp;
 
 	// delete n_wc[]
-	mCalculator->free_largeNumberArray(n_wc.getArrayPointer());
+	gCalculator->free_largeNumberArray(n_wc.getArrayPointer());
 
-	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
-	for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
-		mCalculator->to_bigInt(&tmp, n_sp[i]);
+	std::vector<bigFloat> solution(g.getNumberOfPlayers());
+	for (longUInt i = 0; i < g.getNumberOfPlayers(); ++i) {
+		gCalculator->to_bigInt(&tmp, n_sp[i]);
 		solution[i] = (double)0.5 * (tmp + float_total_wc);
 	}
 
-	mCalculator->free_largeNumber(total_wc);
+	gCalculator->free_largeNumber(total_wc);
 	delete[] n_sp;
 	return solution;
 }

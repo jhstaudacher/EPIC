@@ -33,12 +33,13 @@ namespace epic::index {
  */
 class RawPublicHelpTheta : public PowerIndexWithWinningCoalitions {
 public:
-	RawPublicHelpTheta(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
-	~RawPublicHelpTheta() override;
+	RawPublicHelpTheta(Game& g);
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game& g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement() override;
+	longUInt getMemoryRequirement(Game& g) override;
+	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
+	lint::Operation getOperationRequirement() override;
 
 protected:
 	/**
@@ -50,7 +51,7 @@ protected:
 	 * @param wci A return array. wci[x] will be the number of winning coalitions player x is a member of when the function returns. The array must have enough memory for at least numberOfPlayers entries.
 	 * @param total_wc A optional return parameter. If it is not a nullptr it will contain the total number of winning coalitions when the function returns.
 	 */
-	void winningCoalitionsForPlayer(bigInt wci[], bigFloat* total_wc = nullptr);
+	void winningCoalitionsForPlayer(Game& g, bigInt wci[], bigFloat* total_wc = nullptr);
 };
 
 } /* namespace epic::index */

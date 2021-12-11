@@ -14,6 +14,18 @@ enum Operation {
 	multiplication
 };
 
+struct CalculatorConfig {
+	CalculatorConfig(bigInt max_value, Operation op, IntRepresentation rep) {
+		maxValue = max_value;
+		this->op = op;
+		intRep = rep;
+	};
+
+	bigInt maxValue;
+	Operation op;
+	IntRepresentation intRep = DEFAULT;
+};
+
 /**
  * Interface class for the Chinese Remainder Theorem
  * 
@@ -264,7 +276,7 @@ public:
 	 *
 	 * @return A new allocated object of type ItfLargeNumberCalculator able to represent at least max_value and calculate the op operations. This object should be deleted using delete_calculator() function.
 	 */
-	static ItfLargeNumberCalculator* new_calculator(const bigInt& max_value, Operation op, IntRepresentation int_representation = DEFAULT);
+	static ItfLargeNumberCalculator* new_calculator(const CalculatorConfig& config);
 
 	/**
 	 * A Factory-Method deleting an object of type ItfLargeNumberCalculator

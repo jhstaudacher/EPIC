@@ -13,12 +13,14 @@ class BanzhafOwen : public PowerIndexWithPrecoalitions {
  * Implement the ItfPowerIndex interface:
  */
 public:
-	BanzhafOwen(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
-	~BanzhafOwen() override;
+	BanzhafOwen();
+	~BanzhafOwen();
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game& g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement() override;
+	longUInt getMemoryRequirement(Game& g) override;
+	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
+	lint::Operation getOperationRequirement() override;
 
 private:
 	lint::LargeNumber mTmp;

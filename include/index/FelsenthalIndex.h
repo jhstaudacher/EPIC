@@ -35,11 +35,11 @@ public:
 	 *
 	 * Scales the results calculated by the RawFelsenthal index.
 	 */
-	FelsenthalIndex(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
+	FelsenthalIndex(Game& g);
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game& g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement() override;
+	longUInt getMemoryRequirement(Game& g) override;
 };
 
 } /* namespace epic::index */

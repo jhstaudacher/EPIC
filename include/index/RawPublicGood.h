@@ -27,19 +27,13 @@ namespace epic::index {
  */
 class RawPublicGood : public ItfPowerIndex {
 public:
-	/**
-	 * Construct the RawPublicGood object
-	 *
-	 * @param g The Game for which the RawPublicGood index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
-	 */
-	RawPublicGood(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
-	~RawPublicGood() override;
+	RawPublicGood();
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game& g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement() override;
+	longUInt getMemoryRequirement(Game& g) override;
+	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
+	lint::Operation getOperationRequirement() override;
 
 protected:
 	/**
@@ -47,7 +41,7 @@ protected:
 	 *
 	 * @param mwc The return array, mwc[x]: the number of minimal winning coalitions player x belongs to. The array must have enough memory for at least numberOfPlayers entries. Each entry must be initialized with zero!
 	 */
-	void calculateMinimalWinningCoalitionsPerPlayer(lint::LargeNumber mwc[]);
+	void calculateMinimalWinningCoalitionsPerPlayer(Game& g, lint::LargeNumber mwc[]);
 
 private:
 	/**
@@ -55,7 +49,7 @@ private:
 	 *
 	 * @param f The return array. The array must have enough memory for at least quota entries. Each entry must be initialized with zero!
 	 */
-	void calculateFVector(lint::LargeNumber f[]);
+	void calculateFVector(Game& g, lint::LargeNumber f[]);
 };
 
 } /* namespace epic::index */

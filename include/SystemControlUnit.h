@@ -75,7 +75,7 @@ public:
        * @param index_ptr PowerIndex defining the requirements
        * @return If the calculation should be done or not (user decision)
        */
-	bool checkHardware(index::ItfPowerIndex* index_ptr);
+	bool checkHardware(longUInt memory_requirement);
 
 	/**
        * A function that will estimate the time needed for the computation and outputting it to the screen.

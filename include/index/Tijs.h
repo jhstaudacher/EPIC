@@ -35,11 +35,13 @@ public:
 	 *
 	 * @param g The Game for which the Tijs index should be calculated.
 	 */
-	explicit Tijs(Game& g);
+	explicit Tijs();
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game& g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement() override;
+	longUInt getMemoryRequirement(Game& g) override;
+	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
+	lint::Operation getOperationRequirement() override;
 };
 
 } /* namespace epic::index */

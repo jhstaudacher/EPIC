@@ -20,7 +20,7 @@ INC_DIR=include
 SRCS=$(shell find $(SRC_DIR) -name "*.cpp") # find all source files (.cpp)
 OBJS=$(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS)) # generate list of object files (.o)
 
-CFLAGS= -Ofast -Wall -std=c++17 -I$(INC_DIR)
+CFLAGS= -g -Wall -std=c++17 -I$(INC_DIR)
 
 # Add the path to your manual GMP installation to the variable below using the -L prefix (e.g. LDFLAGS=-Lpath/to/gmp-lib -lgmpxx -lgmp)
 LDFLAGS=-lgmpxx -lgmp

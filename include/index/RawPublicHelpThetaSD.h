@@ -27,9 +27,9 @@ namespace epic::index {
  */
 class RawPublicHelpThetaSD : public RawBanzhaf {
 public:
-	RawPublicHelpThetaSD(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
+	RawPublicHelpThetaSD(Game& g);
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game& g) override;
 	std::string getFullName() override;
 
 protected:
@@ -38,7 +38,7 @@ protected:
 	 * 	 
 	 * @param wci A return array. wci[x] will be the number of winning coalitions player x is a member of when the function returns. The array must have enough memory for at least numberOfPlayers entries.
 	 */
-	void winningCoalitionsForPlayer(bigInt wci[]);
+	void winningCoalitionsForPlayer(Game& g, bigInt wci[]);
 };
 
 } // namespace epic::index

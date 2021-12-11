@@ -93,6 +93,8 @@ public:
 	 */
 	longUInt getNumberOfNullPlayers() const;
 
+	longUInt getNumberOfNonZeroPlayers() const;
+
 	/**
 	 * A function to get the number of players of weight zero
 	 */
@@ -109,6 +111,12 @@ public:
 	 *
 	 */
 	std::vector<std::vector<int>> getPrecoalitions() const;
+
+	std::vector<longUInt> getPrecoalitionWeights() const;
+
+	longUInt getNumberOfPrecoalitions() const;
+
+	longUInt getMaxPrecoalitionSize() const;
 
 	/**
 	 * Converting the player index (sorted weights) into the player number (input ordering).
@@ -148,6 +156,12 @@ private:
 	 */
 	std::vector<std::vector<int>> precoalitions;
 
+	std::vector<longUInt> precoalitionWeights;
+
+	longUInt numberOfPrecoalitions;
+
+	longUInt maxPrecoalitionSize;
+
 	/**
 	 * A vector of booleans which holds which players are veto players
 	 */
@@ -162,6 +176,8 @@ private:
 	 * An integer holding how many null players there are (including the players of weight 0)
 	 */
 	longUInt numberOfNullPlayers;
+
+	longUInt numberOfNonZeroPlayers;
 
 	/**
 	 * An integer holding how many players of weight 0 there are

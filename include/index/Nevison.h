@@ -40,9 +40,9 @@ public:
 	 * @param approx A specialized approximation object to approximate the largest needed numbers.
 	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
 	 */
-	Nevison(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
+	Nevison(Game& g);
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game& g) override;
 	std::string getFullName() override;
 };
 

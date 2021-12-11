@@ -1,11 +1,12 @@
 #include "index/RawPublicHelpTheta.h"
 
 #include "Logging.h"
+#include "lint/GlobalCalculator.h"
 
-epic::longUInt epic::index::RawPublicHelpTheta::getMemoryRequirement() {
-	bigInt memory = (mGame.getWeightSum() + 1 - mGame.getQuota()) * mCalculator->getLargeNumberSize() * 2;	// n_wc, helper
-	memory += mGame.getNumberOfPlayers() * mCalculator->getLargeNumberSize();								// wci
-	memory += GMPHelper::size_of_int(bigInt(1) << mGame.getNumberOfPlayers()) * mGame.getNumberOfPlayers(); // big_wci
+epic::longUInt epic::index::RawPublicHelpTheta::getMemoryRequirement(Game& g) {
+	bigInt memory = (g.getWeightSum() + 1 - g.getQuota()) * gCalculator->getLargeNumberSize() * 2;	// n_wc, helper
+	memory += g.getNumberOfPlayers() * gCalculator->getLargeNumberSize();								// wci
+	memory += GMPHelper::size_of_int(bigInt(1) << g.getNumberOfPlayers()) * g.getNumberOfPlayers(); // big_wci
 	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;
@@ -16,28 +17,28 @@ epic::longUInt epic::index::RawPublicHelpTheta::getMemoryRequirement() {
 	return ret;
 }
 
-epic::index::RawPublicHelpTheta::RawPublicHelpTheta(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
-	: PowerIndexWithWinningCoalitions(g) {
-	if (mGame.getNumberOfNullPlayers() > 0 && mGame.getFlagNullPlayerHandling()) {
+epic::bigInt epic::index::RawPublicHelpTheta::getMaxValueRequirement(ItfUpperBoundApproximation* approx) {
+	return approx->upperBound_numberOfWinningCoalitionsPerWeight();
+}
+
+epic::lint::Operation epic::index::RawPublicHelpTheta::getOperationRequirement() {
+	return lint::Operation::addition;
+}
+
+epic::index::RawPublicHelpTheta::RawPublicHelpTheta(Game& g) : PowerIndexWithWinningCoalitions() {
+	if (g.getNumberOfNullPlayers() > 0 && g.getFlagNullPlayerHandling()) {
 		throw std::invalid_argument(log::invalidFlagF);
 	}
-
-	bigInt max_value = approx->upperBound_numberOfWinningCoalitionsPerWeight();
-	mCalculator = lint::ItfLargeNumberCalculator::new_calculator(max_value, lint::Operation::addition, int_representation);
 }
 
-epic::index::RawPublicHelpTheta::~RawPublicHelpTheta() {
-	lint::ItfLargeNumberCalculator::delete_calculator(mCalculator);
-}
+std::vector<epic::bigFloat> epic::index::RawPublicHelpTheta::calculate(Game& g) {
+	auto big_wci = new bigInt[g.getNumberOfPlayers()];
 
-std::vector<epic::bigFloat> epic::index::RawPublicHelpTheta::calculate() {
-	auto big_wci = new bigInt[mGame.getNumberOfPlayers()];
+	winningCoalitionsForPlayer(g, big_wci);
+	bigInt factor = bigInt(1) << g.getNumberOfPlayersWithWeight0(); // additional winning coalitions due to players of weight 0
 
-	winningCoalitionsForPlayer(big_wci);
-	bigInt factor = bigInt(1) << mGame.getNumberOfPlayersWithWeight0(); // additional winning coalitions due to players of weight 0
-
-	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
-	for (longUInt i = 0; i < mGame.getNumberOfPlayers(); i++) {
+	std::vector<bigFloat> solution(g.getNumberOfPlayers());
+	for (longUInt i = 0; i < g.getNumberOfPlayers(); i++) {
 		solution[i] = big_wci[i] * factor;
 	}
 
@@ -49,54 +50,54 @@ std::string epic::index::RawPublicHelpTheta::getFullName() {
 	return "RawPublicHelpTheta";
 }
 
-void epic::index::RawPublicHelpTheta::winningCoalitionsForPlayer(bigInt big_wci[], bigFloat* big_total_wc) {
+void epic::index::RawPublicHelpTheta::winningCoalitionsForPlayer(Game& g, bigInt big_wci[], bigFloat* big_total_wc) {
 	// n_wc[x]: number of winning coalitions of weight x.
-	ArrayOffset<lint::LargeNumber> n_wc(mGame.getWeightSum() + 1, mGame.getQuota());
-	mCalculator->allocInit_largeNumberArray(n_wc.getArrayPointer(), n_wc.getNumberOfElements());
+	ArrayOffset<lint::LargeNumber> n_wc(g.getWeightSum() + 1, g.getQuota());
+	gCalculator->allocInit_largeNumberArray(n_wc.getArrayPointer(), n_wc.getNumberOfElements());
 
 	// helper: helper array for n_wc
-	ArrayOffset<lint::LargeNumber> helper(mGame.getWeightSum() + 1, mGame.getQuota());
-	mCalculator->allocInit_largeNumberArray(helper.getArrayPointer(), helper.getNumberOfElements());
+	ArrayOffset<lint::LargeNumber> helper(g.getWeightSum() + 1, g.getQuota());
+	gCalculator->allocInit_largeNumberArray(helper.getArrayPointer(), helper.getNumberOfElements());
 
-	numberOfWinningCoalitionsPerWeight(n_wc);
+	numberOfWinningCoalitionsPerWeight(g, n_wc);
 
 	// wci[x]: number of winning coalitions for player x
-	auto wci = new lint::LargeNumber[mGame.getNumberOfPlayers()];
+	auto wci = new lint::LargeNumber[g.getNumberOfPlayers()];
 
-	mCalculator->allocInit_largeNumberArray(wci, mGame.getNumberOfPlayers());
+	gCalculator->allocInit_largeNumberArray(wci, g.getNumberOfPlayers());
 
 	/*
 	 * Handle all players of weight > 0
 	 */
 
 	// This algorithm is nearly the same as it is used in the PowerIndexWithWinningCoalitionsAndSwingPlayers::numberOfTimesPlayerIsSwingPlayer() function
-	for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
-		longUInt wi = mGame.getWeights()[i];
+	for (longUInt i = 0; i < g.getNumberOfPlayers(); ++i) {
+		longUInt wi = g.getWeights()[i];
 
-		// skip dummy players if they are present in the array (!mGame.getFlagNullPlayerHandling())
-		if ((i >= mGame.getNumberOfPlayers() - mGame.getNumberOfNullPlayers()) && mGame.getFlagNullPlayerHandling()) {
+		// skip dummy players if they are present in the array (!g.getFlagNullPlayerHandling())
+		if ((i >= g.getNumberOfPlayers() - g.getNumberOfNullPlayers()) && g.getFlagNullPlayerHandling()) {
 			continue;
 		}
 
-		longUInt m = std::max(mGame.getWeightSum() - wi, mGame.getQuota() - 1);
-		for (longUInt k = mGame.getWeightSum(); k > m; --k) {
-			mCalculator->assign(helper[k], n_wc[k]);
+		longUInt m = std::max(g.getWeightSum() - wi, g.getQuota() - 1);
+		for (longUInt k = g.getWeightSum(); k > m; --k) {
+			gCalculator->assign(helper[k], n_wc[k]);
 		}
 
-		for (longUInt k = mGame.getWeightSum() - wi; k >= mGame.getQuota(); --k) {
-			mCalculator->minus(helper[k], n_wc[k], helper[k + wi]);
+		for (longUInt k = g.getWeightSum() - wi; k >= g.getQuota(); --k) {
+			gCalculator->minus(helper[k], n_wc[k], helper[k + wi]);
 		}
 
 		// this is the only difference to the previously mentioned algorithm.
 		// instead of looping over all coalitions the player would turn into losing ones, we step over all winning coalitions the player is a member of (up to weightsum).
-		for (longUInt k = mGame.getQuota(); k <= mGame.getWeightSum(); ++k) {
-			mCalculator->plusEqual(wci[i], helper[k]);
+		for (longUInt k = g.getQuota(); k <= g.getWeightSum(); ++k) {
+			gCalculator->plusEqual(wci[i], helper[k]);
 		}
 
-		mCalculator->to_bigInt(&big_wci[i], wci[i]);
+		gCalculator->to_bigInt(&big_wci[i], wci[i]);
 	}
 
-	mCalculator->free_largeNumberArray(wci);
+	gCalculator->free_largeNumberArray(wci);
 	delete[] wci;
 
 	// If total_wc is wished for, provide it, otherwise delete it
@@ -111,21 +112,21 @@ void epic::index::RawPublicHelpTheta::winningCoalitionsForPlayer(bigInt big_wci[
 	// initialize total_wc
 	// total_wc: the total number of winning coalitions (sum over all n_wc)
 	lint::LargeNumber total_wc;
-	mCalculator->allocInit_largeNumber(total_wc);
+	gCalculator->allocInit_largeNumber(total_wc);
 
-	numberOfWinningCoalitions(n_wc, total_wc);
+	numberOfWinningCoalitions(g, n_wc, total_wc);
 
 	bigInt tmp;
-	mCalculator->to_bigInt(&tmp, total_wc);
+	gCalculator->to_bigInt(&tmp, total_wc);
 	*big_total_wc = tmp;
 
-	mCalculator->free_largeNumber(total_wc);
-	mCalculator->free_largeNumberArray(n_wc.getArrayPointer());
-	mCalculator->free_largeNumberArray(helper.getArrayPointer());
+	gCalculator->free_largeNumber(total_wc);
+	gCalculator->free_largeNumberArray(n_wc.getArrayPointer());
+	gCalculator->free_largeNumberArray(helper.getArrayPointer());
 
 	// Handle null/dummy players
-	// If there are null players, naturally they start at index mGame.getNumberOfPlayers() - mGame.getNumberOfNullPlayers()
-	for (longUInt i = mGame.getNumberOfPlayers() - mGame.getNumberOfNullPlayers(); i < mGame.getNumberOfPlayers(); ++i) {
+	// If there are null players, naturally they start at index g.getNumberOfPlayers() - g.getNumberOfNullPlayers()
+	for (longUInt i = g.getNumberOfPlayers() - g.getNumberOfNullPlayers(); i < g.getNumberOfPlayers(); ++i) {
 		big_wci[i] = *big_total_wc / 2;
 	}
 

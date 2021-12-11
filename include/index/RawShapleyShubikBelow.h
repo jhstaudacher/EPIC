@@ -36,12 +36,13 @@ public:
 	 * @param approx A specialized approximation object to approximate the largest needed numbers.
 	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
 	 */
-	RawShapleyShubikBelow(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
-	~RawShapleyShubikBelow() override;
+	RawShapleyShubikBelow();
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game& g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement() override;
+	longUInt getMemoryRequirement(Game& g) override;
+	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
+	lint::Operation getOperationRequirement() override;
 
 private:
 	/**
@@ -51,7 +52,7 @@ private:
 	 *
 	 * @note The n_lc matrix must be allocated and zero initialized at least in the range: [0, quota] x [0, numberOfPlayers + 1]
 	 */
-	void numberOfLosingCoalitionsPerWeightAndCardinality(Array2d<lint::LargeNumber>& n_lc);
+	void numberOfLosingCoalitionsPerWeightAndCardinality(Game& g, Array2d<lint::LargeNumber>& n_lc);
 
 	/**
 	 * Calculating how often each player is a swing player in coalitions of certain cardinalities.
@@ -61,7 +62,7 @@ private:
 	 * @note The raw_ssi matrix must be allocated and zero initialized in at least the range [0, numberOfPlayers] x [0, numberOfPlayers + 1].
 	 * @note The values for players of weight zero will remain unchanged, i.e. zero (as initialized).
 	 */
-	void swingsPerPlayerAndCardinality(Array2d<lint::LargeNumber>& raw_ssi);
+	void swingsPerPlayerAndCardinality(Game& g, Array2d<lint::LargeNumber>& raw_ssi);
 };
 
 } /* namespace epic::index */

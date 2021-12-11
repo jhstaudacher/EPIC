@@ -37,9 +37,9 @@ public:
 	 *  each iteration: f(i-1,k,x) <=> f(k,x); b(i,k,x) <=> b(k,y) -> compute unscaled-DP[i] = f(i-1,k,x)*b(i,k,q-x) <=> f(k,x)* b(k,y)
 	 *  DP[i]= unscaled-DP[i] / total-number-of-minimal-winning-coalitions
 	 */
-	DeeganPackel(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
+	DeeganPackel();
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game& g) override;
 	std::string getFullName() override;
 
 protected:
@@ -48,7 +48,7 @@ protected:
 	 *
 	 * @param total_mwc The total number of minimal winning coalitions
 	 */
-	void numberOfMinimalWinningCoalitions(bigInt* total_mwc);
+	void numberOfMinimalWinningCoalitions(Game& g, bigInt* total_mwc);
 };
 
 } /* namespace epic::index */

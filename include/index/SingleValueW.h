@@ -20,9 +20,9 @@ namespace epic::index {
  */
 class SingleValueW : public RawBanzhaf {
 public:
-	SingleValueW(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
+	SingleValueW();
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game& g) override;
 	std::string getFullName() override;
 };
 

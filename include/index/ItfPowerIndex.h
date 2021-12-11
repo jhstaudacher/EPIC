@@ -2,23 +2,24 @@
 #define EPIC_INDEX_ITFPOWERINDEX_H_
 
 #include "Game.h"
+#include "ItfUpperBoundApproximation.h"
 #include "lint/ItfLargeNumberCalculator.h"
 
 namespace epic::index {
 
 class ItfPowerIndex {
 public:
-	explicit ItfPowerIndex(Game& g)
-		: mGame(g) {
-		mCalculator = nullptr;
-		mNonZeroPlayerCount = mGame.getNumberOfPlayers() - mGame.getNumberOfPlayersWithWeight0();
-	};
+//	explicit ItfPowerIndex(Game& g)
+//		: mGame(g) {
+//		gCalculator = nullptr;
+//		g.getNumberOfNonZeroPlayers() = mGame.getNumberOfPlayers() - mGame.getNumberOfPlayersWithWeight0();
+//	};
 	virtual ~ItfPowerIndex() = default;
 
 	/**
 	 * Calculating the power index for each player.
 	 */
-	virtual std::vector<bigFloat> calculate() = 0;
+	virtual std::vector<bigFloat> calculate(Game& g) = 0;
 
 	/**
 	 * A function to get the full name of the index.
@@ -31,21 +32,13 @@ public:
 	 *
 	 * @return The approximated RAM size in <cMemUnit_name>. If 0 is returned the approximated memory is larger than 2^64 Bytes (does not fit in to a longUInt variable).
 	 */
-	virtual longUInt getMemoryRequirement() = 0;
+	virtual longUInt getMemoryRequirement(Game& g) = 0;
+
+	virtual bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) = 0;
+
+	virtual lint::Operation getOperationRequirement() = 0;
 
 protected:
-	Game& mGame;
-
-	/**
-	 * A specialized Calculator object for operating with LargeNumber objects
-	 */
-	lint::ItfLargeNumberCalculator* mCalculator;
-
-	/**
-	 * The number of players in the mGame with weight > zero
-	 */
-	longUInt mNonZeroPlayerCount;
-
 }; /* ItfPowerIndex */
 
 /**
@@ -64,9 +57,9 @@ protected:
  * For creating a completely new power index implementation the `include/index/ItfPowerIndex.h` interface must get implemented (i.e. inherit from ItfPowerIndex and implement the pure virtual methods). For a description what the pure virtual methods are supposed to do, see the comments in the `include/index/ItfPowerIndex.h` file.
  *
  * What must be done at least:
- *	- **Constructor**: initialize `mCalculator` (if large integer calculations are needed)
- *	- **Destructor**: delete `mCalculator` (if initialized in the constructor)
- *	- **calculate()**: do your calculations (you may need `mGame` and `mCalculator`) and return the index values for each player as a vector
+ *	- **Constructor**: initialize `gCalculator` (if large integer calculations are needed)
+ *	- **Destructor**: delete `gCalculator` (if initialized in the constructor)
+ *	- **calculate()**: do your calculations (you may need `mGame` and `gCalculator`) and return the index values for each player as a vector
  *	- **getFullName()**: return the full/complete name of your index
  *	- **getMemoryRequirement()**: return an approximation (upper bound) for the amount of memory needed during the `calculation()` method
  *
@@ -81,11 +74,11 @@ protected:
  * @include{lineno} new_index/independent/NewIndex.cpp
  *
  * ### derived implementation
- * By deriving from an already existing power index implementation the `include/index/ItfPowerIndex.h` interface gets indirectly implemented. In this case one must not care about the `mCalculator` object. For the other methods (especially `calculate()`) the functionality provided by the base class can be used.
+ * By deriving from an already existing power index implementation the `include/index/ItfPowerIndex.h` interface gets indirectly implemented. In this case one must not care about the `gCalculator` object. For the other methods (especially `calculate()`) the functionality provided by the base class can be used.
  *
- * **NOTE**: Since the `mCalculator` object gets initialized by the base class, the calculations must be in the limits of this object (i.e. calculation maximum and allowed operations).
+ * **NOTE**: Since the `gCalculator` object gets initialized by the base class, the calculations must be in the limits of this object (i.e. calculation maximum and allowed operations).
  *
- * **NOTE**: There are classes deriving from the `include/index/ItfPowerIndex.h` interface but not initializing the mCalculator object. Those classes (e.g. `PowerIndexWithWinningCoalitions`) providing extra methods but do not implement the pure virtual methods. Using a class like this can be done by a "independent implementaiton" deriving from such a class instead from the `ItfPowerIndex` interface directly.
+ * **NOTE**: There are classes deriving from the `include/index/ItfPowerIndex.h` interface but not initializing the gCalculator object. Those classes (e.g. `PowerIndexWithWinningCoalitions`) providing extra methods but do not implement the pure virtual methods. Using a class like this can be done by a "independent implementaiton" deriving from such a class instead from the `ItfPowerIndex` interface directly.
  *
  * An already existing example for a derived implementation is provided by the PublicGood implementation (`include/index/PublicGood.h`, `src/index/PublicGood.cpp`).
  *

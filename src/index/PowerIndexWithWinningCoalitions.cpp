@@ -1,17 +1,15 @@
 #include "index/PowerIndexWithWinningCoalitions.h"
 
-epic::index::PowerIndexWithWinningCoalitions::PowerIndexWithWinningCoalitions(Game& g)
-	: ItfPowerIndex(g) {
-}
+#include "lint/GlobalCalculator.h"
 
-void epic::index::PowerIndexWithWinningCoalitions::numberOfWinningCoalitionsPerWeight(ArrayOffset<lint::LargeNumber>& n_wc) {
+void epic::index::PowerIndexWithWinningCoalitions::numberOfWinningCoalitionsPerWeight(Game& g, ArrayOffset<lint::LargeNumber>& n_wc) {
 	// initialize the grand coalition (weight == weightsum) with 1, since it is always winning
-	mCalculator->assign_one(n_wc[mGame.getWeightSum()]);
+	gCalculator->assign_one(n_wc[g.getWeightSum()]);
 
 	// For each player...
-	for (longUInt i = 0; i < mNonZeroPlayerCount; ++i) {
+	for (longUInt i = 0; i < g.getNumberOfNonZeroPlayers(); ++i) {
 		// wi: weight of player i
-		longUInt wi = mGame.getWeights()[i];
+		longUInt wi = g.getWeights()[i];
 
 		/*
 		 * Iterate over the array starting at the value of quota + wi. This is the coalition weight from whereon
@@ -25,14 +23,14 @@ void epic::index::PowerIndexWithWinningCoalitions::numberOfWinningCoalitionsPerW
 		 * coalitions of weight k - wi (we know that subtracting player i's weight does not turn the coalition
 		 * losing, since we started at quota + wi, ensuring that).
 		 */
-		for (longUInt k = mGame.getQuota() + wi; k <= mGame.getWeightSum(); ++k) {
-			mCalculator->plusEqual(n_wc[k - wi], n_wc[k]);
+		for (longUInt k = g.getQuota() + wi; k <= g.getWeightSum(); ++k) {
+			gCalculator->plusEqual(n_wc[k - wi], n_wc[k]);
 		}
 	}
 }
 
-void epic::index::PowerIndexWithWinningCoalitions::numberOfWinningCoalitions(ArrayOffset<lint::LargeNumber>& n_wc, lint::LargeNumber& total_wc) {
-	for (longUInt i = mGame.getQuota(); i <= mGame.getWeightSum(); ++i) {
-		mCalculator->plusEqual(total_wc, n_wc[i]);
+void epic::index::PowerIndexWithWinningCoalitions::numberOfWinningCoalitions(Game& g, ArrayOffset<lint::LargeNumber>& n_wc, lint::LargeNumber& total_wc) {
+	for (longUInt i = g.getQuota(); i <= g.getWeightSum(); ++i) {
+		gCalculator->plusEqual(total_wc, n_wc[i]);
 	}
 }

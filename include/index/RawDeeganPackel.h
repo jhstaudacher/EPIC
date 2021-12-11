@@ -40,12 +40,13 @@ public:
 	 *  each iteration: f(i-1,k,x) <=> f(k,x); b(i,k,x) <=> b(k,y) -> compute unscaled-DP[i] = f(i-1,k,x)*b(i,k,q-x) <=> f(k,x)* b(k,y)
 	 *  DP[i]= unscaled-DP[i] / total-number-of-minimal-winning-coalitions
 	 */
-	RawDeeganPackel(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
-	~RawDeeganPackel() override;
+	RawDeeganPackel();
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game& g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement() override;
+	longUInt getMemoryRequirement(Game& g) override;
+	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
+	lint::Operation getOperationRequirement() override;
 };
 
 } /* namespace epic::index */

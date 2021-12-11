@@ -1,36 +1,29 @@
 #include "index/RawPublicGood.h"
 
 #include "Array.h"
+#include "lint/GlobalCalculator.h"
 
 #include <iostream>
 
-epic::index::RawPublicGood::RawPublicGood(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
-	: ItfPowerIndex(g) {
-	bigInt max_value = approx->upperBound_totalNumberOfSwingPlayer();
-	mCalculator = lint::ItfLargeNumberCalculator::new_calculator(max_value, lint::Operation::multiplication, int_representation);
-}
+epic::index::RawPublicGood::RawPublicGood() : ItfPowerIndex() {}
 
-epic::index::RawPublicGood::~RawPublicGood() {
-	lint::ItfLargeNumberCalculator::delete_calculator(mCalculator);
-}
+std::vector<epic::bigFloat> epic::index::RawPublicGood::calculate(Game& g) {
+	auto mwc = new lint::LargeNumber[g.getNumberOfNonZeroPlayers()];
+	gCalculator->allocInit_largeNumberArray(mwc, g.getNumberOfNonZeroPlayers());
+	calculateMinimalWinningCoalitionsPerPlayer(g, mwc);
 
-std::vector<epic::bigFloat> epic::index::RawPublicGood::calculate() {
-	auto mwc = new lint::LargeNumber[mNonZeroPlayerCount];
-	mCalculator->allocInit_largeNumberArray(mwc, mNonZeroPlayerCount);
-	calculateMinimalWinningCoalitionsPerPlayer(mwc);
-
-	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
+	std::vector<bigFloat> solution(g.getNumberOfPlayers());
 	bigInt big_mwc;
 
-	for (longUInt i = 0; i < mNonZeroPlayerCount; ++i) {
-		mCalculator->to_bigInt(&big_mwc, mwc[i]);
+	for (longUInt i = 0; i < g.getNumberOfNonZeroPlayers(); ++i) {
+		gCalculator->to_bigInt(&big_mwc, mwc[i]);
 		solution[i] = big_mwc;
 	}
-	for (longUInt i = mNonZeroPlayerCount; i < mGame.getNumberOfPlayers(); ++i) {
+	for (longUInt i = g.getNumberOfNonZeroPlayers(); i < g.getNumberOfPlayers(); ++i) {
 		solution[i] = 0;
 	}
 
-	mCalculator->free_largeNumberArray(mwc);
+	gCalculator->free_largeNumberArray(mwc);
 	delete[] mwc;
 
 	return solution;
@@ -40,12 +33,12 @@ std::string epic::index::RawPublicGood::getFullName() {
 	return "RawPublicGood";
 }
 
-epic::longUInt epic::index::RawPublicGood::getMemoryRequirement() {
-	bigInt memory = mNonZeroPlayerCount * mCalculator->getLargeNumberSize(); // mwc
+epic::longUInt epic::index::RawPublicGood::getMemoryRequirement(Game& g) {
+	bigInt memory = g.getNumberOfNonZeroPlayers() * gCalculator->getLargeNumberSize(); // mwc
 
 	// The memory needed inside the calculateMinimalWinningCoalitionsPerPlayer() function
-	memory += mGame.getQuota() * mCalculator->getLargeNumberSize();			  // f
-	memory += (mGame.getQuota() + 1) * mCalculator->getLargeNumberSize() * 2; // b, b_helper
+	memory += g.getQuota() * gCalculator->getLargeNumberSize();			  // f
+	memory += (g.getQuota() + 1) * gCalculator->getLargeNumberSize() * 2; // b, b_helper
 	// don't add solution vector since it gets allocated after the previous arrays are already freed.
 	memory /= cMemUnit_factor;
 
@@ -57,105 +50,113 @@ epic::longUInt epic::index::RawPublicGood::getMemoryRequirement() {
 	return ret;
 }
 
-void epic::index::RawPublicGood::calculateFVector(lint::LargeNumber f[]) {
-	// Initialize the empty coalition with 1 since we know, that the empty coalition is always losing.
-	mCalculator->assign_one(f[0]);
+epic::bigInt epic::index::RawPublicGood::getMaxValueRequirement(ItfUpperBoundApproximation* approx) {
+	return approx->upperBound_totalNumberOfSwingPlayer();
+}
 
-	for (longUInt i = 0; i < mNonZeroPlayerCount; ++i) {
-		longUInt wi = mGame.getWeights()[i];
+epic::lint::Operation epic::index::RawPublicGood::getOperationRequirement() {
+	return lint::Operation::multiplication;
+}
+
+void epic::index::RawPublicGood::calculateFVector(Game& g, lint::LargeNumber f[]) {
+	// Initialize the empty coalition with 1 since we know, that the empty coalition is always losing.
+	gCalculator->assign_one(f[0]);
+
+	for (longUInt i = 0; i < g.getNumberOfNonZeroPlayers(); ++i) {
+		longUInt wi = g.getWeights()[i];
 
 		// Players are veto players
-		if (wi < mGame.getQuota()) {
-			for (longUInt k = mGame.getQuota() - wi - 1; k < mGame.getQuota(); --k) {
-				mCalculator->plusEqual(f[k + wi], f[k]);
+		if (wi < g.getQuota()) {
+			for (longUInt k = g.getQuota() - wi - 1; k < g.getQuota(); --k) {
+				gCalculator->plusEqual(f[k + wi], f[k]);
 			}
 		}
 	}
 }
 
-void epic::index::RawPublicGood::calculateMinimalWinningCoalitionsPerPlayer(lint::LargeNumber mwc[]) {
-	auto f = new lint::LargeNumber[mGame.getQuota()];
-	mCalculator->allocInit_largeNumberArray(f, mGame.getQuota());
-	calculateFVector(f);
+void epic::index::RawPublicGood::calculateMinimalWinningCoalitionsPerPlayer(Game& g, lint::LargeNumber mwc[]) {
+	auto f = new lint::LargeNumber[g.getQuota()];
+	gCalculator->allocInit_largeNumberArray(f, g.getQuota());
+	calculateFVector(g, f);
 
-	auto b = new lint::LargeNumber[mGame.getQuota() + 1];
-	mCalculator->allocInit_largeNumberArray(b, mGame.getQuota() + 1);
+	auto b = new lint::LargeNumber[g.getQuota() + 1];
+	gCalculator->allocInit_largeNumberArray(b, g.getQuota() + 1);
 
 	lint::LargeNumber tmp;
-	mCalculator->alloc_largeNumber(tmp);
+	gCalculator->alloc_largeNumber(tmp);
 
 	// Last Player
 	{
-		longUInt last_player = mNonZeroPlayerCount - 1;
-		longUInt w_last = mGame.getWeights()[last_player];
+		longUInt last_player = g.getNumberOfNonZeroPlayers() - 1;
+		longUInt w_last = g.getWeights()[last_player];
 
-		if (w_last < mGame.getQuota()) {
+		if (w_last < g.getQuota()) {
 			for (longUInt i = 0; i <= w_last; ++i) {
-				mCalculator->assign_one(b[i]);
+				gCalculator->assign_one(b[i]);
 			}
 
-			for (longUInt i = w_last; i < mGame.getQuota(); ++i) {
-				mCalculator->minusEqual(f[i], f[i - w_last]);
+			for (longUInt i = w_last; i < g.getQuota(); ++i) {
+				gCalculator->minusEqual(f[i], f[i - w_last]);
 			}
 		}
 
-		for (longUInt i = 0; i < mGame.getQuota(); ++i) {
-			mCalculator->mul(tmp, f[i], b[mGame.getQuota() - i]);
-			mCalculator->plusEqual(mwc[last_player], tmp);
+		for (longUInt i = 0; i < g.getQuota(); ++i) {
+			gCalculator->mul(tmp, f[i], b[g.getQuota() - i]);
+			gCalculator->plusEqual(mwc[last_player], tmp);
 		}
 	}
 
-	auto b_helper = new lint::LargeNumber[mGame.getQuota() + 1];
-	mCalculator->allocInit_largeNumberArray(b_helper, mGame.getQuota() + 1);
+	auto b_helper = new lint::LargeNumber[g.getQuota() + 1];
+	gCalculator->allocInit_largeNumberArray(b_helper, g.getQuota() + 1);
 
 	// For each player (except the last one)
-	for (longUInt i = mNonZeroPlayerCount - 2; i < mNonZeroPlayerCount; --i) {
-		longUInt wi = mGame.getWeights()[i];
-		longUInt wi_plus1 = mGame.getWeights()[i + 1];
+	for (longUInt i = g.getNumberOfNonZeroPlayers() - 2; i < g.getNumberOfNonZeroPlayers(); --i) {
+		longUInt wi = g.getWeights()[i];
+		longUInt wi_plus1 = g.getWeights()[i + 1];
 
-		for (longUInt k = 0; k <= mGame.getQuota(); ++k) {
-			mCalculator->assign(b_helper[k], b[k]);
+		for (longUInt k = 0; k <= g.getQuota(); ++k) {
+			gCalculator->assign(b_helper[k], b[k]);
 		}
 
-		for (longUInt k = 0; k <= wi && k <= mGame.getQuota(); ++k) {
-			mCalculator->assign_one(b[k]);
+		for (longUInt k = 0; k <= wi && k <= g.getQuota(); ++k) {
+			gCalculator->assign_one(b[k]);
 		}
 
-		if (wi < mGame.getQuota()) {
-			for (longUInt k = wi; k < mGame.getQuota(); ++k) {
-				mCalculator->minusEqual(f[k], f[k - wi]);
+		if (wi < g.getQuota()) {
+			for (longUInt k = wi; k < g.getQuota(); ++k) {
+				gCalculator->minusEqual(f[k], f[k - wi]);
 			}
 
-			for (longUInt k = wi + 1; k <= mGame.getQuota(); ++k) {
-				mCalculator->plus(b[k], b_helper[k - wi + wi_plus1], b_helper[k - wi]);
+			for (longUInt k = wi + 1; k <= g.getQuota(); ++k) {
+				gCalculator->plus(b[k], b_helper[k - wi + wi_plus1], b_helper[k - wi]);
 			}
 		}
 
-		for (longUInt k = 0; k < mGame.getQuota(); ++k) {
-			mCalculator->mul(tmp, f[k], b[mGame.getQuota() - k]);
-			mCalculator->plusEqual(mwc[i], tmp);
+		for (longUInt k = 0; k < g.getQuota(); ++k) {
+			gCalculator->mul(tmp, f[k], b[g.getQuota() - k]);
+			gCalculator->plusEqual(mwc[i], tmp);
 		}
 	}
 
 	// Handling veto players: As they are ignored in the above calculation, we can just look through the player base here and add 1 to all of them, since each one veto player is ONLY ever in 1 minimal winning coalition
-	for (longUInt i = 0; i < mNonZeroPlayerCount; i++) {
+	for (longUInt i = 0; i < g.getNumberOfNonZeroPlayers(); i++) {
 		// If player is veto player:
-		if (mGame.getVetoPlayerVector()[i]) {
-			mCalculator->assign(mwc[i], 1ul);
+		if (g.getVetoPlayerVector()[i]) {
+			gCalculator->assign(mwc[i], 1ul);
 		}
 	}
 
 	/**
 	 * DELETE
 	 */
-	mCalculator->free_largeNumberArray(b_helper);
+	gCalculator->free_largeNumberArray(b_helper);
 	delete[] b_helper;
 
-	mCalculator->free_largeNumberArray(b);
+	gCalculator->free_largeNumberArray(b);
 	delete[] b;
 
-	mCalculator->free_largeNumberArray(f);
+	gCalculator->free_largeNumberArray(f);
 	delete[] f;
 
-	mCalculator->free_largeNumber(tmp);
+	gCalculator->free_largeNumber(tmp);
 }

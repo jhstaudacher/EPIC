@@ -25,6 +25,7 @@ epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool 
 	numberOfPlayers = weights.size();
 
 	numberOfPlayersOfWeight0 = weights.end() - std::find(weights.begin(), weights.end(), 0);
+	numberOfNonZeroPlayers = numberOfPlayers - numberOfPlayersOfWeight0;
 
 	// Check if weight_sum is smaller than the quota, otherwise throw error
 	if (this->weightSum < this->quota) {
@@ -44,6 +45,21 @@ epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool 
 			++numberOfVetoPlayers;
 		} else {
 			playerIsVetoPlayer[i] = false;
+		}
+	}
+
+	numberOfPrecoalitions = precoalitions.size();
+	precoalitionWeights.resize(numberOfPrecoalitions);
+	maxPrecoalitionSize = 0;
+	for (longUInt i = 0; i < numberOfPrecoalitions; ++i) {
+		longUInt precSize = precoalitions[i].size();
+		precoalitionWeights[i] = 0;
+		for (longUInt p = 0; p < precSize; ++p) {
+			precoalitionWeights[i] += weights[precoalitions[i][p]];
+		}
+
+		if (precSize > maxPrecoalitionSize) {
+			maxPrecoalitionSize = precSize;
 		}
 	}
 }
@@ -84,6 +100,18 @@ std::vector<std::vector<int>> epic::Game::getPrecoalitions() const {
 	return precoalitions;
 }
 
+std::vector<epic::longUInt> epic::Game::getPrecoalitionWeights() const {
+	return precoalitionWeights;
+}
+
+epic::longUInt epic::Game::getNumberOfPrecoalitions() const {
+	return numberOfPrecoalitions;
+}
+
+epic::longUInt epic::Game::getMaxPrecoalitionSize() const {
+	return maxPrecoalitionSize;
+}
+
 void epic::Game::setSolution(const std::vector<bigFloat>& pre_solution) {
 	solution.resize(weights.size() + excludedNullPlayer.size());
 
@@ -103,6 +131,10 @@ void epic::Game::setSingleValueSolution(const bigFloat& value) {
 
 epic::longUInt epic::Game::getNumberOfNullPlayers() const {
 	return numberOfNullPlayers;
+}
+
+epic::longUInt epic::Game::getNumberOfNonZeroPlayers() const {
+	return numberOfNonZeroPlayers;
 }
 
 epic::longUInt epic::Game::getNumberOfPlayersWithWeight0() const {

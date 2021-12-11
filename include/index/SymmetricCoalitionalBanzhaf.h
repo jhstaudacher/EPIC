@@ -13,12 +13,14 @@ class SymmetricCoalitionalBanzhaf : public PowerIndexWithPrecoalitions {
  * Implement the ItfPowerIndex interface:
  */
 public:
-	SymmetricCoalitionalBanzhaf(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
-	~SymmetricCoalitionalBanzhaf() override;
+	SymmetricCoalitionalBanzhaf();
+	~SymmetricCoalitionalBanzhaf();
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game& g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement() override;
+	longUInt getMemoryRequirement(Game& g) override;
+	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
+	lint::Operation getOperationRequirement() override;
 
 private:
 	/**
@@ -31,7 +33,7 @@ private:
 	 */
 	bigInt mBigTmp;
 
-	void updateInternalShapleyShubik(bigInt* internal_ssi, Array2dOffset<lint::LargeNumber>& cwi, longUInt precoalition, longUInt player, longUInt* weights, bigInt* factorial);
+	void updateInternalShapleyShubik(Game& g, bigInt* internal_ssi, Array2dOffset<lint::LargeNumber>& cwi, longUInt precoalition, longUInt player, std::vector<longUInt>& weights, bigInt* factorial);
 };
 
 } // namespace epic::index
