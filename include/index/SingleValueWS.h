@@ -20,11 +20,11 @@ namespace epic::index {
  */
 class SingleValueWS : public RawFelsenthal {
 public:
-	SingleValueWS(Game& g);
+	SingleValueWS(Game* g);
 
-	std::vector<bigFloat> calculate(Game& g) override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement(Game& g) override;
+	longUInt getMemoryRequirement(Game* g) override;
 };
 
 } // namespace epic::index

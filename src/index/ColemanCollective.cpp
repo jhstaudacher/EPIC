@@ -5,9 +5,9 @@
 
 epic::index::ColemanCollective::ColemanCollective() : PowerIndexWithWinningCoalitions() {}
 
-std::vector<epic::bigFloat> epic::index::ColemanCollective::calculate(Game& g) {
+std::vector<epic::bigFloat> epic::index::ColemanCollective::calculate(Game* g) {
 	// n_wc[x]: number of winning coalitions of weight x.
-	ArrayOffset<lint::LargeNumber> n_wc(g.getWeightSum() + 1, g.getQuota());
+	ArrayOffset<lint::LargeNumber> n_wc(g->getWeightSum() + 1, g->getQuota());
 	gCalculator->allocInit_largeNumberArray(n_wc.getArrayPointer(), n_wc.getNumberOfElements());
 	numberOfWinningCoalitionsPerWeight(g, n_wc);
 
@@ -19,19 +19,19 @@ std::vector<epic::bigFloat> epic::index::ColemanCollective::calculate(Game& g) {
 	//delete n_wc[]
 	gCalculator->free_largeNumberArray(n_wc.getArrayPointer());
 
-	std::vector<bigFloat> solution(g.getNumberOfPlayers());
+	std::vector<bigFloat> solution(g->getNumberOfPlayers());
 	{
 		bigInt big_total_wc;
 		gCalculator->to_bigInt(&big_total_wc, total_wc);
 
-		log::out << log::info << "Total number of winning coalitions: " << big_total_wc * (bigInt(1) << g.getNumberOfPlayersWithWeight0()) << log::endl;
+		log::out << log::info << "Total number of winning coalitions: " << big_total_wc * (bigInt(1) << g->getNumberOfPlayersWithWeight0()) << log::endl;
 
-		//total number of winning coalitions / maximal number of winning coalitions(= 2^g.getNumberOfNonZeroPlayers())
+		//total number of winning coalitions / maximal number of winning coalitions(= 2^g->getNumberOfNonZeroPlayers())
 		bigFloat big_total_wc_float = big_total_wc;
-		bigInt maximum_big_total_wc = bigInt(1) << g.getNumberOfNonZeroPlayers(); // = 2^g.getNumberOfNonZeroPlayers()
+		bigInt maximum_big_total_wc = bigInt(1) << g->getNumberOfNonZeroPlayers(); // = 2^g->getNumberOfNonZeroPlayers()
 		big_total_wc_float /= maximum_big_total_wc;
 
-		for (longUInt i = 0; i < g.getNumberOfPlayers(); ++i) {
+		for (longUInt i = 0; i < g->getNumberOfPlayers(); ++i) {
 			solution[i] = big_total_wc_float;
 		}
 	}
@@ -44,9 +44,9 @@ std::string epic::index::ColemanCollective::getFullName() {
 	return "ColemanCollective";
 }
 
-epic::longUInt epic::index::ColemanCollective::getMemoryRequirement(Game& g) {
+epic::longUInt epic::index::ColemanCollective::getMemoryRequirement(Game* g) {
 	bigInt memory = gCalculator->getLargeNumberSize();
-	memory *= g.getWeightSum() + 1 - g.getQuota(); // n_wc
+	memory *= g->getWeightSum() + 1 - g->getQuota(); // n_wc
 	memory += gCalculator->getLargeNumberSize();		   // total_wc
 	memory /= cMemUnit_factor;
 

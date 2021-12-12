@@ -29,9 +29,9 @@ class RawPublicGood : public ItfPowerIndex {
 public:
 	RawPublicGood();
 
-	std::vector<bigFloat> calculate(Game& g) override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement(Game& g) override;
+	longUInt getMemoryRequirement(Game* g) override;
 	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
 	lint::Operation getOperationRequirement() override;
 
@@ -41,7 +41,7 @@ protected:
 	 *
 	 * @param mwc The return array, mwc[x]: the number of minimal winning coalitions player x belongs to. The array must have enough memory for at least numberOfPlayers entries. Each entry must be initialized with zero!
 	 */
-	void calculateMinimalWinningCoalitionsPerPlayer(Game& g, lint::LargeNumber mwc[]);
+	void calculateMinimalWinningCoalitionsPerPlayer(Game* g, lint::LargeNumber mwc[]);
 
 private:
 	/**
@@ -49,7 +49,7 @@ private:
 	 *
 	 * @param f The return array. The array must have enough memory for at least quota entries. Each entry must be initialized with zero!
 	 */
-	void calculateFVector(Game& g, lint::LargeNumber f[]);
+	void calculateFVector(Game* g, lint::LargeNumber f[]);
 };
 
 } /* namespace epic::index */

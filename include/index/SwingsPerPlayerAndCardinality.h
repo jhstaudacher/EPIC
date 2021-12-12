@@ -11,7 +11,7 @@ class SwingsPerPlayerAndCardinality : public ItfPowerIndex {
 public:
 	explicit SwingsPerPlayerAndCardinality();
 
-	longUInt getMemoryRequirement(Game& g) override;
+	longUInt getMemoryRequirement(Game* g) override;
 
 protected:
 	/**
@@ -21,7 +21,7 @@ protected:
 	 *
 	 * @note The n_wc matrix must be allocated and zero initialized at least in the range: [quota, weightsum] x [0, numberOfPlayers + 1]
 	 */
-	void numberOfWinningCoalitionsPerWeightAndCardinality(Game& g, Array2dOffset<lint::LargeNumber>& n_wc);
+	void numberOfWinningCoalitionsPerWeightAndCardinality(Game* g, Array2dOffset<lint::LargeNumber>& n_wc);
 
 	/**
 	 * Calculating the number of winning coalitions per player and cardinality.
@@ -32,7 +32,7 @@ protected:
 	 * @note The raw_ssi matrix must be allocated and zero initialized in at least the range [0, numberOfPlayers] x [0, numberOfPlayers + 1]
 	 * @note The values for players of weight zero will remain zero (as initialized).
 	 */
-	void swingsPerPlayerAndCardinality(Game& g, Array2d<lint::LargeNumber>& raw_ssi, bool only_swingplayer = true);
+	void swingsPerPlayerAndCardinality(Game* g, Array2d<lint::LargeNumber>& raw_ssi, bool only_swingplayer = true);
 
 	/**
 	 * Calculating the number of winning coalitions per player and cardinality.
@@ -46,7 +46,7 @@ protected:
 	 * @note The raw_ssi matrix must be allocated and zero initialized in at least the range [0, numberOfPlayers] x [0, numberOfPlayers + 1]
 	 * @note The values for players of weight zero will remain zero (as initialized).
 	 */
-	void swingsPerPlayerAndCardinality(Game& g, Array2dOffset<lint::LargeNumber>& n_wc, Array2d<lint::LargeNumber>& raw_ssi, bool only_swingplayer = true);
+	void swingsPerPlayerAndCardinality(Game* g, Array2dOffset<lint::LargeNumber>& n_wc, Array2d<lint::LargeNumber>& raw_ssi, bool only_swingplayer = true);
 };
 
 } /* namespace epic::index */

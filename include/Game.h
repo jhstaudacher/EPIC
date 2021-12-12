@@ -25,7 +25,15 @@ public:
 	 * @param flag_verbose a flag causing extra verbose output if set.
 	 *
 	 */
-	Game(longUInt quota, std::vector<longUInt>& weights, bool flag_filterOutNullPlayers, std::vector<std::vector<int>>& precoalitions);
+	Game(longUInt quota, std::vector<longUInt>& weights, bool flag_filterOutNullPlayers);
+
+	/**
+	 * Sorting the weights in decreasing order
+	 *
+	 * @param weights containing the (unsorted) weights
+	 * @return the permutation (return[x] = the pre-sorted index of sorted index x)
+	 */
+	std::vector<longUInt> sortWeights();
 
 	/**
 	 * A function to get all weights
@@ -107,18 +115,6 @@ public:
 	bool getFlagNullPlayerHandling() const;
 
 	/**
-	 * A function to get the precoalition structure
-	 *
-	 */
-	std::vector<std::vector<int>> getPrecoalitions() const;
-
-	std::vector<longUInt> getPrecoalitionWeights() const;
-
-	longUInt getNumberOfPrecoalitions() const;
-
-	longUInt getMaxPrecoalitionSize() const;
-
-	/**
 	 * Converting the player index (sorted weights) into the player number (input ordering).
 	 *
 	 * @note The indices are in the interval [0,n-1] while the player numbers are in the interval [1,n].
@@ -129,11 +125,6 @@ public:
 	longUInt playerIndexToNumber(longUInt index) const;
 
 private:
-	/**
-	 * A vector of weights, contain the voting weight of each player
-	 */
-	std::vector<longUInt> weights;
-
 	std::vector<longUInt> excludedNullPlayer;
 
 	/**
@@ -150,17 +141,6 @@ private:
 	 * The number of players/voters
 	 */
 	longUInt numberOfPlayers;
-
-	/**
-	 * Structure of precoalitions
-	 */
-	std::vector<std::vector<int>> precoalitions;
-
-	std::vector<longUInt> precoalitionWeights;
-
-	longUInt numberOfPrecoalitions;
-
-	longUInt maxPrecoalitionSize;
 
 	/**
 	 * A vector of booleans which holds which players are veto players
@@ -195,20 +175,6 @@ private:
 	bool flag_null_player_handling;
 
 	/**
-	 * Storing the permutation that gets applied to sort the weights by decreasing weights.
-	 * sortingPermutation[x] is the original Player number of sorted index x.
-	 */
-	std::vector<longUInt> sortingPermutation;
-
-	/**
-	 * Sorting the weights in decreasing order
-	 *
-	 * @param weights containing the (unsorted) weights
-	 * @return the permutation (return[x] = the pre-sorted index of sorted index x)
-	 */
-	static std::vector<longUInt> sortWeights(std::vector<longUInt>& weights, std::vector<std::vector<int>>& precoalitions);
-
-	/**
 	 * A function to sort out the player, who are in no minimum winning coalitions
 	 *
 	 * @param flag_withoutNullPlayers Defines whether found null players should be removed from the weights vector or not
@@ -216,7 +182,64 @@ private:
 	 */
 	longUInt findNullPlayersFromBelow(bool flag_withoutNullPlayers);
 
+protected:
+	/**
+	 * A vector of weights, contain the voting weight of each player
+	 */
+	std::vector<longUInt> weights;
+
+	/**
+	 * Storing the permutation that gets applied to sort the weights by decreasing weights.
+	 * sortingPermutation[x] is the original Player number of sorted index x.
+	 */
+	std::vector<longUInt> sortingPermutation;
 }; /* class Game */
+
+class PrecoalitionGame : public Game {
+public:
+	/**
+	 * Constructor: Set variables according to the given parameters (set configuration of the mGame)
+	 *
+	 * @param quota a value between one and the sum of the weights of all players.
+	 * @param weights a vector that includes the weights (each weight represents a players weight)
+	 * @param flag_filterOutNullPlayers a flag bit which decides whether players with a weight of zero should be sorted out.
+	 * @param flag_verbose a flag causing extra verbose output if set.
+	 *
+	 */
+	PrecoalitionGame(longUInt quota, std::vector<longUInt>& weights, bool flag_filterOutNullPlayers, std::vector<std::vector<int>>& precoalitions);
+
+	/**
+	 * Sorting the weights in decreasing order
+	 *
+	 * @param weights containing the (unsorted) weights
+	 * @return the permutation (return[x] = the pre-sorted index of sorted index x)
+	 */
+	void sortPrecoalitions();
+
+	/**
+	 * A function to get the precoalition structure
+	 *
+	 */
+	std::vector<std::vector<int>> getPrecoalitions() const;
+
+	std::vector<longUInt> getPrecoalitionWeights() const;
+
+	longUInt getNumberOfPrecoalitions() const;
+
+	longUInt getMaxPrecoalitionSize() const;
+
+private:
+	/**
+	 * Structure of precoalitions
+	 */
+	std::vector<std::vector<int>> precoalitions;
+
+	std::vector<longUInt> precoalitionWeights;
+
+	longUInt numberOfPrecoalitions;
+
+	longUInt maxPrecoalitionSize;
+}; /* class PrecoalitionGame */
 
 } /* namespace epic */
 

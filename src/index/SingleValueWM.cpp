@@ -2,7 +2,7 @@
 
 epic::index::SingleValueWM::SingleValueWM() : DeeganPackel() {}
 
-std::vector<epic::bigFloat> epic::index::SingleValueWM::calculate(Game& g) {
+std::vector<epic::bigFloat> epic::index::SingleValueWM::calculate(Game* g) {
 	bigInt total_mwc;
 	numberOfMinimalWinningCoalitions(g, &total_mwc);
 

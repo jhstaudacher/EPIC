@@ -35,7 +35,7 @@ public:
 	 */
 	AbsolutePublicGood();
 
-	std::vector<bigFloat> calculate(Game& g) override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
 
 protected:
@@ -44,7 +44,7 @@ protected:
 	 *
 	 * @param total_mwc The total number of minimal winning coalitions
 	 */
-	void numberOfMinimalWinningCoalitions(Game& g, bigInt* total_mwc);
+	void numberOfMinimalWinningCoalitions(Game* g, bigInt* total_mwc);
 };
 
 } /* namespace epic::index */

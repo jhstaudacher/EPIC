@@ -99,7 +99,7 @@ bool epic::index::IndexFactory::validateIndex(const std::string& short_name) {
 	return getIndexType(short_name) != INVALID_INDEX;
 }
 
-epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std::string& short_name, Game& g, IntRepresentation int_representation) {
+epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std::string& short_name, Game* g, IntRepresentation int_representation) {
 	ItfPowerIndex* index = nullptr;
 
 	switch (getIndexType(short_name)) {

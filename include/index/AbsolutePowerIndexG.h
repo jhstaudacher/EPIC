@@ -32,9 +32,9 @@ public:
 	 *
 	 * @param g The Game for which the AbsolutePowerIndexG index should be calculated.
 	 */
-	AbsolutePowerIndexG(Game& g);
+	AbsolutePowerIndexG(Game* g);
 
-	std::vector<bigFloat> calculate(Game& g) override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
 };
 

@@ -6,21 +6,21 @@
 
 #include <iostream>
 
-epic::index::RawPowerIndexG::RawPowerIndexG(Game& g) : RawBanzhaf() {
-	if (g.getNumberOfNullPlayers() > 0 && !g.getFlagNullPlayerHandling()) {
+epic::index::RawPowerIndexG::RawPowerIndexG(Game* g) : RawBanzhaf() {
+	if (g->getNumberOfNullPlayers() > 0 && !g->getFlagNullPlayerHandling()) {
 		throw std::invalid_argument(log::missingFlagF);
 	}
 }
 
-std::vector<epic::bigFloat> epic::index::RawPowerIndexG::calculate(Game& g) {
+std::vector<epic::bigFloat> epic::index::RawPowerIndexG::calculate(Game* g) {
 	// n_sp[x]: number of times player x is a swing player.
-	auto n_sp = new lint::LargeNumber[g.getNumberOfPlayers()];
-	gCalculator->allocInit_largeNumberArray(n_sp, g.getNumberOfPlayers());
+	auto n_sp = new lint::LargeNumber[g->getNumberOfPlayers()];
+	gCalculator->allocInit_largeNumberArray(n_sp, g->getNumberOfPlayers());
 
 	numberOfTimesPlayerIsSwingPlayer(g, n_sp);
 
 	// n_wc[x]: number of winning coalitions of weight x.
-	ArrayOffset<lint::LargeNumber> n_wc(g.getWeightSum() + 1, g.getQuota());
+	ArrayOffset<lint::LargeNumber> n_wc(g->getWeightSum() + 1, g->getQuota());
 	gCalculator->allocInit_largeNumberArray(n_wc.getArrayPointer(), n_wc.getNumberOfElements());
 
 	numberOfWinningCoalitionsPerWeight(g, n_wc);
@@ -37,8 +37,8 @@ std::vector<epic::bigFloat> epic::index::RawPowerIndexG::calculate(Game& g) {
 	// delete n_wc[]
 	gCalculator->free_largeNumberArray(n_wc.getArrayPointer());
 
-	std::vector<bigFloat> solution(g.getNumberOfPlayers());
-	for (longUInt i = 0; i < g.getNumberOfPlayers(); ++i) {
+	std::vector<bigFloat> solution(g->getNumberOfPlayers());
+	for (longUInt i = 0; i < g->getNumberOfPlayers(); ++i) {
 		gCalculator->to_bigInt(&tmp, n_sp[i]);
 		solution[i] = (double)0.5 * (tmp + float_total_wc);
 	}

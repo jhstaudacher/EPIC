@@ -4,9 +4,9 @@
 
 epic::index::SingleValueW::SingleValueW() : RawBanzhaf() {}
 
-std::vector<epic::bigFloat> epic::index::SingleValueW::calculate(Game& g) {
+std::vector<epic::bigFloat> epic::index::SingleValueW::calculate(Game* g) {
 	// n_wc[x]: number of winning coalitions of weight x.
-	ArrayOffset<lint::LargeNumber> n_wc(g.getWeightSum() + 1, g.getQuota());
+	ArrayOffset<lint::LargeNumber> n_wc(g->getWeightSum() + 1, g->getQuota());
 	gCalculator->allocInit_largeNumberArray(n_wc.getArrayPointer(), n_wc.getNumberOfElements());
 	numberOfWinningCoalitionsPerWeight(g, n_wc);
 
@@ -22,7 +22,7 @@ std::vector<epic::bigFloat> epic::index::SingleValueW::calculate(Game& g) {
 		bigInt big_total_wc;
 		gCalculator->to_bigInt(&big_total_wc, total_wc);
 
-		bigInt factor = bigInt(1) << g.getNumberOfPlayersWithWeight0();
+		bigInt factor = bigInt(1) << g->getNumberOfPlayersWithWeight0();
 		solution[0] = big_total_wc * factor;
 	}
 

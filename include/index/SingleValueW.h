@@ -22,7 +22,7 @@ class SingleValueW : public RawBanzhaf {
 public:
 	SingleValueW();
 
-	std::vector<bigFloat> calculate(Game& g) override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
 };
 

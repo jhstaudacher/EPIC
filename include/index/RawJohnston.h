@@ -35,11 +35,11 @@ public:
 	 * @param approx A specialized approximation object to approximate the largest needed numbers.
 	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
 	 */
-	RawJohnston(Game& g);
+	RawJohnston(Game* g);
 
-	std::vector<bigFloat> calculate(Game& g) override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement(Game& g) override;
+	longUInt getMemoryRequirement(Game* g) override;
 	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
 	lint::Operation getOperationRequirement() override;
 
@@ -52,14 +52,14 @@ private:
      * @param player_limit The upper cardinality limit
      * @param first_step Since this method calculates iteratively, this parameter must be set to true if it is the first iteration.
      */
-	void forward_counting_per_weight_cardinality_next_step(Game& g, Array2d<lint::LargeNumber>& ret_ptr, std::vector<longUInt> weights, longUInt player_limit, bool first_step);
+	void forward_counting_per_weight_cardinality_next_step(Game* g, Array2d<lint::LargeNumber>& ret_ptr, std::vector<longUInt> weights, longUInt player_limit, bool first_step);
 
 	/**
 	 * Work out Subset Sum problem by starting with the smallest weight along the lines of CMS book (see book by CMS, p. 230, below)
 	 *
 	 * @param h The matrix to return the result. This Array2d must be allocated to have enough space for at least player-count x quota entries. All entries must be zero-initialized!
 	 */
-	void subsetSumFromSmallestPerWeight(Game& g, Array2d<longUInt>& h);
+	void subsetSumFromSmallestPerWeight(Game* g, Array2d<longUInt>& h);
 
 	/**
 	 * Finding largest weight w with the property w <= weight
@@ -69,7 +69,7 @@ private:
 	 *
 	 * @remark This method is fast since the weights are ordered.
 	 */
-	longUInt findIndexInRev(Game& g, longUInt weight);
+	longUInt findIndexInRev(Game* g, longUInt weight);
 };
 
 } /* namespace epic::index */

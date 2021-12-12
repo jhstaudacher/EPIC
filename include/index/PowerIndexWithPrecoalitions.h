@@ -19,7 +19,7 @@ protected:
 	 * @param cc number of coalitions per weight (like calculated by generalizedBackwardCountingPerWeight()-method)
 	 * @param wi the weight of player <i>i</i>
 	 */
-	void coalitionsContainingPlayerFromAbove(Game& g, ArrayOffset<lint::LargeNumber>& cw, ArrayOffset<lint::LargeNumber>& cc, longUInt wi);
+	void coalitionsContainingPlayerFromAbove(PrecoalitionGame* g, ArrayOffset<lint::LargeNumber>& cw, ArrayOffset<lint::LargeNumber>& cc, longUInt wi);
 
 	/**
 	 * Calculating the number of coalitions per weight
@@ -30,7 +30,7 @@ protected:
 	 * @param weights array of player weights - must be allocated and filled in the range [0, n-1]
 	 * @param n player amount
 	 */
-	void generalizedBackwardCountingPerWeight(Game& g, ArrayOffset<lint::LargeNumber>& c, const std::vector<longUInt>& weights, longUInt n);
+	void generalizedBackwardCountingPerWeight(PrecoalitionGame* g, ArrayOffset<lint::LargeNumber>& c, const std::vector<longUInt>& weights, longUInt n);
 
 	/**
 	 * Calculates the number of coalitions and cardinalities containing player <i>i</i>.
@@ -43,7 +43,7 @@ protected:
 	 *
 	 * @note This method can be used for external games as well. In this case <i>n</i> is the precoalition amount, <i>p</i> the precoalition index and <i>weights</i> an array of precoalition weights.
 	 */
-	void coalitionsCardinalityContainingPlayerFromAbove(Game& g, Array2dOffset<lint::LargeNumber>& cw, Array2dOffset<lint::LargeNumber>& cc, longUInt n, longUInt p, const std::vector<longUInt>& weights);
+	void coalitionsCardinalityContainingPlayerFromAbove(PrecoalitionGame* g, Array2dOffset<lint::LargeNumber>& cw, Array2dOffset<lint::LargeNumber>& cc, longUInt n, longUInt p, const std::vector<longUInt>& weights);
 
 	/**
 	 * Calculates the number of coalitions per weight and cardinality
@@ -54,7 +54,7 @@ protected:
 	 * @param weights array of player weights - must be allocated and filled in the range [0; n-1]
 	 * @param n player amount
 	 */
-	void generalizedBackwardCountingPerWeightCardinality(Game& g, Array2dOffset<lint::LargeNumber>& cc, const std::vector<longUInt>& weights, longUInt n);
+	void generalizedBackwardCountingPerWeightCardinality(PrecoalitionGame* g, Array2dOffset<lint::LargeNumber>& cc, const std::vector<longUInt>& weights, longUInt n);
 };
 
 } /* namespace epic::index */

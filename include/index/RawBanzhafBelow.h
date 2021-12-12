@@ -30,9 +30,9 @@ class RawBanzhafBelow : public ItfPowerIndex {
 public:
 	RawBanzhafBelow();
 
-	std::vector<bigFloat> calculate(Game& g) override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement(Game& g) override;
+	longUInt getMemoryRequirement(Game* g) override;
 	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
 	lint::Operation getOperationRequirement() override;
 
@@ -42,7 +42,7 @@ protected:
 	 *
 	 * @param n_sp A return array. n_sp[x] will be the number how often player x is a swing player. The array must be allocated and zero-initialized at least in the range [0, g.getNumberOfNonZeroPlayers() - 1]!
 	 */
-	void numberOfTimesPlayerIsSwingPlayer(Game& g, lint::LargeNumber n_sp[]);
+	void numberOfTimesPlayerIsSwingPlayer(Game* g, lint::LargeNumber n_sp[]);
 
 	/**
 	 * Calculating how often each player is a swing player.
@@ -53,7 +53,7 @@ protected:
 	 * @param n_lc The array containing the number of losing coalitions. n_lc[x]: number of losing coalitions of weight x. The array must be filled in the range [0, quota - 1]!
 	 * @param n_sp A return array. n_sp[x] will be the number how often player x is a swing player. The array must be allocated and zero-initialized at least in the range [0, g.getNumberOfNonZeroPlayers() - 1]!
 	 */
-	void numberOfTimesPlayerIsSwingPlayer(Game& g, lint::LargeNumber n_lc[], lint::LargeNumber n_sp[]);
+	void numberOfTimesPlayerIsSwingPlayer(Game* g, lint::LargeNumber n_lc[], lint::LargeNumber n_sp[]);
 
 	/**
 	 * Calculating the total number of all swing players
@@ -63,7 +63,7 @@ protected:
 	 * @param n_sp An Array containing the number of swing players. n_sp[x]: number of times player x is a swing player. This array must be filled in the range [0, g.getNumberOfNonZeroPlayers() - 1].
 	 * @param total_sp A return variable containing the calculated sum
 	 */
-	void numberOfSwingPlayer(Game& g, lint::LargeNumber n_sp[], lint::LargeNumber& total_sp);
+	void numberOfSwingPlayer(Game* g, lint::LargeNumber n_sp[], lint::LargeNumber& total_sp);
 
 private:
 	/**
@@ -71,7 +71,7 @@ private:
 	 *
 	 * @param n_lc An array to store the calculation results. This array must be allocated and zero-initialized at least in the range [0, quota - 1]!
 	 */
-	void numberOfLosingCoalitionsPerWeight(Game& g, lint::LargeNumber n_lc[]);
+	void numberOfLosingCoalitionsPerWeight(Game* g, lint::LargeNumber n_lc[]);
 };
 
 } /* namespace epic::index */

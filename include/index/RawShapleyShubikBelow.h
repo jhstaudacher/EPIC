@@ -38,9 +38,9 @@ public:
 	 */
 	RawShapleyShubikBelow();
 
-	std::vector<bigFloat> calculate(Game& g) override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement(Game& g) override;
+	longUInt getMemoryRequirement(Game* g) override;
 	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
 	lint::Operation getOperationRequirement() override;
 
@@ -52,7 +52,7 @@ private:
 	 *
 	 * @note The n_lc matrix must be allocated and zero initialized at least in the range: [0, quota] x [0, numberOfPlayers + 1]
 	 */
-	void numberOfLosingCoalitionsPerWeightAndCardinality(Game& g, Array2d<lint::LargeNumber>& n_lc);
+	void numberOfLosingCoalitionsPerWeightAndCardinality(Game* g, Array2d<lint::LargeNumber>& n_lc);
 
 	/**
 	 * Calculating how often each player is a swing player in coalitions of certain cardinalities.
@@ -62,7 +62,7 @@ private:
 	 * @note The raw_ssi matrix must be allocated and zero initialized in at least the range [0, numberOfPlayers] x [0, numberOfPlayers + 1].
 	 * @note The values for players of weight zero will remain unchanged, i.e. zero (as initialized).
 	 */
-	void swingsPerPlayerAndCardinality(Game& g, Array2d<lint::LargeNumber>& raw_ssi);
+	void swingsPerPlayerAndCardinality(Game* g, Array2d<lint::LargeNumber>& raw_ssi);
 };
 
 } /* namespace epic::index */

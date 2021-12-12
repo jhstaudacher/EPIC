@@ -31,7 +31,7 @@ class AbsoluteBanzhaf : public RawBanzhaf {
 public:
 	AbsoluteBanzhaf();
 
-	std::vector<bigFloat> calculate(Game& g) override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
 };
 

@@ -12,9 +12,9 @@ public:
 	Owen();
 	~Owen();
 
-	std::vector<bigFloat> calculate(Game& g) override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement(Game& g) override;
+	longUInt getMemoryRequirement(Game* g) override;
 	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
 	lint::Operation getOperationRequirement() override;
 
@@ -29,7 +29,7 @@ private:
 	 */
 	bigInt mBigTmp;
 
-	void updateInternalShapleyShubik(Game& g, bigInt* internal_ssi, Array2dOffset<lint::LargeNumber>& cwi, longUInt precoalition, longUInt player, std::vector<longUInt>& weights, bigInt* factorial, bigInt& scale_factor);
+	void updateInternalShapleyShubik(PrecoalitionGame* g, bigInt* internal_ssi, Array2dOffset<lint::LargeNumber>& cwi, longUInt precoalition, longUInt player, std::vector<longUInt>& weights, bigInt* factorial, bigInt& scale_factor);
 };
 
 } /* namespace epic::index */

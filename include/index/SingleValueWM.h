@@ -19,7 +19,7 @@ class SingleValueWM : public DeeganPackel {
 public:
 	SingleValueWM();
 
-	std::vector<bigFloat> calculate(Game& g) override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
 };
 

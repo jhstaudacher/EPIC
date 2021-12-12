@@ -44,11 +44,11 @@ public:
 	 * Using this, the index is calculated as follows: (MWCS of player i) / (SUM of MWCS of all players)
 	 *
 	 */
-	RawFelsenthal(Game& g);
+	RawFelsenthal(Game* g);
 
-	std::vector<bigFloat> calculate(Game& g) override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement(Game& g) override;
+	longUInt getMemoryRequirement(Game* g) override;
 	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
 	lint::Operation getOperationRequirement() override;
 
@@ -58,7 +58,7 @@ protected:
 	 *
 	 * @param mwcs The return array, mwcs[x]: the number of minimal winning coalitions of least size player x belongs to. The array mus have enough memory for at least numberOfPlayers entries. Each entry must be initialized with zero!
 	 */
-	void minimal_winning_coalitions_of_least_size(Game& g, lint::LargeNumber mwcs[]);
+	void minimal_winning_coalitions_of_least_size(Game* g, lint::LargeNumber mwcs[]);
 
 private:
 	/**

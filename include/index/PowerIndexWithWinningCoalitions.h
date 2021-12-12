@@ -17,7 +17,7 @@ protected:
 	 *
 	 * @param n_wc An array of ChineseNumbers to store the calculation results. This array must be allocated and zero initialized at least in the range [quota, weightsum]!
 	 */
-	void numberOfWinningCoalitionsPerWeight(Game& g, ArrayOffset<lint::LargeNumber>& n_wc);
+	void numberOfWinningCoalitionsPerWeight(Game* g, ArrayOffset<lint::LargeNumber>& n_wc);
 
 	/**
 	 * Calculating the total number of possible winning coalitions.
@@ -27,7 +27,7 @@ protected:
 	 * @param n_wc Number of winning coalitions per weight. The array must be filled in the range [quota, weightsum].
 	 * @param total_wc Total number of all winning coalitions. The return parameter
 	 */
-	void numberOfWinningCoalitions(Game& g, ArrayOffset<lint::LargeNumber>& n_wc, lint::LargeNumber& total_wc);
+	void numberOfWinningCoalitions(Game* g, ArrayOffset<lint::LargeNumber>& n_wc, lint::LargeNumber& total_wc);
 };
 
 } /* namespace epic::index */

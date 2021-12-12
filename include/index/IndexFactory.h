@@ -30,7 +30,7 @@ public:
 	 *
 	 * @return A powerindex instance.
 	 */
-	static ItfPowerIndex* new_powerIndex(const std::string& short_name, Game& g, IntRepresentation int_representation = DEFAULT);
+	static ItfPowerIndex* new_powerIndex(const std::string& short_name, Game* g, IntRepresentation int_representation = DEFAULT);
 
 	/**
 	 * Delete a powerindex instance

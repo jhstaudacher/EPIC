@@ -9,17 +9,12 @@ namespace epic::index {
 
 class ItfPowerIndex {
 public:
-//	explicit ItfPowerIndex(Game& g)
-//		: mGame(g) {
-//		gCalculator = nullptr;
-//		g.getNumberOfNonZeroPlayers() = mGame.getNumberOfPlayers() - mGame.getNumberOfPlayersWithWeight0();
-//	};
 	virtual ~ItfPowerIndex() = default;
 
 	/**
 	 * Calculating the power index for each player.
 	 */
-	virtual std::vector<bigFloat> calculate(Game& g) = 0;
+	virtual std::vector<bigFloat> calculate(Game* g) = 0;
 
 	/**
 	 * A function to get the full name of the index.
@@ -32,7 +27,7 @@ public:
 	 *
 	 * @return The approximated RAM size in <cMemUnit_name>. If 0 is returned the approximated memory is larger than 2^64 Bytes (does not fit in to a longUInt variable).
 	 */
-	virtual longUInt getMemoryRequirement(Game& g) = 0;
+	virtual longUInt getMemoryRequirement(Game* g) = 0;
 
 	virtual bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) = 0;
 

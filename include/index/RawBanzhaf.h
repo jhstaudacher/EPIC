@@ -30,9 +30,9 @@ class RawBanzhaf : public PowerIndexWithWinningCoalitions {
 public:
 	RawBanzhaf();
 
-	std::vector<bigFloat> calculate(Game& g) override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement(Game& g) override;
+	longUInt getMemoryRequirement(Game* g) override;
 	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
 	lint::Operation getOperationRequirement() override;
 
@@ -42,7 +42,7 @@ protected:
 	 *
 	 * @param n_sp A return array. n_sp[x] will be the number how often player x is a swing player. The array must have enough memory for at least g.getNumberOfNonZeroPlayers() entries. Each entry must be initialized with zero!
 	 */
-	void numberOfTimesPlayerIsSwingPlayer(Game& g, lint::LargeNumber n_sp[]);
+	void numberOfTimesPlayerIsSwingPlayer(Game* g, lint::LargeNumber n_sp[]);
 
 	/**
 	 * Calculating how often each player is a swing player.
@@ -53,7 +53,7 @@ protected:
 	 * @param n_wc The array containing the number of winning coalitions. n_wc[x]: number of winning coalitions of weight x. The array must be filled in the range [quota, weightsum]!
 	 * @param n_sp A return array. n_sp[x] will be the number how often player x is a swing player. The array must have enough memory for at least g.getNumberOfNonZeroPlayers() entries. Each entry must be initialized with zero!
 	 */
-	void numberOfTimesPlayerIsSwingPlayer(Game& g, ArrayOffset<lint::LargeNumber>& n_wc, lint::LargeNumber n_sp[]);
+	void numberOfTimesPlayerIsSwingPlayer(Game* g, ArrayOffset<lint::LargeNumber>& n_wc, lint::LargeNumber n_sp[]);
 
 	/**
 	 * Calculating the total number of all swings
@@ -63,7 +63,7 @@ protected:
 	 * @param n_sp An Array containing the number of swing players. n_sp[x]: number of times player x is a swing player. This array must be filled in the range [0, g.getNumberOfNonZeroPlayers()].
 	 * @param total_sp A return parameter containing the calculated sum
 	 */
-	void numberOfSwingPlayer(Game& g, lint::LargeNumber n_sp[], lint::LargeNumber& total_sp);
+	void numberOfSwingPlayer(Game* g, lint::LargeNumber n_sp[], lint::LargeNumber& total_sp);
 };
 
 } /* namespace epic::index */

@@ -56,11 +56,11 @@ epic::SystemControlUnit::~SystemControlUnit() {
 
 //specify and compute index
 void epic::SystemControlUnit::calculateIndex() {
-	index::ItfPowerIndex* index = index::IndexFactory::new_powerIndex(mUserInputHandler->getIndexToCompute(), *mGame, mUserInputHandler->getIntRepresentation());
+	index::ItfPowerIndex* index = index::IndexFactory::new_powerIndex(mUserInputHandler->getIndexToCompute(), mGame, mUserInputHandler->getIntRepresentation());
 	ItfUpperBoundApproximation* approx = new FastUpperBoundApproximation(*mGame);
 	lint::GlobalCalculator::init(lint::CalculatorConfig(index->getMaxValueRequirement(approx), index->getOperationRequirement(), mUserInputHandler->getIntRepresentation()));
 
-	if (checkHardware(index->getMemoryRequirement(*mGame))) {
+	if (checkHardware(index->getMemoryRequirement(mGame))) {
 		log::out << log::info << "Start computation (" << index->getFullName() << ")" << log::endl
 				 << log::endl;
 
@@ -68,9 +68,9 @@ void epic::SystemControlUnit::calculateIndex() {
 
 		std::chrono::steady_clock::time_point t_begin = std::chrono::steady_clock::now();
 		if (idx == "W" || idx == "WM" || idx == "WS") { // single value calculation
-			mGame->setSingleValueSolution(index->calculate(*mGame)[0]);
+			mGame->setSingleValueSolution(index->calculate(mGame)[0]);
 		} else {
-			mGame->setSolution(index->calculate(*mGame));
+			mGame->setSolution(index->calculate(mGame));
 		}
 		std::chrono::steady_clock::time_point t_end = std::chrono::steady_clock::now();
 
@@ -103,7 +103,11 @@ void epic::SystemControlUnit::createGamefromInputAndMinimiseWeights() {
 		}
 	}
 
-	mGame = new Game(mUserInputHandler->getQuota() / m_gcd, weights, mUserInputHandler->doFilterNullPlayers(), mUserInputHandler->getPrecoalitions());
+	if (mUserInputHandler->getPrecoalitions().size() > 0) {
+		mGame = new PrecoalitionGame(mUserInputHandler->getQuota() / m_gcd, weights, mUserInputHandler->doFilterNullPlayers(), mUserInputHandler->getPrecoalitions());
+	} else {
+		mGame = new Game(mUserInputHandler->getQuota() / m_gcd, weights, mUserInputHandler->doFilterNullPlayers());
+	}
 
 	log::out << log::info << "Game was created:" << log::endl;
 	log::out << " * quota: " << mGame->getQuota() << " (~" << std::round(mGame->getQuota() * 100.0 / mGame->getWeightSum()) << "%)" << log::endl;

@@ -4,9 +4,9 @@
 #include "Array.h"
 #include "Logging.h"
 
-std::vector<epic::bigFloat> epic::index::PublicGood::calculate(Game& g) {
-	auto mwc = new lint::LargeNumber[g.getNumberOfNonZeroPlayers()];
-	gCalculator->allocInit_largeNumberArray(mwc, g.getNumberOfNonZeroPlayers());
+std::vector<epic::bigFloat> epic::index::PublicGood::calculate(Game* g) {
+	auto mwc = new lint::LargeNumber[g->getNumberOfNonZeroPlayers()];
+	gCalculator->allocInit_largeNumberArray(mwc, g->getNumberOfNonZeroPlayers());
 
 	calculateMinimalWinningCoalitionsPerPlayer(g, mwc);
 
@@ -15,7 +15,7 @@ std::vector<epic::bigFloat> epic::index::PublicGood::calculate(Game& g) {
 		lint::LargeNumber mwc_sum;
 		gCalculator->allocInit_largeNumber(mwc_sum);
 
-		for (longUInt i = 0; i < g.getNumberOfNonZeroPlayers(); ++i) {
+		for (longUInt i = 0; i < g->getNumberOfNonZeroPlayers(); ++i) {
 			gCalculator->plusEqual(mwc_sum, mwc[i]);
 		}
 
@@ -28,19 +28,19 @@ std::vector<epic::bigFloat> epic::index::PublicGood::calculate(Game& g) {
 
 	log::out << log::info << "Number of minimal winning coalitions individual players belong to: " << log::endl;
 
-	std::vector<bigFloat> solution(g.getNumberOfPlayers());
+	std::vector<bigFloat> solution(g->getNumberOfPlayers());
 	{
 		bigInt big_mwc;
 
-		for (longUInt i = 0; i < g.getNumberOfNonZeroPlayers(); ++i) {
+		for (longUInt i = 0; i < g->getNumberOfNonZeroPlayers(); ++i) {
 			gCalculator->to_bigInt(&big_mwc, mwc[i]);
 			solution[i] = big_mwc;
-			log::out << "Player " << g.playerIndexToNumber(i) << ": " << big_mwc << log::endl;
+			log::out << "Player " << g->playerIndexToNumber(i) << ": " << big_mwc << log::endl;
 			solution[i] /= big_mwc_sum;
 		}
-		for (longUInt i = g.getNumberOfNonZeroPlayers(); i < g.getNumberOfPlayers(); ++i) {
+		for (longUInt i = g->getNumberOfNonZeroPlayers(); i < g->getNumberOfPlayers(); ++i) {
 			solution[i] = 0;
-			log::out << "Player " << g.playerIndexToNumber(i) << ": 0" << log::endl;
+			log::out << "Player " << g->playerIndexToNumber(i) << ": 0" << log::endl;
 		}
 	}
 

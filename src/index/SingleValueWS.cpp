@@ -2,19 +2,19 @@
 
 #include "lint/GlobalCalculator.h"
 
-epic::index::SingleValueWS::SingleValueWS(Game& g) : RawFelsenthal(g) {}
+epic::index::SingleValueWS::SingleValueWS(Game* g) : RawFelsenthal(g) {}
 
-std::vector<epic::bigFloat> epic::index::SingleValueWS::calculate(Game& g) {
+std::vector<epic::bigFloat> epic::index::SingleValueWS::calculate(Game* g) {
 	// mwcs: number of minimal winning coalitions for each player i
-	auto mwcs = new lint::LargeNumber[g.getNumberOfNonZeroPlayers()];
-	gCalculator->allocInit_largeNumberArray(mwcs, g.getNumberOfNonZeroPlayers());
+	auto mwcs = new lint::LargeNumber[g->getNumberOfNonZeroPlayers()];
+	gCalculator->allocInit_largeNumberArray(mwcs, g->getNumberOfNonZeroPlayers());
 	minimal_winning_coalitions_of_least_size(g, mwcs);
 
 	// sum_mwcs: number of all minimal winning coalitions
 	lint::LargeNumber sum_mwcs;
 	gCalculator->allocInit_largeNumber(sum_mwcs);
 
-	for (longUInt i = 0; i < g.getNumberOfNonZeroPlayers(); ++i) {
+	for (longUInt i = 0; i < g->getNumberOfNonZeroPlayers(); ++i) {
 		gCalculator->plusEqual(sum_mwcs, mwcs[i]);
 	}
 
@@ -34,7 +34,7 @@ std::string epic::index::SingleValueWS::getFullName() {
 	return "Number of minimal winning coalitions of smallest cardinality";
 }
 
-epic::longUInt epic::index::SingleValueWS::getMemoryRequirement(Game& g) {
+epic::longUInt epic::index::SingleValueWS::getMemoryRequirement(Game* g) {
 	bigInt memory = gCalculator->getLargeNumberSize(); // sum_mwcs
 	memory /= cMemUnit_factor;
 
