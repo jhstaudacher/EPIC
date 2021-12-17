@@ -12,7 +12,7 @@ epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool 
 
 	//sort players by weight
 	weights = untreated_weights;
-	sortingPermutation = sortWeights();
+	mPermutation = Permutation(sortWeights());
 
 	//handleDummyPlayers(flag_withoutNullPlayers);	//handle dummy-/null-player
 	numberOfNullPlayers = findNullPlayersFromBelow(flag_withoutNullPlayers);
@@ -46,6 +46,10 @@ epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool 
 			playerIsVetoPlayer[i] = false;
 		}
 	}
+}
+
+const epic::Permutation& epic::Game::getPermutation() const {
+	return mPermutation;
 }
 
 const std::vector<epic::longUInt>& epic::Game::getWeights() const {
@@ -82,14 +86,7 @@ std::vector<epic::bigFloat> epic::Game::getSolution() const {
 
 void epic::Game::setSolution(const std::vector<bigFloat>& pre_solution) {
 	solution.resize(weights.size() + excludedNullPlayer.size());
-
-	longUInt n = pre_solution.size();
-	for (longUInt i = 0; i < n; ++i) {
-		solution[sortingPermutation[i]] = pre_solution[i];
-	}
-	for (longUInt i = 0; i < excludedNullPlayer.size(); ++i) {
-		solution[sortingPermutation[n + i]] = 0;
-	}
+	mPermutation.reverse(pre_solution, solution, bigFloat(0));
 }
 
 void epic::Game::setSingleValueSolution(const bigFloat& value) {
@@ -110,7 +107,7 @@ epic::longUInt epic::Game::getNumberOfPlayersWithWeight0() const {
 }
 
 epic::longUInt epic::Game::playerIndexToNumber(longUInt index) const {
-	return sortingPermutation[index] + 1; // +1 to get values in [1,n]
+	return mPermutation.inverseIndex(index) + 1;
 }
 
 //---------- private methods -------------
@@ -248,14 +245,9 @@ epic::PrecoalitionGame::PrecoalitionGame(longUInt quota, std::vector<longUInt>& 
 }
 
 void epic::PrecoalitionGame::sortPrecoalitions() {
-	std::vector<longUInt> inv_p(sortingPermutation.size());
-	for (longUInt i = 0; i < inv_p.size(); ++i) {
-		inv_p[sortingPermutation[i]] = i;
-	}
-
 	for (auto& prec: precoalitions) {
 		for (auto& it: prec) {
-			it = inv_p[it];
+			it = mPermutation.applyIndex(it);
 		}
 	}
 }

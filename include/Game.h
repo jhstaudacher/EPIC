@@ -9,6 +9,70 @@
 
 namespace epic {
 
+class Permutation {
+public:
+	Permutation() : mP() {};
+
+	Permutation(const std::vector<size_t>& permutation) : mP(permutation) {
+		mI.reserve(mP.size());
+		for (size_t i = 0; i < mP.size(); ++i) {
+			mI[mP[i]] = i;
+		}
+	}
+
+	size_t applyIndex(size_t index) const {
+		return mI[index];
+	}
+
+	template<class T> void apply(const T* values, T* destination) const {
+		for(size_t i = 0; i < mI.size(); ++i) {
+			destination[mI[i]] = values[i];
+		}
+	}
+
+	template<class T> void apply(const std::vector<T>& values, std::vector<T>& destination, T fill_value = 0) const {
+		destination.reserve(mI.size()); // ensure at least the same size as mP
+
+		size_t i = 0;
+		size_t min_size = std::min(mI.size(), values.size());
+		for (; i < min_size; ++i) {
+			destination[mI[i]] = values[i];
+		}
+
+		for (; i < mI.size(); ++i) {
+			destination[mI[i]] = fill_value;
+		}
+	}
+
+	size_t inverseIndex(size_t index) const {
+		return mP[index];
+	}
+
+	template<class T> void reverse(T* values, T* destination) const {
+		for(size_t i = 0; i < mP.size(); ++i) {
+			destination[mP[i]] = values[i];
+		}
+	}
+
+	template<class T> void reverse(const std::vector<T>& values, std::vector<T>& destination, T fill_value = 0) const {
+		destination.reserve(mP.size()); // ensure at least the same size as mP
+
+		size_t i = 0;
+		size_t min_size = std::min(mP.size(), values.size());
+		for (; i < min_size; ++i) {
+			destination[mP[i]] = values[i];
+		}
+
+		for (; i < mP.size(); ++i) {
+			destination[mP[i]] = fill_value;
+		}
+	}
+
+	private:
+		std::vector<size_t> mP; // permutation
+		std::vector<size_t> mI; // inverse (permutation)
+};
+
 /**
  * A class to prepare and store important variables for the computation of power indices
  *
@@ -34,6 +98,8 @@ public:
 	 * @return the permutation (return[x] = the pre-sorted index of sorted index x)
 	 */
 	std::vector<longUInt> sortWeights();
+
+	const Permutation& getPermutation() const;
 
 	/**
 	 * A function to get all weights
@@ -188,11 +254,7 @@ protected:
 	 */
 	std::vector<longUInt> weights;
 
-	/**
-	 * Storing the permutation that gets applied to sort the weights by decreasing weights.
-	 * sortingPermutation[x] is the original Player number of sorted index x.
-	 */
-	std::vector<longUInt> sortingPermutation;
+	Permutation mPermutation;
 }; /* class Game */
 
 class PrecoalitionGame : public Game {
