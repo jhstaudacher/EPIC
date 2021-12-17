@@ -4,16 +4,11 @@
 #include "lint/GlobalCalculator.h"
 
 
-epic::index::Owen::Owen() : PowerIndexWithPrecoalitions() {
-	gCalculator->alloc_largeNumber(mTmp);
-}
-
-epic::index::Owen::~Owen() {
-	gCalculator->free_largeNumber(mTmp);
-}
+epic::index::Owen::Owen() : PowerIndexWithPrecoalitions() {}
 
 std::vector<epic::bigFloat> epic::index::Owen::calculate(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
+	gCalculator->alloc_largeNumber(mTmp);
 	std::vector<bigFloat> solution;
 
 	if (g->getNumberOfVetoPlayers() > 0) {
@@ -124,6 +119,8 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate(Game* g_) {
 		delete[] factorial;
 		delete[] shapleysInternal;
 	}
+
+	gCalculator->free_largeNumber(mTmp);
 
 	return solution;
 }

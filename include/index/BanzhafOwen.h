@@ -14,7 +14,6 @@ class BanzhafOwen : public PowerIndexWithPrecoalitions {
  */
 public:
 	BanzhafOwen();
-	~BanzhafOwen();
 
 	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
@@ -23,7 +22,6 @@ public:
 	lint::Operation getOperationRequirement() override;
 
 private:
-	lint::LargeNumber mTmp;
 	bigInt mBigTmp;
 };
 

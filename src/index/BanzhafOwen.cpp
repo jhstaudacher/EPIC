@@ -5,16 +5,13 @@
 
 #include <cmath>
 
-epic::index::BanzhafOwen::BanzhafOwen() : PowerIndexWithPrecoalitions() {
-	gCalculator->alloc_largeNumber(mTmp);
-}
-
-epic::index::BanzhafOwen::~BanzhafOwen() {
-	gCalculator->free_largeNumber(mTmp);
-}
+epic::index::BanzhafOwen::BanzhafOwen() : PowerIndexWithPrecoalitions() {}
 
 std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
+
+	lint::LargeNumber tmp;
+	gCalculator->alloc_largeNumber(tmp);
 
 	std::vector<bigFloat> solution(g->getNumberOfPlayers());
 	longUInt totalWeight = g->getWeightSum();
@@ -82,13 +79,13 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate(Game* g_) {
 			}
 		} else {
 			//get sum of vector
-			gCalculator->assign_zero(mTmp);
+			gCalculator->assign_zero(tmp);
 			longUInt min = std::min(quota + g->getPrecoalitionWeights()[i] - 1, totalWeight);
 			for (longUInt ii = quota; ii <= min; ++ii) {
-				gCalculator->plusEqual(mTmp, cw[ii]);
+				gCalculator->plusEqual(tmp, cw[ii]);
 			}
 			bigInt banzhafs_external;
-			gCalculator->to_bigInt(&banzhafs_external, mTmp);
+			gCalculator->to_bigInt(&banzhafs_external, tmp);
 			solution[g->getPrecoalitions()[i][0]] = ExternalMultiplier * banzhafs_external;
 		}
 	}
@@ -100,6 +97,8 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate(Game* g_) {
 	gCalculator->free_largeNumberArray(cwi.getArrayPointer());
 	gCalculator->free_largeNumberArray(c.getArrayPointer());
 	gCalculator->free_largeNumberArray(cw.getArrayPointer());
+
+	gCalculator->free_largeNumber(tmp);
 
 	return solution;
 }

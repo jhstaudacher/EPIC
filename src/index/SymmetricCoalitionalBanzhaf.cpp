@@ -5,16 +5,11 @@
 
 #include <cmath>
 
-epic::index::SymmetricCoalitionalBanzhaf::SymmetricCoalitionalBanzhaf() : PowerIndexWithPrecoalitions() {
-	gCalculator->alloc_largeNumber(mTmp);
-}
-
-epic::index::SymmetricCoalitionalBanzhaf::~SymmetricCoalitionalBanzhaf() {
-	gCalculator->free_largeNumber(mTmp);
-}
+epic::index::SymmetricCoalitionalBanzhaf::SymmetricCoalitionalBanzhaf() : PowerIndexWithPrecoalitions() {}
 
 std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
+	gCalculator->alloc_largeNumber(mTmp);
 
 	/*
 	 * Use g and gCalculator to calculate the power index and return the results.
@@ -109,6 +104,8 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 	gCalculator->free_largeNumberArray(banzhafsExternalGame);
 	delete[] banzhafsExternalGame;
 	delete[] factorial;
+
+	gCalculator->free_largeNumber(mTmp);
 
 	return solution;
 }

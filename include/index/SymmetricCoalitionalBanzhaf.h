@@ -14,7 +14,6 @@ class SymmetricCoalitionalBanzhaf : public PowerIndexWithPrecoalitions {
  */
 public:
 	SymmetricCoalitionalBanzhaf();
-	~SymmetricCoalitionalBanzhaf();
 
 	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;

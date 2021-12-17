@@ -10,7 +10,6 @@ namespace epic::index {
 class Owen : public PowerIndexWithPrecoalitions {
 public:
 	Owen();
-	~Owen();
 
 	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
