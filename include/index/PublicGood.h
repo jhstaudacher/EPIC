@@ -29,8 +29,9 @@ namespace epic::index {
 class PublicGood : public RawPublicGood {
 public:
 	std::vector<bigFloat> calculate(Game* g) override;
-
 	std::string getFullName() override;
+
+	void calculate(Game* g, std::vector<bigFloat>& solution);
 };
 
 } /* namespace epic::index */

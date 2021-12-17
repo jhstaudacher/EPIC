@@ -35,6 +35,8 @@ public:
 	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
 	lint::Operation getOperationRequirement() override;
 
+	void calculate(Game* g, lint::LargeNumber* solution);
+
 protected:
 	/**
 	 * Calculating the number of minimal winning coalitions a player belongs to.

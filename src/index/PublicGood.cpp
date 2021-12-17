@@ -5,6 +5,12 @@
 #include "Logging.h"
 
 std::vector<epic::bigFloat> epic::index::PublicGood::calculate(Game* g) {
+	std::vector<bigFloat> solution;
+	calculate(g, solution);
+	return solution;
+}
+
+void epic::index::PublicGood::calculate(Game* g, std::vector<bigFloat>& solution) {
 	auto mwc = new lint::LargeNumber[g->getNumberOfNonZeroPlayers()];
 	gCalculator->allocInit_largeNumberArray(mwc, g->getNumberOfNonZeroPlayers());
 
@@ -28,26 +34,22 @@ std::vector<epic::bigFloat> epic::index::PublicGood::calculate(Game* g) {
 
 	log::out << log::info << "Number of minimal winning coalitions individual players belong to: " << log::endl;
 
-	std::vector<bigFloat> solution(g->getNumberOfPlayers());
-	{
-		bigInt big_mwc;
+	solution.reserve(g->getNumberOfPlayers());
+	bigInt big_mwc;
 
-		for (longUInt i = 0; i < g->getNumberOfNonZeroPlayers(); ++i) {
-			gCalculator->to_bigInt(&big_mwc, mwc[i]);
-			solution[i] = big_mwc;
-			log::out << "Player " << g->playerIndexToNumber(i) << ": " << big_mwc << log::endl;
-			solution[i] /= big_mwc_sum;
-		}
-		for (longUInt i = g->getNumberOfNonZeroPlayers(); i < g->getNumberOfPlayers(); ++i) {
-			solution[i] = 0;
-			log::out << "Player " << g->playerIndexToNumber(i) << ": 0" << log::endl;
-		}
+	for (longUInt i = 0; i < g->getNumberOfNonZeroPlayers(); ++i) {
+		gCalculator->to_bigInt(&big_mwc, mwc[i]);
+		solution[i] = big_mwc;
+		log::out << "Player " << g->playerIndexToNumber(i) << ": " << big_mwc << log::endl;
+		solution[i] /= big_mwc_sum;
+	}
+	for (longUInt i = g->getNumberOfNonZeroPlayers(); i < g->getNumberOfPlayers(); ++i) {
+		solution[i] = 0;
+		log::out << "Player " << g->playerIndexToNumber(i) << ": 0" << log::endl;
 	}
 
 	gCalculator->free_largeNumberArray(mwc);
 	delete[] mwc;
-
-	return solution;
 }
 
 std::string epic::index::PublicGood::getFullName() {

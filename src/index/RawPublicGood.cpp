@@ -8,25 +8,30 @@
 epic::index::RawPublicGood::RawPublicGood() : ItfPowerIndex() {}
 
 std::vector<epic::bigFloat> epic::index::RawPublicGood::calculate(Game* g) {
-	auto mwc = new lint::LargeNumber[g->getNumberOfNonZeroPlayers()];
-	gCalculator->allocInit_largeNumberArray(mwc, g->getNumberOfNonZeroPlayers());
-	calculateMinimalWinningCoalitionsPerPlayer(g, mwc);
+	auto mwc = new lint::LargeNumber[g->getNumberOfPlayers()];
+	gCalculator->allocInit_largeNumberArray(mwc, g->getNumberOfPlayers());
+	calculate(g, mwc);
 
 	std::vector<bigFloat> solution(g->getNumberOfPlayers());
 	bigInt big_mwc;
 
-	for (longUInt i = 0; i < g->getNumberOfNonZeroPlayers(); ++i) {
+	for (longUInt i = 0; i < g->getNumberOfPlayers(); ++i) {
 		gCalculator->to_bigInt(&big_mwc, mwc[i]);
 		solution[i] = big_mwc;
-	}
-	for (longUInt i = g->getNumberOfNonZeroPlayers(); i < g->getNumberOfPlayers(); ++i) {
-		solution[i] = 0;
 	}
 
 	gCalculator->free_largeNumberArray(mwc);
 	delete[] mwc;
 
 	return solution;
+}
+
+void epic::index::RawPublicGood::calculate(Game* g, lint::LargeNumber* solution) {
+	calculateMinimalWinningCoalitionsPerPlayer(g, solution);
+
+	for (longUInt i = g->getNumberOfNonZeroPlayers(); i < g->getNumberOfPlayers(); ++i) {
+		gCalculator->assign_zero(solution[i]);
+	}
 }
 
 std::string epic::index::RawPublicGood::getFullName() {
