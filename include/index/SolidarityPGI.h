@@ -27,4 +27,4 @@ private:
 
 } // namespace epic::index
 
-#endif //EPIC_INDEX_BANZHAFOWEN_H_
+#endif 

@@ -91,8 +91,9 @@ private:
 		RPIG,		   /**< raw null-player-free Power Index G (based on the Dubey-Shapley identity) */
 		RPIF,		   /**< raw null-player-free Power Index F */
 		RSH,		   /**< raw Shapley Shubik */
-		SCB,		   /**< symmetric Coalitional Banzhaf */
 		RSHB,		   /**< raw Shapley Shubik from below */
+		SCB,		   /**< symmetric Coalitional Banzhaf */
+		SPGI,		   /**< Solidarity Public Good */
 		SH,			   /**< Shapley Shubik */
 		SHB,		   /**< Shapley Shubik from below */
 		T,			   /**< Tijs */

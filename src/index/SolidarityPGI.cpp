@@ -1,4 +1,5 @@
 #include "index/SolidarityPGI.h"
+#include "index/PublicGood.h"
 
 #include "Logging.h"
 #include "lint/GlobalCalculator.h"
@@ -12,20 +13,22 @@ std::vector<epic::bigFloat> epic::index::SolidarityPGI::calculate(Game* g_) {
 
 	std::vector<bigFloat> solution(g->getNumberOfPlayers());
 	longUInt quota = g->getQuota();
+	
+	std::vector<longUInt> preCoalitionWeights = g->getPrecoalitionWeights();
 
 	// Create game object from weights of precoalitions with original quota
-	auto precoalitionGame = new Game(quota, g->getPrecoalitionWeights());
+	auto precoalitionGame = new Game(quota, preCoalitionWeights, false);
 	
 	std::vector<bigFloat> externalSolution(g->getNumberOfPrecoalitions());
 	
-	auto extPGI = new PublicGood();
+	PublicGood* extPGI = new PublicGood();
 	
 	extPGI->calculate(precoalitionGame, externalSolution);
 	
 	for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); i++) {
 		longUInt nbPlayersInParti = g->getPrecoalitions()[i].size();
 		for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
-			solution[g->getPrecoalitions()[i][ii]] = externalSolution[i]/nbPlayerInParti;
+			solution[g->getPrecoalitions()[i][ii]] = externalSolution[i]/nbPlayersInParti;
 		}
     }
 	

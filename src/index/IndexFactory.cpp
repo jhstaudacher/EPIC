@@ -44,6 +44,7 @@
 #include "index/SingleValueW.h"
 #include "index/SingleValueWM.h"
 #include "index/SingleValueWS.h"
+#include "index/SolidarityPGI.h"
 #include "index/SymmetricCoalitionalBanzhaf.h"
 #include "index/Tijs.h"
 
@@ -90,6 +91,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{RSHB, {"RSHB", "raw Shapley Shubik below"}},
 	{SH, {"SH", "Shapley Shubik"}},
 	{SHB, {"SHB", "Shapley Shubik below"}},
+	{SPGI, {"SPGI", "Solidarity Public Good Index"}},
 	{T, {"T", "Tijs"}},
 	{W, {"W", "Number of winning coalitions"}},
 	{WM, {"WM", "Number of minimal winning coalitions"}},
@@ -145,6 +147,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::RSHB: index = new RawShapleyShubikBelow(); break;
 		case IndexType::SH: index = new ShapleyShubik(); break;
 		case IndexType::SHB: index = new ShapleyShubikBelow(); break;
+		case IndexType::SPGI: index = new SolidarityPGI(); break;
 		case IndexType::T: index = new Tijs(); break;
 		case IndexType::W: index = new SingleValueW(); break;
 		case IndexType::WM: index = new SingleValueWM(); break;
