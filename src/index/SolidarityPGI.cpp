@@ -38,7 +38,7 @@ std::vector<epic::bigFloat> epic::index::SolidarityPGI::calculate(Game* g_) {
 	for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); i++) {
 		longUInt nbPlayersInParti = g->getPrecoalitions()[i].size();
 		for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
-			solution[g->getPrecoalitions()[i][ii]] = externalSolution[i]; // /(bigFloat(nbPlayersInParti));
+			solution[g->getPrecoalitions()[i][ii]] = externalSolution[i] / nbPlayersInParti;
 		}
     }
 	
