@@ -1,5 +1,5 @@
-#ifndef EPIC_INDEX_NEWINDEX_H_
-#define EPIC_INDEX_NEWINDEX_H_
+#ifndef EPIC_INDEX_SOLIDARITYPGI_H_
+#define EPIC_INDEX_SOLIDARITYPGI_H_
 
 #include "PowerIndexWithPrecoalitions.h"
 
@@ -21,8 +21,8 @@ public:
 	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
 	lint::Operation getOperationRequirement() override;
 
-private:
-	bigInt mBigTmp;
+//private:
+//	bigInt mBigTmp;
 };
 
 } // namespace epic::index

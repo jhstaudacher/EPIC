@@ -147,7 +147,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::RSHB: index = new RawShapleyShubikBelow(); break;
 		case IndexType::SH: index = new ShapleyShubik(); break;
 		case IndexType::SHB: index = new ShapleyShubikBelow(); break;
-		case IndexType::SPGI: index = new SolidarityPGI(); break;
+		case IndexType::SPGI: index = (ItfPowerIndex*) new SolidarityPGI(); break;
 		case IndexType::T: index = new Tijs(); break;
 		case IndexType::W: index = new SingleValueW(); break;
 		case IndexType::WM: index = new SingleValueWM(); break;

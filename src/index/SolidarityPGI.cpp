@@ -15,6 +15,11 @@ std::vector<epic::bigFloat> epic::index::SolidarityPGI::calculate(Game* g_) {
 	longUInt quota = g->getQuota();
 	
 	std::vector<longUInt> preCoalitionWeights = g->getPrecoalitionWeights();
+	std::cout << "prec weights" << "\n";
+	for (auto it : preCoalitionWeights ){
+		std::cout << it << "\n";
+	}
+	std::cout <<"\n";
 
 	// Create game object from weights of precoalitions with original quota
 	auto precoalitionGame = new Game(quota, preCoalitionWeights, false);
@@ -24,11 +29,16 @@ std::vector<epic::bigFloat> epic::index::SolidarityPGI::calculate(Game* g_) {
 	PublicGood* extPGI = new PublicGood();
 	
 	extPGI->calculate(precoalitionGame, externalSolution);
+	std::cout << "externalSolution:" << "\n";
+	for (auto it : externalSolution) {
+			std::cout << it << "\n";
+	}
+	std::cout << "\n";
 	
 	for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); i++) {
 		longUInt nbPlayersInParti = g->getPrecoalitions()[i].size();
 		for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
-			solution[g->getPrecoalitions()[i][ii]] = externalSolution[i]/nbPlayersInParti;
+			solution[g->getPrecoalitions()[i][ii]] = externalSolution[i]; // /(bigFloat(nbPlayersInParti));
 		}
     }
 	
