@@ -235,7 +235,7 @@ epic::PrecoalitionGame::PrecoalitionGame(longUInt quota, std::vector<longUInt>& 
 		precoalitionWeights[i] = 0;
 
 		for (longUInt p = 0; p < precSize; ++p) {
-			precoalitionWeights[i] += weights[precoalitions[i][p]];
+			precoalitionWeights[i] += weights[mPrecoalitions[i][p]];
 		}
 
 		if (precSize > mMaxPrecoalitionSize) {
