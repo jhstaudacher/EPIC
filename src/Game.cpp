@@ -223,14 +223,14 @@ epic::longUInt epic::Game::findNullPlayersFromBelow(bool flag_withoutNullPlayers
  */
 
 epic::PrecoalitionGame::PrecoalitionGame(longUInt quota, std::vector<longUInt>& untreated_weights, bool flag_withoutNullPlayers, std::vector<std::vector<int>>& precoalitions) : Game(quota, untreated_weights, flag_withoutNullPlayers) {
-	this->precoalitions = precoalitions;
+	mPrecoalitions = precoalitions;
 
 	sortPrecoalitions();
 
-	numberOfPrecoalitions = precoalitions.size();
-	precoalitionWeights.resize(numberOfPrecoalitions);
-	maxPrecoalitionSize = 0;
-	for (longUInt i = 0; i < numberOfPrecoalitions; ++i) {
+	mNumberOfPrecoalitions = precoalitions.size();
+	precoalitionWeights.resize(mNumberOfPrecoalitions);
+	mMaxPrecoalitionSize = 0;
+	for (longUInt i = 0; i < mNumberOfPrecoalitions; ++i) {
 		longUInt precSize = precoalitions[i].size();
 		precoalitionWeights[i] = 0;
 
@@ -238,14 +238,14 @@ epic::PrecoalitionGame::PrecoalitionGame(longUInt quota, std::vector<longUInt>& 
 			precoalitionWeights[i] += weights[precoalitions[i][p]];
 		}
 
-		if (precSize > maxPrecoalitionSize) {
-			maxPrecoalitionSize = precSize;
+		if (precSize > mMaxPrecoalitionSize) {
+			mMaxPrecoalitionSize = precSize;
 		}
 	}
 }
 
 void epic::PrecoalitionGame::sortPrecoalitions() {
-	for (auto& prec: precoalitions) {
+	for (auto& prec: mPrecoalitions) {
 		for (auto& it: prec) {
 			it = mPermutation.applyIndex(it);
 		}
@@ -253,7 +253,7 @@ void epic::PrecoalitionGame::sortPrecoalitions() {
 }
 
 std::vector<std::vector<int>> epic::PrecoalitionGame::getPrecoalitions() const {
-	return precoalitions;
+	return mPrecoalitions;
 }
 
 std::vector<epic::longUInt> epic::PrecoalitionGame::getPrecoalitionWeights() const {
@@ -261,9 +261,9 @@ std::vector<epic::longUInt> epic::PrecoalitionGame::getPrecoalitionWeights() con
 }
 
 epic::longUInt epic::PrecoalitionGame::getNumberOfPrecoalitions() const {
-	return numberOfPrecoalitions;
+	return mNumberOfPrecoalitions;
 }
 
 epic::longUInt epic::PrecoalitionGame::getMaxPrecoalitionSize() const {
-	return maxPrecoalitionSize;
+	return mMaxPrecoalitionSize;
 }

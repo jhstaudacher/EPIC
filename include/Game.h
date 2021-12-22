@@ -292,15 +292,15 @@ public:
 
 private:
 	/**
-	 * Structure of precoalitions
+	 * Structure of mPrecoalitions
 	 */
-	std::vector<std::vector<int>> precoalitions;
+	std::vector<std::vector<int>> mPrecoalitions;
 
 	std::vector<longUInt> precoalitionWeights;
 
-	longUInt numberOfPrecoalitions;
+	longUInt mNumberOfPrecoalitions;
 
-	longUInt maxPrecoalitionSize;
+	longUInt mMaxPrecoalitionSize;
 }; /* class PrecoalitionGame */
 
 } /* namespace epic */
