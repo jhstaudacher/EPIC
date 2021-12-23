@@ -14,7 +14,7 @@ public:
 	Permutation() : mP() {};
 
 	Permutation(const std::vector<size_t>& permutation) : mP(permutation) {
-		mI.reserve(mP.size());
+		mI.resize(mP.size());
 		for (size_t i = 0; i < mP.size(); ++i) {
 			mI[mP[i]] = i;
 		}
@@ -31,7 +31,7 @@ public:
 	}
 
 	template<class T> void apply(const std::vector<T>& values, std::vector<T>& destination, T fill_value = 0) const {
-		destination.reserve(mI.size()); // ensure at least the same size as mP
+		destination.resize(mI.size()); // ensure at least the same size as mP
 
 		size_t i = 0;
 		size_t min_size = std::min(mI.size(), values.size());
@@ -55,7 +55,7 @@ public:
 	}
 
 	template<class T> void reverse(const std::vector<T>& values, std::vector<T>& destination, T fill_value = 0) const {
-		destination.reserve(mP.size()); // ensure at least the same size as mP
+		destination.resize(mP.size()); // ensure at least the same size as mP
 
 		size_t i = 0;
 		size_t min_size = std::min(mP.size(), values.size());

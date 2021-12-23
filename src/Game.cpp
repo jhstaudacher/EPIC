@@ -37,7 +37,7 @@ epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool 
 
 	// Find out if there are veto players and if there are which
 	numberOfVetoPlayers = 0;
-	playerIsVetoPlayer.reserve(numberOfPlayers);
+	playerIsVetoPlayer.resize(numberOfPlayers);
 	for (longUInt i = 0; i < numberOfPlayers; ++i) {
 		if (weights[i] >= quota) {
 			playerIsVetoPlayer[i] = true;
