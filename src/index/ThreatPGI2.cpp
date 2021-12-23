@@ -26,7 +26,7 @@ std::vector<epic::bigFloat> epic::index::ThreatPGI2::calculate(Game* g_) {
 	
 	std::vector<bigFloat> externalSolution(g->getNumberOfPrecoalitions());
 	
-	bigFloat denominator = 0;
+	bigFloat denominator = 0.0;
 	
 	PublicGood* extPGI = new PublicGood();
 	
@@ -70,8 +70,8 @@ std::vector<epic::bigFloat> epic::index::ThreatPGI2::calculate(Game* g_) {
 		longUInt nbIntGame = g->getNumberOfPrecoalitions() + nbPlayersInParti - 1;
 		denominator = 0.0;
 		std::vector<longUInt> weightsVector(nbIntGame);
-		std::vector<longUInt> intSolution(nbIntGame);
-		std::vector<longUInt> sortedSolution(nbIntGame);
+		std::vector<bigFloat> intSolution(nbIntGame);
+		std::vector<bigFloat> sortedSolution(nbIntGame);
 		for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
 			weightsVector[ii] = g->getWeights()[g->getPrecoalitions()[i][ii]];
 		}
@@ -87,14 +87,28 @@ std::vector<epic::bigFloat> epic::index::ThreatPGI2::calculate(Game* g_) {
 		// Reuse PublicGood-Object we already have ...
 	    extPGI->calculate(intGame,intSolution); 
 		//
+		std::cout << "intSolution:" << i << "\n";
+		for (auto it : intSolution) {
+			std::cout << it << "\n";
+		}
+		std::cout << "\n";
+		//
 		intGame->getPermutation().reverse(intSolution,sortedSolution);
+		//
+		std::cout << "sortedSolution:" << i << "\n";
+		for (auto it : sortedSolution) {
+			std::cout << it << "\n";
+		}
+		std::cout << "\n";
+		//
 		
 		for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
-			denominator += sortedSolution[g->getPrecoalitions()[i][ii]];
+			denominator += sortedSolution[ii];
 		}
+		std::cout << denominator << "\n";
 		for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
 			if (denominator > 0){
-				solution[g->getPrecoalitions()[i][ii]] = externalSolution[i] * (sortedSolution[g->getPrecoalitions()[i][ii]] / denominator);
+				solution[g->getPrecoalitions()[i][ii]] = externalSolution[i] * (sortedSolution[ii] / denominator);
 			} else
 			{
 				solution[g->getPrecoalitions()[i][ii]] = 0.0;
