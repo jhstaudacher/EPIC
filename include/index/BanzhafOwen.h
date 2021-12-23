@@ -1,5 +1,5 @@
-#ifndef EPIC_INDEX_NEWINDEX_H_
-#define EPIC_INDEX_NEWINDEX_H_
+#ifndef EPIC_INDEX_BANZHAFOWEN_H_
+#define EPIC_INDEX_BANZHAFOWEN_H_
 
 #include "PowerIndexWithPrecoalitions.h"
 
