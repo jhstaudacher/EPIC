@@ -72,6 +72,7 @@ private:
 		N,			   /**< Nevison (based on the Dubey-Shapley identity)*/
 		NPH,		   /**< Nevison (based on raw Public Help theta) */
 		O,			   /**< Owen */
+		// O,			   /**< Owen Extended Public Good Index */
 		PG,			   /**< Public Good */
 		PHT,		   /**< Public Help theta (based on the Dubey-Shapley identity)*/
 		PHTPH,		   /**< Public Help theta (based on raw Public Help theta) */
@@ -97,6 +98,9 @@ private:
 		SH,			   /**< Shapley Shubik */
 		SHB,		   /**< Shapley Shubik from below */
 		T,			   /**< Tijs */
+		//TPGI1,		   /**< Threat Public Good Index 1 */
+		//TPGI2,		   /**< Threat Public Good Index 2 */
+		//TPGI3,		   /**< Threat Public Good Index 3 */
 		UPGI,		   /**< Union Public Good */
 		W,			   /**< The number of winning coalitions */
 		WM,			   /**< The number of minimal winning coalitions */

@@ -19,6 +19,7 @@
 #include "index/Nevison.h"
 #include "index/NevisonPH.h"
 #include "index/Owen.h"
+// #include "index/OwenExtendedPGI.h"
 #include "index/PowerIndexF.h"
 #include "index/PowerIndexG.h"
 #include "index/PowerIndexGPH.h"
@@ -47,6 +48,9 @@
 #include "index/SolidarityPGI.h"
 #include "index/SymmetricCoalitionalBanzhaf.h"
 #include "index/Tijs.h"
+// #include "index/ThreatPGI1.h"
+// #include "index/ThreatPGI2.h"
+// #include "index/ThreatPGI3.h"
 #include "index/UnionPGI.h"
 
 const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std::string>> epic::index::IndexFactory::cIndexNames = {
@@ -69,6 +73,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{N, {"N", "Nevison (based on the Dubey-Shapley identity)"}},
 	{NPH, {"NPH", "Nevsion (based on raw Public Help theta)"}},
 	{O, {"O", "Owen"}},
+	//{OPGI, {"OPGI", "Owen Extended Public Good Index"}},
 	{PG, {"PG", "Public Good"}},
 	{PHT, {"PHT", "Public Help theta (based on the Dubey-Shapley identity)"}},
 	{PHTPH, {"PHTPH", "Public Help theta (based on the raw Public Help theta)"}},
@@ -95,6 +100,9 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{SPGI, {"SPGI", "Solidarity Public Good Index"}},
 	{UPGI, {"UPGI", "Union Public Good Index"}},
 	{T, {"T", "Tijs"}},
+	//{TPGI1, {"TPGI1", "Threat Public Good Index 1"}},
+	//{TPGI2, {"TPGI2", "Threat Public Good Index 2"}},
+	//{TPGI3, {"TPGI3", "Threat Public Good Index 3"}},
 	{W, {"W", "Number of winning coalitions"}},
 	{WM, {"WM", "Number of minimal winning coalitions"}},
 	{WS, {"WS", "Number of minimal winning coalitions of smallest cardinality"}}};
