@@ -100,7 +100,7 @@ private:
 		T,			   /**< Tijs */
 		TPGI1,		   /**< Threat Public Good Index 1 */
 		TPGI2,		   /**< Threat Public Good Index 2 */
-		//TPGI3,		   /**< Threat Public Good Index 3 */
+		TPGI3,		   /**< Threat Public Good Index 3 */
 		UPGI,		   /**< Union Public Good */
 		W,			   /**< The number of winning coalitions */
 		WM,			   /**< The number of minimal winning coalitions */
