@@ -5,7 +5,7 @@
 #include "Logging.h"
 
 std::vector<epic::bigFloat> epic::index::PublicGood::calculate(Game* g) {
-	std::vector<bigFloat> solution(g->getNumberOfPlayers());
+	std::vector<bigFloat> solution;
 	calculate(g, solution);
 	return solution;
 }
@@ -34,7 +34,7 @@ void epic::index::PublicGood::calculate(Game* g, std::vector<bigFloat>& solution
 
 	log::out << log::info << "Number of minimal winning coalitions individual players belong to: " << log::endl;
 
-	//solution.reserve(g->getNumberOfPlayers());
+	solution.resize(g->getNumberOfPlayers());
 	bigInt big_mwc;
 
 	for (longUInt i = 0; i < g->getNumberOfNonZeroPlayers(); ++i) {
