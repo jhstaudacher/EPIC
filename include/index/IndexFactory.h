@@ -99,7 +99,7 @@ private:
 		SHB,		   /**< Shapley Shubik from below */
 		T,			   /**< Tijs */
 		TPGI1,		   /**< Threat Public Good Index 1 */
-		//TPGI2,		   /**< Threat Public Good Index 2 */
+		TPGI2,		   /**< Threat Public Good Index 2 */
 		//TPGI3,		   /**< Threat Public Good Index 3 */
 		UPGI,		   /**< Union Public Good */
 		W,			   /**< The number of winning coalitions */
