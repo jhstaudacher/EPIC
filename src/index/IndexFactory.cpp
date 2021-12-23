@@ -48,7 +48,7 @@
 #include "index/SolidarityPGI.h"
 #include "index/SymmetricCoalitionalBanzhaf.h"
 #include "index/Tijs.h"
-// #include "index/ThreatPGI1.h"
+#include "index/ThreatPGI1.h"
 // #include "index/ThreatPGI2.h"
 // #include "index/ThreatPGI3.h"
 #include "index/UnionPGI.h"
@@ -100,7 +100,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{SPGI, {"SPGI", "Solidarity Public Good Index"}},
 	{UPGI, {"UPGI", "Union Public Good Index"}},
 	{T, {"T", "Tijs"}},
-	//{TPGI1, {"TPGI1", "Threat Public Good Index 1"}},
+	{TPGI1, {"TPGI1", "Threat Public Good Index 1"}},
 	//{TPGI2, {"TPGI2", "Threat Public Good Index 2"}},
 	//{TPGI3, {"TPGI3", "Threat Public Good Index 3"}},
 	{W, {"W", "Number of winning coalitions"}},
@@ -159,6 +159,9 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::SHB: index = new ShapleyShubikBelow(); break;
 		case IndexType::SPGI: index = new SolidarityPGI(); break;
 		case IndexType::T: index = new Tijs(); break;
+		case IndexType::TPGI1: index = new ThreatPGI1(); break;
+		// case IndexType::TPGI2: index = new ThreatPGI2(); break;
+		// case IndexType::TPGI3: index = new ThreatPGI3(); break;
 		case IndexType::UPGI: index = new UnionPGI(); break;
 		case IndexType::W: index = new SingleValueW(); break;
 		case IndexType::WM: index = new SingleValueWM(); break;
