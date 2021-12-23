@@ -5,13 +5,7 @@
 
 namespace epic::index {
 
-/**
- * Add here a description of the new power index for the Doxygen documentation generator.
- */
 class SolidarityPGI : public PowerIndexWithPrecoalitions {
-	/*
- * Implement the ItfPowerIndex interface:
- */
 public:
 	SolidarityPGI();
 
@@ -20,9 +14,6 @@ public:
 	longUInt getMemoryRequirement(Game* g) override;
 	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
 	lint::Operation getOperationRequirement() override;
-
-//private:
-//	bigInt mBigTmp;
 };
 
 } // namespace epic::index

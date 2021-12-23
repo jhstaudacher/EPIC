@@ -5,13 +5,7 @@
 
 namespace epic::index {
 
-/**
- * Add here a description of the new power index for the Doxygen documentation generator.
- */
 class BanzhafOwen : public PowerIndexWithPrecoalitions {
-	/*
- * Implement the ItfPowerIndex interface:
- */
 public:
 	BanzhafOwen();
 

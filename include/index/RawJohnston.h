@@ -29,11 +29,7 @@ namespace epic::index {
 class RawJohnston : public PowerIndexWithWinningCoalitions {
 public:
 	/**
-	 * Construct the RawJohnston object
-	 *
 	 * @param g The Game for which the RawJohnston index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
 	 */
 	RawJohnston(Game* g);
 
@@ -47,6 +43,7 @@ private:
 	/**
      * Sasha Kurz' algorithm (paper by Sasha Kurz, pages 3 and 4) adapted for cardinalities
      *
+     * @param g The Game object for the current calculation
      * @param ret_ptr The matrix to return the calculated values. It must be allocated to have enough space for at least quota x weights.size() entries. All entries must be zero-initialized!
      * @param weights A list of all weights to consider. The first g.getNumberOfNonZeroPlayers() weights are getting considered at most. If you remove weights (compared to the mGame.getWeights() vector) make sure to remove the weights zero as well. In that case weights.size() weights are getting considered.
      * @param player_limit The upper cardinality limit
@@ -57,6 +54,7 @@ private:
 	/**
 	 * Work out Subset Sum problem by starting with the smallest weight along the lines of CMS book (see book by CMS, p. 230, below)
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param h The matrix to return the result. This Array2d must be allocated to have enough space for at least player-count x quota entries. All entries must be zero-initialized!
 	 */
 	void subsetSumFromSmallestPerWeight(Game* g, Array2d<longUInt>& h);
@@ -64,6 +62,7 @@ private:
 	/**
 	 * Finding largest weight w with the property w <= weight
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param weight The upper limit of the weight to find
 	 * @return The index of the player having weight w
 	 *

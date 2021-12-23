@@ -26,12 +26,6 @@ namespace epic::index {
 class DeeganPackel : public RawDeeganPackel {
 public:
 	/*
-	 * Construct the DeeganPackel object
-	 *
-	 * @param g The Game for which the DeeganPackel index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 * @param low_memory A Flag to use a less memory consuming (but slower!) integer representation
-	 *
 	 * 	first iteration: formula f was compute for player n-1 already; other iteration: 'decrement' f for player n-2 ...
 	 *  first iteration: formula b for player n-1 will be initialize; other iteration: 'increment' b for player n-2
 	 *  each iteration: f(i-1,k,x) <=> f(k,x); b(i,k,x) <=> b(k,y) -> compute unscaled-DP[i] = f(i-1,k,x)*b(i,k,q-x) <=> f(k,x)* b(k,y)
@@ -43,9 +37,10 @@ public:
 	std::string getFullName() override;
 
 protected:
-	/*
+	/**
 	 * A function to compute the total number of minimal winning coalitions
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param total_mwc The total number of minimal winning coalitions
 	 */
 	void numberOfMinimalWinningCoalitions(Game* g, bigInt* total_mwc);

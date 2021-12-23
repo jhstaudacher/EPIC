@@ -30,7 +30,7 @@ public:
 	 * This index is basically Public Good, but not calculated with minimal winning coalitions alone, but with all null player free winning coalitions
 	 * This index makes only sense, if null players are filtered out. See Alvarez-Mozos, M., Ferreira, F., Alonso-Meijide, J.M. and Pinto, A.A. (2015) Characterizations of power indices based on null player free winning coalitions for more information, especially the index g definition 4.2
 	 *
-	 * @param g The Game for which the AbsolutePowerIndexG index should be calculated.
+	 * @param g The Game for which the AbsolutePowerIndexG index should later be calculated.
 	 */
 	AbsolutePowerIndexG(Game* g);
 

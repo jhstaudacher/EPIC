@@ -20,6 +20,10 @@ namespace epic::index {
  */
 class SingleValueWS : public RawFelsenthal {
 public:
+	/**
+	 *
+	 * @param g The Game-object for which the SingleValueWS should later be calculated
+	 */
 	SingleValueWS(Game* g);
 
 	std::vector<bigFloat> calculate(Game* g) override;

@@ -30,11 +30,6 @@ namespace epic::index {
  */
 class Tijs : public ItfPowerIndex {
 public:
-	/**
-	 * Construct the Tijs object
-	 *
-	 * @param g The Game for which the Tijs index should be calculated.
-	 */
 	explicit Tijs();
 
 	std::vector<bigFloat> calculate(Game* g) override;

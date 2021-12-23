@@ -34,11 +34,7 @@ namespace epic::index {
 class Nevison : public RawBanzhaf {
 public:
 	/**
-	 * Construct the Nevison object
-	 *
-	 * @param g The Game for which the Nevison index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
+	 * @param g The Game for which the Nevison index should later be calculated.
 	 */
 	Nevison(Game* g);
 

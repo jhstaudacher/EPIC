@@ -31,6 +31,6 @@ epic::lint::ItfLargeNumberCalculator* epic::lint::ItfLargeNumberCalculator::new_
 	return ret;
 }
 
-void epic::lint::ItfLargeNumberCalculator::delete_calculator(ItfLargeNumberCalculator* remainder) {
-	delete remainder;
+void epic::lint::ItfLargeNumberCalculator::delete_calculator(ItfLargeNumberCalculator* calculator) {
+	delete calculator;
 }

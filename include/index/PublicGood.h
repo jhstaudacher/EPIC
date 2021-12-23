@@ -31,6 +31,12 @@ public:
 	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
 
+	/**
+	 * Another interface to the calculate()-function allowing passing in the solution vector to avoid unnecessary allocations.
+	 *
+	 * @param g A Game-object for which the power index should be calculated
+	 * @param solution Return vector the solution will be stored in (will be resized to g->getNumberOfPlayers() elements)
+	 */
 	void calculate(Game* g, std::vector<bigFloat>& solution);
 };
 

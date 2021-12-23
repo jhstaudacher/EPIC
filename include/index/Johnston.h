@@ -25,11 +25,7 @@ namespace epic::index {
 class Johnston : public RawJohnston {
 public:
 	/**
-	 * Construct the Johnston object
-	 *
-	 * @param g The Game for which the Johnston index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
+	 * @param g The Game for which the Johnston index should later be calculated.
 	 */
 	Johnston(Game* g);
 

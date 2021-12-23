@@ -15,6 +15,7 @@ protected:
 	/**
 	 * Calculating the number of coalitions containing player <i>i</i>
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param cw return array containing the calculated results
 	 * @param cc number of coalitions per weight (like calculated by generalizedBackwardCountingPerWeight()-method)
 	 * @param wi the weight of player <i>i</i>
@@ -26,6 +27,7 @@ protected:
 	 *
 	 * c[x]: number of coalitions of weight <i>x</i>
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param c return array containing the calculated results
 	 * @param weights array of player weights - must be allocated and filled in the range [0, n-1]
 	 * @param n player amount
@@ -35,6 +37,7 @@ protected:
 	/**
 	 * Calculates the number of coalitions and cardinalities containing player <i>i</i>.
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param cw return matrix containing the calculated results
 	 * @param cc number of coalitions per weight and cardinality (like calculated by generalizedBackwardCountingPerWeightAndCardinality()-method)
 	 * @param n player amount
@@ -50,6 +53,7 @@ protected:
 	 *
 	 * cc(x, y): number of coalitions of weight <i>x</i> and cardinality <i>y</i>
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param cc return matrix containing the calculated results
 	 * @param weights array of player weights - must be allocated and filled in the range [0; n-1]
 	 * @param n player amount

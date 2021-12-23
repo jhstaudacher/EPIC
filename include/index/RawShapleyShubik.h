@@ -28,13 +28,6 @@ namespace epic::index {
  */
 class RawShapleyShubik : public SwingsPerPlayerAndCardinality {
 public:
-	/**
-	 * Construct the RawShapleyShubik object
-	 *
-	 * @param g The Game for which the RawShapleyShubik index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
-	 */
 	RawShapleyShubik();
 
 	std::vector<bigFloat> calculate(Game* g) override;

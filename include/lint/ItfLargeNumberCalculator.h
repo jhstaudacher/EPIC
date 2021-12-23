@@ -14,7 +14,17 @@ enum Operation {
 	multiplication
 };
 
+/**
+ * A struct holding the parameters to decide what calculator to use
+ */
 struct CalculatorConfig {
+	/**
+	 * Constructor simply initializes the internal variables wth the passed values
+	 *
+	 * @param max_value The maximum value that should be representable using the LargeNumber (via the calculator object)
+	 * @param op The most complex operation that needs to get applied by the calculator object
+	 * @param rep Defining the int representation and therefore, which calculator needed (if not equal DEFAULT)
+	 */
 	CalculatorConfig(bigInt max_value, Operation op, IntRepresentation rep) {
 		maxValue = max_value;
 		this->op = op;
@@ -268,22 +278,22 @@ public:
 	/**
 	 * A Factory-Method allocating an object of type ItfLargeNumberCalculator
 	 *
-	 * Depending on the parameters the correct ChineseRemainder object gets allocated.
+	 * Depending on the required configuration the correct object gets created.
 	 *
-	 * @param max_value The largest values that needs to get represented using the Chinese Remainder Theorem.
-	 * @param op The most complex mathematical operation that needs to be applied to the values.
-	 * @param int_representation Explicitly set the kind of integer representation. If set to DEFAULT the best version depending on max_value gets chosen.
+	 * @param config The configuration specifying the requirements on the ItfLargeNumberCalculator object
 	 *
-	 * @return A new allocated object of type ItfLargeNumberCalculator able to represent at least max_value and calculate the op operations. This object should be deleted using delete_calculator() function.
+	 * @return A new allocated object of type ItfLargeNumberCalculator is able to represent at least config.maxValue and calculate the config.op operations.
+	 *
+	 * @note The returned object should be deleted using delete_calculator() function.
 	 */
 	static ItfLargeNumberCalculator* new_calculator(const CalculatorConfig& config);
 
 	/**
 	 * A Factory-Method deleting an object of type ItfLargeNumberCalculator
 	 *
-	 * @param remainder The object to delete. This should have previously been allocated using the new_calculator() function.
+	 * @param calculator The object to delete. This should have previously been allocated using the new_calculator() function.
 	 */
-	static void delete_calculator(ItfLargeNumberCalculator* remainder);
+	static void delete_calculator(ItfLargeNumberCalculator* calculator);
 };
 
 } /* namespace epic::lint */

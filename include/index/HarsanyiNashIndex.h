@@ -34,12 +34,6 @@ namespace epic::index {
  */
 class HarsanyiNashIndex : public ItfPowerIndex {
 public:
-	/**
-	 * Construct the HarsanyiNash object
-	 *
-	 * @param g The Game for which the HarsanyiNash index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 */
 	HarsanyiNashIndex();
 
 	std::vector<bigFloat> calculate(Game* g) override;

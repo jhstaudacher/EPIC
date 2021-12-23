@@ -5,13 +5,7 @@
 
 namespace epic::index {
 
-/**
- * Add here a description of the new power index for the Doxygen documentation generator.
- */
 class SymmetricCoalitionalBanzhaf : public PowerIndexWithPrecoalitions {
-	/*
- * Implement the ItfPowerIndex interface:
- */
 public:
 	SymmetricCoalitionalBanzhaf();
 
@@ -22,15 +16,9 @@ public:
 	lint::Operation getOperationRequirement() override;
 
 private:
-	/**
-	 * temporary variable - avoids temporary allocations inside the loops.
-	 */
-	lint::LargeNumber mTmp;
+	lint::LargeNumber mTmp; // temporary variable - avoids temporary allocations inside the loops.
 
-	/**
-	 * temporary variable - avoids temporary allocations inside the loops.
-	 */
-	bigInt mBigTmp;
+	bigInt mBigTmp; // temporary variable - avoids temporary allocations inside the loops.
 
 	void updateInternalShapleyShubik(PrecoalitionGame* g, bigInt* internal_ssi, Array2dOffset<lint::LargeNumber>& cwi, longUInt precoalition, longUInt player, std::vector<longUInt>& weights, bigInt* factorial);
 };

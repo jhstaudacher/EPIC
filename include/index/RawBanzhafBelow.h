@@ -40,6 +40,7 @@ protected:
 	/**
 	 * Calculating how often each player is a swing player.
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param n_sp A return array. n_sp[x] will be the number how often player x is a swing player. The array must be allocated and zero-initialized at least in the range [0, g.getNumberOfNonZeroPlayers() - 1]!
 	 */
 	void numberOfTimesPlayerIsSwingPlayer(Game* g, lint::LargeNumber n_sp[]);
@@ -50,6 +51,7 @@ protected:
 	 * This function is the same as numberOfTimesPlayerIsSwingPlayer(lint::LargeNumber n_sp[]) but here you can pass the n_lc array. This is useful if the n_lc values are needed outside this function as well and is therefore already calculated.
 	 * The n_lc array must be filled in the range [0, quota - 1].
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param n_lc The array containing the number of losing coalitions. n_lc[x]: number of losing coalitions of weight x. The array must be filled in the range [0, quota - 1]!
 	 * @param n_sp A return array. n_sp[x] will be the number how often player x is a swing player. The array must be allocated and zero-initialized at least in the range [0, g.getNumberOfNonZeroPlayers() - 1]!
 	 */
@@ -60,6 +62,7 @@ protected:
 	 *
 	 * This function calculates the sum over the n_sp array writing the result to total_sp.
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param n_sp An Array containing the number of swing players. n_sp[x]: number of times player x is a swing player. This array must be filled in the range [0, g.getNumberOfNonZeroPlayers() - 1].
 	 * @param total_sp A return variable containing the calculated sum
 	 */
@@ -69,6 +72,7 @@ private:
 	/**
 	 * Calculating the number of losing coalitions per coalition-weight.
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param n_lc An array to store the calculation results. This array must be allocated and zero-initialized at least in the range [0, quota - 1]!
 	 */
 	void numberOfLosingCoalitionsPerWeight(Game* g, lint::LargeNumber n_lc[]);

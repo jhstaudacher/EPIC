@@ -33,6 +33,9 @@ namespace epic::index {
  */
 class RawPublicHelpTheta : public PowerIndexWithWinningCoalitions {
 public:
+	/**
+	 * @param g The Game-object for which the RawPublicHelpTheta index should later be calculated
+	 */
 	RawPublicHelpTheta(Game* g);
 
 	std::vector<bigFloat> calculate(Game* g) override;
@@ -44,10 +47,12 @@ public:
 protected:
 	/**
 	 * Calculating the number of winning coalitions each player is a member of.
+	 *
 	 * The other major difference is: instead of looping over all coalitions the player would turn into losing ones, we step over all winning coalitions the player is a member of (up to weightsum).
 	 *
 	 * The used algorithm is nearly the same as in the PowerIndexWithWinningCoalitionsAndSwingPlayers::numberOfTimesPlayerIsSwingPlayer() function. One difference is, that players of weight zero getting calculated separately since each player of them is a member of half of all possible winning coalitions.
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param wci A return array. wci[x] will be the number of winning coalitions player x is a member of when the function returns. The array must have enough memory for at least numberOfPlayers entries.
 	 * @param total_wc A optional return parameter. If it is not a nullptr it will contain the total number of winning coalitions when the function returns.
 	 */

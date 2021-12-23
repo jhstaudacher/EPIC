@@ -17,6 +17,7 @@ protected:
 	/**
 	 * Calculating the number of winning coalitions per weight and cardinality.
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param n_wc A matrix where the calculated values will be stored. n_wc(x, y): number of winning coalitions of weight x and cardinality y.
 	 *
 	 * @note The n_wc matrix must be allocated and zero initialized at least in the range: [quota, weightsum] x [0, numberOfPlayers + 1]
@@ -26,6 +27,7 @@ protected:
 	/**
 	 * Calculating the number of winning coalitions per player and cardinality.
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param raw_ssi The matrix where the calculated values will be stored. raw_ssi(x, y): number of winning coalitions of cardinality y, player x is a member of.
 	 * @param only_swingplayer Defines if only swing players are taken into account. If false, all winning coalitions are considered (if the is pivotal or not).
 	 *
@@ -39,6 +41,7 @@ protected:
 	 *
 	 * This method offers the possibility to pass the calculated n_wc matrix (as it gets computed by the numberOfWinningCoalitionsPerWeightAndCardinality() method). This is useful if the n_wc values are needed outside of this method, so it must not get computed again.
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param n_wc The already computed matrix containing the number of winning coalitions per weight and cardinality (as it is done by the numberOfWinningCoalitionsPerWeightAndCardinality() method).
 	 * @param raw_ssi The matrix where the calculated values will be stored. raw_ssi(x, y): number of winning coalitions of cardinality y, player x is a member of.
 	 * @param only_swingplayer Defines if only swing players are taken into account. If false, all winning coalitions are considered (if the is pivotal or not).

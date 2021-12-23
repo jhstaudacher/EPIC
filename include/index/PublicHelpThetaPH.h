@@ -28,11 +28,7 @@ namespace epic::index {
 class PublicHelpThetaPH : public RawPublicHelpTheta {
 public:
 	/**
-	 * Construct the PublicHelpTheta object
-	 *
 	 * @param g The Game for which the PublicHelpTheta index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
 	 */
 	PublicHelpThetaPH(Game* g);
 

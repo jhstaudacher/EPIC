@@ -29,13 +29,6 @@ namespace epic::index {
  */
 class RawShapleyShubikBelow : public ItfPowerIndex {
 public:
-	/**
-	 * Construct the RawShapleyShubikBelow object
-	 *
-	 * @param g The Game for which the RawShapleyShubik index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
-	 */
 	RawShapleyShubikBelow();
 
 	std::vector<bigFloat> calculate(Game* g) override;
@@ -48,6 +41,7 @@ private:
 	/**
 	 * Calculating the number of losing coalitions per weight and cardinality.
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param n_lc A matrix where the calculated values will be stored. n_lc(x, y): number of losing coalitions of weight x and cardinality y.
 	 *
 	 * @note The n_lc matrix must be allocated and zero initialized at least in the range: [0, quota] x [0, numberOfPlayers + 1]
@@ -57,6 +51,7 @@ private:
 	/**
 	 * Calculating how often each player is a swing player in coalitions of certain cardinalities.
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param raw_ssi A matrix where the calculated values will be stored. raw_ssi(x, y): amount of coalitions of cardinality y for which player x is a swing player.
 	 *
 	 * @note The raw_ssi matrix must be allocated and zero initialized in at least the range [0, numberOfPlayers] x [0, numberOfPlayers + 1].

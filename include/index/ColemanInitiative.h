@@ -27,13 +27,6 @@ namespace epic::index {
  */
 class ColemanInitiative : public RawBanzhaf {
 public:
-	/**
-	 * Construct the ColemanInitiative object
-	 *
-	 * @param g The Game for which the ColemanInitiative index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
-	 */
 	ColemanInitiative();
 
 	std::vector<bigFloat> calculate(Game* g) override;

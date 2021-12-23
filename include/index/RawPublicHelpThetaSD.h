@@ -27,6 +27,9 @@ namespace epic::index {
  */
 class RawPublicHelpThetaSD : public RawBanzhaf {
 public:
+	/**
+	 * @param g The Game-object for which the RawPublicHelpThetaSD index should later be calculated
+	 */
 	RawPublicHelpThetaSD(Game* g);
 
 	std::vector<bigFloat> calculate(Game* g) override;
@@ -35,7 +38,8 @@ public:
 protected:
 	/**
 	 * Calculating the number of winning coalitions each player is a member of using the Shapley-Dubey Identity.
-	 * 	 
+	 *
+	 * @param g The Game object for the current calculation
 	 * @param wci A return array. wci[x] will be the number of winning coalitions player x is a member of when the function returns. The array must have enough memory for at least numberOfPlayers entries.
 	 */
 	void winningCoalitionsForPlayer(Game* g, bigInt wci[]);

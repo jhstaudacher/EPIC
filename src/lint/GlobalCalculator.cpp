@@ -10,7 +10,6 @@ void epic::lint::GlobalCalculator::init(const CalculatorConfig& config) {
 	}
 
 	gCalculator = ItfLargeNumberCalculator::new_calculator(config);
-	//mConfig = config;
 }
 
 void epic::lint::GlobalCalculator::remove() {
@@ -21,7 +20,3 @@ void epic::lint::GlobalCalculator::remove() {
 	ItfLargeNumberCalculator::delete_calculator(gCalculator);
 	gCalculator = nullptr;
 }
-
-//epic::lint::CalculatorConfig epic::lint::GlobalCalculator::getConfig() {
-//	return mConfig;
-//}
