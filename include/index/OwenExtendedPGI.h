@@ -22,6 +22,7 @@ public:
 	lint::Operation getOperationRequirement() override;
 
 //private:
+    void forward_counting_per_weight_next_step(Game* g, lint::LargeNumber* ret_ptr, std::vector<epic::longUInt> weights, longUInt player_limit, bool first_step);
 //	bigInt mBigTmp;
 };
 

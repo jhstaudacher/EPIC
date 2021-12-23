@@ -25,7 +25,7 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 	auto precoalitionGame = new Game(quota, preCoalitionWeights, false);
 	
 	std::vector<bigFloat> externalSolution(g->getNumberOfPrecoalitions());
-	auto rawExternalSolution = new LargeNumber[g->getNumberOfPrecoalitions()];
+	auto rawExternalSolution = new lint::LargeNumber[g->getNumberOfPrecoalitions()];
 	gCalculator->allocInit_largeNumberArray(rawExternalSolution,g->getNumberOfPrecoalitions()); 
 	
 	bigFloat denominator = 0;
@@ -124,11 +124,11 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 	
     //players in precoalitionGame are already in descending order	
 	if (precoalitionGame->getWeights()[0] >= quota){
-		longUInt nbPlayersInParti = g->getPrecoalitions()[i].size();
+		longUInt kk = precoalitionGame->getPermutation().inverseIndex(0);
+		longUInt nbPlayersInParti = g->getPrecoalitions()[kk].size();
 		std::vector<longUInt> weightsVector(nbPlayersInParti);
 		std::vector<bigFloat> intSolution(nbPlayersInParti);
 		std::vector<bigFloat> sortedSolution(nbPlayersInParti);
-		longUInt kk = precoalitionGame->getPermutation().inverseIndex(0);
 		for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
 			weightsVector[ii] =  g->getWeights()[g->getPrecoalitions()[kk][ii]];
 	    }
@@ -164,7 +164,7 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 	return solution;
 }
 
-void epic::index::OwenExtendedPGI::forward_counting_per_weight_next_step(Game* g, LargeNumber* ret_ptr, std::vector<epic::longUInt> weights, longUInt player_limit, bool first_step) {
+void epic::index::OwenExtendedPGI::forward_counting_per_weight_next_step(Game* g, lint::LargeNumber* ret_ptr, std::vector<epic::longUInt> weights, longUInt player_limit, bool first_step) {
 	/*
 	 * INITIALIZATION
 	 */
@@ -208,7 +208,6 @@ void epic::index::OwenExtendedPGI::forward_counting_per_weight_next_step(Game* g
 		} else {
 			gCalculator->plusEqual(ret_ptr[x - 2], ret_ptr[x - w_limit - 2]);
 			}
-		}
 	}
 
 	delete[] upper;
