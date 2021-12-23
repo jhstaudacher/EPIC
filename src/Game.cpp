@@ -5,45 +5,43 @@
 #include <algorithm>
 #include <stdexcept>
 
-epic::Game::Game(longUInt quota, std::vector<longUInt>& untreated_weights, bool flag_withoutNullPlayers) {
-	this->quota = quota;
-	this->solution = {};
-	this->flag_null_player_handling = flag_withoutNullPlayers;
+epic::Game::Game(longUInt quota, std::vector<longUInt>& weights, bool flag_withoutNullPlayers) {
+	mQuota = quota;
+	mSolution = {};
+	mFlagNullPlayerHandling = flag_withoutNullPlayers;
 
 	//sort players by weight
-	weights = untreated_weights;
+	mWeights = weights;
 	mPermutation = Permutation(sortWeights());
 
-	//handleDummyPlayers(flag_withoutNullPlayers);	//handle dummy-/null-player
-	numberOfNullPlayers = findNullPlayersFromBelow(flag_withoutNullPlayers);
+	mNumberOfNullPlayers = findNullPlayersFromBelow(flag_withoutNullPlayers);
 
-	weightSum = 0;
-	for (auto it : weights) {
-		weightSum += it;
+	mWeightSum = 0;
+	for (auto it : mWeights) {
+		mWeightSum += it;
 	}
-	numberOfPlayers = weights.size();
 
-	numberOfPlayersOfWeight0 = weights.end() - std::find(weights.begin(), weights.end(), 0);
-	numberOfNonZeroPlayers = numberOfPlayers - numberOfPlayersOfWeight0;
+	longUInt nWeightZero = mWeights.end() - std::find(mWeights.begin(), mWeights.end(), 0);
+	mNumberOfNonZeroPlayers = mWeights.size() - nWeightZero;
 
 	// Check if weight_sum is smaller than the quota, otherwise throw error
-	if (this->weightSum < this->quota) {
+	if (mWeightSum < mQuota) {
 		throw std::invalid_argument("The sum of all weights smaller than quota. Please, check your input.");
 	}
 	// Check if quota is greater or equal than half the weight sum, otherwise present a warning
-	if (this->quota < (this->weightSum + 1) / 2) {
+	if (mQuota < (mWeightSum + 1) / 2) {
 		log::out << log::warning << "The quota is less than half of the weight sum." << log::endl;
 	}
 
 	// Find out if there are veto players and if there are which
-	numberOfVetoPlayers = 0;
-	playerIsVetoPlayer.resize(numberOfPlayers);
-	for (longUInt i = 0; i < numberOfPlayers; ++i) {
-		if (weights[i] >= quota) {
-			playerIsVetoPlayer[i] = true;
-			++numberOfVetoPlayers;
+	mNumberOfVetoPlayers = 0;
+	mPlayerIsVetoPlayer.resize(mWeights.size());
+	for (longUInt i = 0; i < mWeights.size(); ++i) {
+		if (mWeights[i] >= quota) {
+			mPlayerIsVetoPlayer[i] = true;
+			++mNumberOfVetoPlayers;
 		} else {
-			playerIsVetoPlayer[i] = false;
+			mPlayerIsVetoPlayer[i] = false;
 		}
 	}
 }
@@ -53,75 +51,73 @@ const epic::Permutation& epic::Game::getPermutation() const {
 }
 
 const std::vector<epic::longUInt>& epic::Game::getWeights() const {
-	return weights;
+	return mWeights;
 }
 
 epic::longUInt epic::Game::getQuota() const {
-	return quota;
+	return mQuota;
 }
 
 bool epic::Game::getFlagNullPlayerHandling() const {
-	return flag_null_player_handling;
+	return mFlagNullPlayerHandling;
 }
 
 epic::longUInt epic::Game::getWeightSum() const {
-	return weightSum;
+	return mWeightSum;
 }
 
 epic::longUInt epic::Game::getNumberOfPlayers() const {
-	return numberOfPlayers;
+	return mWeights.size();
 }
 
 const std::vector<bool>& epic::Game::getVetoPlayerVector() const {
-	return playerIsVetoPlayer;
+	return mPlayerIsVetoPlayer;
 }
 
 epic::longUInt epic::Game::getNumberOfVetoPlayers() const {
-	return numberOfVetoPlayers;
+	return mNumberOfVetoPlayers;
 }
 
 std::vector<epic::bigFloat> epic::Game::getSolution() const {
-	return solution;
+	return mSolution;
 }
 
 void epic::Game::setSolution(const std::vector<bigFloat>& pre_solution) {
-	solution.resize(weights.size() + excludedNullPlayer.size());
-	mPermutation.reverse(pre_solution, solution, bigFloat(0));
+	mSolution.resize(mWeights.size() + mExcludedNullPlayer.size());
+	mPermutation.reverse(pre_solution, mSolution, bigFloat(0));
 }
 
 void epic::Game::setSingleValueSolution(const bigFloat& value) {
-	solution.resize(1);
-	solution[0] = value;
+	mSolution.resize(1);
+	mSolution[0] = value;
 }
 
 epic::longUInt epic::Game::getNumberOfNullPlayers() const {
-	return numberOfNullPlayers;
+	return mNumberOfNullPlayers;
 }
 
 epic::longUInt epic::Game::getNumberOfNonZeroPlayers() const {
-	return numberOfNonZeroPlayers;
+	return mNumberOfNonZeroPlayers;
 }
 
 epic::longUInt epic::Game::getNumberOfPlayersWithWeight0() const {
-	return numberOfPlayersOfWeight0;
+	return mWeights.size() - mNumberOfNonZeroPlayers;
 }
 
 epic::longUInt epic::Game::playerIndexToNumber(longUInt index) const {
 	return mPermutation.inverseIndex(index) + 1;
 }
 
-//---------- private methods -------------
-
 std::vector<epic::longUInt> epic::Game::sortWeights() {
-	std::vector<std::pair<longUInt, longUInt>> weight_index_pair(weights.size());
-	for (longUInt i = 0; i < weights.size(); ++i) {
-		weight_index_pair[i] = std::make_pair(weights[i], i);
+	std::vector<std::pair<longUInt, longUInt>> weight_index_pair(mWeights.size());
+	for (longUInt i = 0; i < mWeights.size(); ++i) {
+		weight_index_pair[i] = std::make_pair(mWeights[i], i);
 	}
 	std::sort(weight_index_pair.begin(), weight_index_pair.end(), std::greater<>());
 
-	std::vector<longUInt> p(weights.size());
-	for (longUInt i = 0; i < weights.size(); ++i) {
-		weights[i] = weight_index_pair[i].first;
+	std::vector<longUInt> p(mWeights.size());
+	for (longUInt i = 0; i < mWeights.size(); ++i) {
+		mWeights[i] = weight_index_pair[i].first;
 		p[i] = weight_index_pair[i].second;
 	}
 
@@ -129,7 +125,7 @@ std::vector<epic::longUInt> epic::Game::sortWeights() {
 }
 
 epic::longUInt epic::Game::findNullPlayersFromBelow(bool flag_withoutNullPlayers) {
-	int n = weights.size();
+	int n = mWeights.size();
 
 	// Helper variable for adding up the weights
 	longUInt cs_tmp = 0;
@@ -138,56 +134,56 @@ epic::longUInt epic::Game::findNullPlayersFromBelow(bool flag_withoutNullPlayers
 	int minsize = 0;
 	// Find the minimal winning coalitions of least size
 	for (int i = 0; i < n; i++) {
-		cs_tmp += weights[i];
+		cs_tmp += mWeights[i];
 		cs[i] = cs_tmp;
 	}
 	// The first minsize players are definitely not null players.
-	for (int i = 0; cs[i] < quota; i++) {
+	for (int i = 0; cs[i] < mQuota; i++) {
 		minsize = i + 1;
 	}
 	delete[] cs;
 
 	bool nullPlayerIndexFound = false;
-	longUInt nullPlayerIndex = weights.size() + 1;
+	longUInt nullPlayerIndex = mWeights.size() + 1;
 	auto upper = new longUInt[n]();
 	longUInt w_sum = 0;
 
 	for (int j = 0; j < n; j++) {
-		w_sum += weights[j];
-		if (quota < w_sum) {
-			upper[j] = quota;
+		w_sum += mWeights[j];
+		if (mQuota < w_sum) {
+			upper[j] = mQuota;
 		} else {
 			upper[j] = w_sum;
 		}
 	}
 
-	auto cv = new longUInt[quota]();
+	auto cv = new longUInt[mQuota]();
 	longUInt alpha_iM1 = 0;
 
 	for (int i = 0; i < n && !nullPlayerIndexFound; i++) {
-		for (longUInt x = upper[i] + 1; x > weights[i]; x--) {
-			if (weights[i] != 0) {
-				if (x - 1 - weights[i] == 0) {
+		for (longUInt x = upper[i] + 1; x > mWeights[i]; x--) {
+			if (mWeights[i] != 0) {
+				if (x - 1 - mWeights[i] == 0) {
 					cv[x - 2] += 1;
 				} else {
-					cv[x - 2] += cv[(x - 2) - weights[i]];
+					cv[x - 2] += cv[(x - 2) - mWeights[i]];
 				}
 			}
 		}
 		if (i > minsize) {
-			if (alpha_iM1 + w_sum < quota) {
+			if (alpha_iM1 + w_sum < mQuota) {
 				nullPlayerIndexFound = true;
 				nullPlayerIndex = i;
 			}
 		}
 
-		for (longUInt j = quota - 2; j < quota; --j) {
+		for (longUInt j = mQuota - 2; j < mQuota; --j) {
 			if (cv[j] > 0) {
 				alpha_iM1 = j + 1;
 				break;
 			}
 		}
-		w_sum -= weights[i];
+		w_sum -= mWeights[i];
 	}
 
 	delete[] upper;
@@ -196,14 +192,14 @@ epic::longUInt epic::Game::findNullPlayersFromBelow(bool flag_withoutNullPlayers
 	if (!nullPlayerIndexFound) {
 		return 0;
 	} else {
-		longUInt n_null_players = weights.size() - nullPlayerIndex;
+		longUInt n_null_players = mWeights.size() - nullPlayerIndex;
 
 		if (flag_withoutNullPlayers) {
-			excludedNullPlayer.reserve(n_null_players);
-			while (nullPlayerIndex < weights.size()) {
-				longUInt weight = weights[nullPlayerIndex];
-				weights.erase(weights.begin() + nullPlayerIndex);
-				excludedNullPlayer.push_back(weight);
+			mExcludedNullPlayer.reserve(n_null_players);
+			while (nullPlayerIndex < mWeights.size()) {
+				longUInt weight = mWeights[nullPlayerIndex];
+				mWeights.erase(mWeights.begin() + nullPlayerIndex);
+				mExcludedNullPlayer.push_back(weight);
 			}
 		}
 
@@ -217,9 +213,12 @@ epic::longUInt epic::Game::findNullPlayersFromBelow(bool flag_withoutNullPlayers
 
 
 
-
 /*
- * PrecoalitionGame
+ *
+ * ##########################
+ * #	PrecoalitionGame	#
+ * ##########################
+ *
  */
 
 epic::PrecoalitionGame::PrecoalitionGame(longUInt quota, std::vector<longUInt>& untreated_weights, bool flag_withoutNullPlayers, std::vector<std::vector<int>>& precoalitions) : Game(quota, untreated_weights, flag_withoutNullPlayers) {
@@ -227,15 +226,14 @@ epic::PrecoalitionGame::PrecoalitionGame(longUInt quota, std::vector<longUInt>& 
 
 	sortPrecoalitions();
 
-	mNumberOfPrecoalitions = precoalitions.size();
-	precoalitionWeights.resize(mNumberOfPrecoalitions);
+	mPrecoalitionWeights.resize(mPrecoalitions.size());
 	mMaxPrecoalitionSize = 0;
-	for (longUInt i = 0; i < mNumberOfPrecoalitions; ++i) {
-		longUInt precSize = precoalitions[i].size();
-		precoalitionWeights[i] = 0;
+	for (longUInt i = 0; i < mPrecoalitions.size(); ++i) {
+		longUInt precSize = mPrecoalitions[i].size();
+		mPrecoalitionWeights[i] = 0;
 
 		for (longUInt p = 0; p < precSize; ++p) {
-			precoalitionWeights[i] += weights[mPrecoalitions[i][p]];
+			mPrecoalitionWeights[i] += mWeights[mPrecoalitions[i][p]];
 		}
 
 		if (precSize > mMaxPrecoalitionSize) {
@@ -257,11 +255,11 @@ std::vector<std::vector<int>> epic::PrecoalitionGame::getPrecoalitions() const {
 }
 
 std::vector<epic::longUInt> epic::PrecoalitionGame::getPrecoalitionWeights() const {
-	return precoalitionWeights;
+	return mPrecoalitionWeights;
 }
 
 epic::longUInt epic::PrecoalitionGame::getNumberOfPrecoalitions() const {
-	return mNumberOfPrecoalitions;
+	return mPrecoalitions.size();
 }
 
 epic::longUInt epic::PrecoalitionGame::getMaxPrecoalitionSize() const {
