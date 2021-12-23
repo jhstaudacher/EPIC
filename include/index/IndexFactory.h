@@ -97,6 +97,7 @@ private:
 		SH,			   /**< Shapley Shubik */
 		SHB,		   /**< Shapley Shubik from below */
 		T,			   /**< Tijs */
+		UPGI,		   /**< Union Public Good */
 		W,			   /**< The number of winning coalitions */
 		WM,			   /**< The number of minimal winning coalitions */
 		WS			   /**< The number of minimal winning coalitions of smalles cardinality */

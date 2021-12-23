@@ -47,6 +47,7 @@
 #include "index/SolidarityPGI.h"
 #include "index/SymmetricCoalitionalBanzhaf.h"
 #include "index/Tijs.h"
+#include "index/UnionPGI.h"
 
 const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std::string>> epic::index::IndexFactory::cIndexNames = {
 	{INVALID_INDEX, {"INVALID", "invalid index"}},
@@ -92,6 +93,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{SH, {"SH", "Shapley Shubik"}},
 	{SHB, {"SHB", "Shapley Shubik below"}},
 	{SPGI, {"SPGI", "Solidarity Public Good Index"}},
+	{UPGI, {"UPGI", "Union Public Good Index"}},
 	{T, {"T", "Tijs"}},
 	{W, {"W", "Number of winning coalitions"}},
 	{WM, {"WM", "Number of minimal winning coalitions"}},
@@ -149,6 +151,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::SHB: index = new ShapleyShubikBelow(); break;
 		case IndexType::SPGI: index = (ItfPowerIndex*) new SolidarityPGI(); break;
 		case IndexType::T: index = new Tijs(); break;
+		case IndexType::UPGI: index = (ItfPowerIndex*) new UnionPGI(); break;
 		case IndexType::W: index = new SingleValueW(); break;
 		case IndexType::WM: index = new SingleValueWM(); break;
 		case IndexType::WS: index = new SingleValueWS(g); break;

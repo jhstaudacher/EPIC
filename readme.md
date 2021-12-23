@@ -109,6 +109,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `SHB` | Shapley Shubik from below |
 | `SPGI` | Solidarity Public Good Index |
 | `T` | Tijs |
+| `SPGI` | Union Public Good Index |
 | `W` | Number of winning coalitions|
 | `WM` | Number of minimal winning coalitions |
 | `WS` | Number of minimal winning coalitions of smallest cardinality |
