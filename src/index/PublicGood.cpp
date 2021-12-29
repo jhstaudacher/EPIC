@@ -32,7 +32,7 @@ void epic::index::PublicGood::calculate(Game* g, std::vector<bigFloat>& solution
 		gCalculator->free_largeNumber(mwc_sum);
 	}
 
-	log::out << log::info << "Number of minimal winning coalitions individual players belong to: " << log::endl;
+	//log::out << log::info << "Number of minimal winning coalitions individual players belong to: " << log::endl;
 
 	solution.resize(g->getNumberOfPlayers());
 	bigInt big_mwc;
@@ -40,12 +40,12 @@ void epic::index::PublicGood::calculate(Game* g, std::vector<bigFloat>& solution
 	for (longUInt i = 0; i < g->getNumberOfNonZeroPlayers(); ++i) {
 		gCalculator->to_bigInt(&big_mwc, mwc[i]);
 		solution[i] = big_mwc;
-		log::out << "Player " << g->playerIndexToNumber(i) << ": " << big_mwc << log::endl;
+		//log::out << "Player " << g->playerIndexToNumber(i) << ": " << big_mwc << log::endl;
 		solution[i] /= big_mwc_sum;
 	}
 	for (longUInt i = g->getNumberOfNonZeroPlayers(); i < g->getNumberOfPlayers(); ++i) {
 		solution[i] = 0;
-		log::out << "Player " << g->playerIndexToNumber(i) << ": 0" << log::endl;
+		//log::out << "Player " << g->playerIndexToNumber(i) << ": 0" << log::endl;
 	}
 
 	gCalculator->free_largeNumberArray(mwc);

@@ -16,10 +16,10 @@ std::vector<epic::bigFloat> epic::index::SolidarityPGI::calculate(Game* g_) {
 	
 	std::vector<longUInt> preCoalitionWeights = g->getPrecoalitionWeights();
 	std::cout << "prec weights" << "\n";
-	for (auto it : preCoalitionWeights ){
+	/* for (auto it : preCoalitionWeights ){
 		std::cout << it << "\n";
 	}
-	std::cout <<"\n";
+	std::cout <<"\n";*/
 
 	// Create game object from weights of precoalitions with original quota
 	auto precoalitionGame = new Game(quota, preCoalitionWeights, false);
@@ -29,11 +29,11 @@ std::vector<epic::bigFloat> epic::index::SolidarityPGI::calculate(Game* g_) {
 	PublicGood* extPGI = new PublicGood();
 	
 	extPGI->calculate(precoalitionGame, externalSolution);
-	std::cout << "externalSolution:" << "\n";
+	/* std::cout << "externalSolution:" << "\n";
 	for (auto it : externalSolution) {
 			std::cout << it << "\n";
 	}
-	std::cout << "\n";
+	std::cout << "\n";*/
 	
 	for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); i++) {
 		longUInt nbPlayersInParti = g->getPrecoalitions()[i].size();
@@ -55,9 +55,9 @@ std::string epic::index::SolidarityPGI::getFullName() {
 epic::longUInt epic::index::SolidarityPGI::getMemoryRequirement(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
 
-	bigInt memory = (g->getWeightSum() + 1 - g->getQuota()) * gCalculator->getLargeNumberSize() * 4; // c, cw, cw2, cwi -- tba
-	memory += g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize();											   // banzhafInternal (tba)
-	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;															   // winternal
+	bigInt memory = (g->getWeightSum() + 1 - g->getQuota()) * gCalculator->getLargeNumberSize(); 
+	memory += g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize();											   
+	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;															 
 	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;

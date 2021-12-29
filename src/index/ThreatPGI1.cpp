@@ -16,11 +16,11 @@ std::vector<epic::bigFloat> epic::index::ThreatPGI1::calculate(Game* g_) {
 	longUInt quota = g->getQuota();
 	
 	std::vector<longUInt> preCoalitionWeights = g->getPrecoalitionWeights();
-	std::cout << "prec weights" << "\n";
+	/*std::cout << "prec weights" << "\n";
 	for (auto it : preCoalitionWeights ){
 		std::cout << it << "\n";
 	}
-	std::cout <<"\n";
+	std::cout <<"\n";*/
 
 	// Create game object from weights of precoalitions with original quota
 	auto precoalitionGame = new Game(quota, preCoalitionWeights, false);
@@ -43,26 +43,6 @@ std::vector<epic::bigFloat> epic::index::ThreatPGI1::calculate(Game* g_) {
 	// Reuse PublicGood-Object we already have ...
 	extPGI->calculate(g,intSolution);
 	
-	// Need internal solution (PGI over all players)
-	// Rest should be very easy
-	
-	/* R Code
-	extGame = weightedVotingGameVector(w=partitionWeights,n=nbPartitions,q=q)
-	pgiExt = publicGoodValue(extGame)
-	intGame = weightedVotingGameVector(w=unlist(weightList),n=nbPlayers,q=q)
-	pgiInt = publicGoodValue(intGame)
-	threatPGI1 = rep(0, nbPlayers)
-	k = 1
-	for (i in (1:nbPartitions)){
-	  nbPlayersInParti = length(weightList[[i]])
-	  denominator = sum(pgiInt[k:(k+nbPlayersInParti-1)])
-	  for (j in (1:nbPlayersInParti)){
-		if (denominator > 0){
-		  threatPGI1[k] = pgiExt[i] * pgiInt[k]/denominator
-		}
-		k = k+1
-	  }
-	}*/
 	
 	for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); i++) {
 		longUInt nbPlayersInParti = g->getPrecoalitions()[i].size();
@@ -93,9 +73,9 @@ std::string epic::index::ThreatPGI1::getFullName() {
 epic::longUInt epic::index::ThreatPGI1::getMemoryRequirement(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
 
-	bigInt memory = (g->getWeightSum() + 1 - g->getQuota()) * gCalculator->getLargeNumberSize() * 4; // c, cw, cw2, cwi -- tba
-	memory += g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize();											   // banzhafInternal (tba)
-	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;															   // winternal
+	bigInt memory = (g->getWeightSum() + 1 - g->getQuota()) * gCalculator->getLargeNumberSize(); 
+	memory += g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize();											   
+	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;									
 	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;
