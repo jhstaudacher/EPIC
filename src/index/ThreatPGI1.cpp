@@ -32,11 +32,11 @@ std::vector<epic::bigFloat> epic::index::ThreatPGI1::calculate(Game* g_) {
 	PublicGood* extPGI = new PublicGood();
 	
 	extPGI->calculate(precoalitionGame, externalSolution);
-	std::cout << "externalSolution:" << "\n";
+	/*std::cout << "externalSolution:" << "\n";
 	for (auto it : externalSolution) {
 			std::cout << it << "\n";
 	}
-	std::cout << "\n";
+	std::cout << "\n";*/
 	
 	// Create game object from weights of players without precoalitions and with original quota
 	//PublicGood* pgi = new PublicGood();
