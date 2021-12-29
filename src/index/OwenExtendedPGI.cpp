@@ -13,6 +13,7 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 
 	std::vector<bigFloat> solution(g->getNumberOfPlayers(),0.0);
 	longUInt quota = g->getQuota();
+	mpf_class big_float("0");
 	
 	std::vector<longUInt> preCoalitionWeights = g->getPrecoalitionWeights();
 	std::cout << "prec weights" << "\n";
@@ -43,84 +44,8 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 	RawPublicGood* rawExtPGI = new RawPublicGood();
 	rawExtPGI->calculate(precoalitionGame, rawExternalSolution);
 	
+	bigInt big_tmp;
 	
-	
-	/* R Code
-			w = partitionWeights
-			extGame = weightedVotingGameVector(w=partitionWeights,n=nbPartitions,q=q)
-			pgiExt = publicGoodValue(extGame)
-			absPGIExt = absolutePublicGoodValue(extGame)
-			owenPGI = rep(0, nbPlayers)
-			mwcs = rep(0,length(w))
-			k = 1
-			# Treat case of dictator coalition first, 
-			# assume precoalitions ordered by weight sum
-			if (partitionWeights[1]>=q){
-			  nbPlayersInParti = length(weightList[[1]])
-			  dictGame = weightedVotingGameVector(w=weightList[[1]],n=nbPlayersInParti,q=q)
-			  gpiDict = publicGoodValue(dictGame) 
-			  owenPGI[1:nbPlayersInParti] =gpiDict
-			  owenPGI[(nbPlayersInParti+1):nbPlayers] = rep(0, nbPlayers-nbPlayersInParti)
-			} else{
-			  for (i in (1:nbPartitions)){
-				nbPlayersInParti = length(weightList[[i]])
-				help = rep(0,nbPlayersInParti*w[i])
-				helpPGIs=matrix(help, nrow=w[i], ncol=nbPlayersInParti)
-				intPGIs = rep(0,nbPlayersInParti)
-				forwards = ForwardCountingPerWeight_AllSteps(length(partitionWeights),q,partitionWeights)
-				for (ii in (1:w[i])){
-				  if (nbPlayersInParti > 1){
-					helpGameVector = weightedVotingGameVector(n=nbPlayersInParti, q=ii, w=weightList[[i]])
-					helpPGIs[ii,1:nbPlayersInParti] = publicGoodValue(helpGameVector)
-				  } else {
-					helpPGIs[ii,1] = 1
-				  }
-				}
-				if (i>1){
-				  interm = forwards[(i-1),]
-				  mwcs[i] = mwcs[i] + sum(interm[(q-w[i]):(q-1)])
-				  for (jj in (1:nbPlayersInParti)){
-					for (ii in ((q-w[i]):(q-1))){
-					  intPGIs[jj] = intPGIs[jj] + interm[ii] * helpPGIs[q-ii,jj]
-					}
-				  }
-				}
-				if (i<length(w)){
-				  wi=w[-i]
-				  intermForwards = ForwardCountingPerWeight_AllSteps(length(wi),q,wi)
-				  for (j in ((i+1):length(w))){
-					interm = rep(0,q)
-					if (j>2){
-					  interm = intermForwards[(j-2),]
-					}
-					if ((q-w[i]-w[j]) <= 0){
-					  mwcs[i] = mwcs[i] +1
-					  for (jj in (1:nbPlayersInParti)){
-						#for (ii in (1:(q-w[i]-1))){
-						  intPGIs[jj] = intPGIs[jj]  + helpPGIs[q-w[j],jj]
-						#}
-					  }
-					}
-					else{
-					  lower=max(q-w[i]-w[j],1)
-					  #mwcs[i] = mwcs[i] + sum(interm[lower:(q-w[i]-1)])
-					  for (jj in (1:nbPlayersInParti)){
-						for (ii in (lower:(q-w[i]-1))){
-						  intPGIs[jj] = intPGIs[jj] + interm[ii] * helpPGIs[q-w[j]-ii,jj]
-						}
-					  }
-					}  
-				  }
-				}
-				for (jj in (1:nbPlayersInParti)){
-				  intPGIs[jj] = intPGIs[jj]/absPGIExt[i]
-				  intPGIs[jj] = pgiExt[i] * intPGIs[jj]
-				}
-				owenPGI[k:(k+nbPlayersInParti-1)] = intPGIs[1:nbPlayersInParti]
-				k = k + nbPlayersInParti
-			  }
-			}	
-	*/
 	
     //players in precoalitionGame are already in descending order	
 	if (precoalitionGame->getWeights()[0] >= quota){
@@ -140,19 +65,156 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 			solution[g->getPrecoalitions()[kk][ii]] =  sortedSolution[ii];
 	    }
 		delete intGame;
-	} 
+	}
+    // Else: There is no dictator precoalition	
 	else {
-		for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); i++) {
-			longUInt nbPlayersInParti = g->getPrecoalitions()[i].size();
-			denominator += nbPlayersInParti * externalSolution[i];
-		}
-		
-		for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); i++) {
-			longUInt nbPlayersInParti = g->getPrecoalitions()[i].size();
-			for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
-				solution[g->getPrecoalitions()[i][ii]] = externalSolution[i] / denominator;
-			}
-		}
+			auto interm = new lint::LargeNumber[quota];
+			gCalculator->alloc_largeNumberArray(interm, quota);
+			for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); i++) {
+				longUInt kk = precoalitionGame->getPermutation().inverseIndex(i);
+				//We need to process precoalitions by their weights ...
+				longUInt nbPlayersInParti = g->getPrecoalitions()[kk].size();
+				std::vector<bigFloat> intPGIs(nbPlayersInParti);
+				std::vector<longUInt> weightsVector(nbPlayersInParti);
+				longUInt precoalWeight = precoalitionGame->getWeights()[i];
+				long lower;
+				long diff;
+				std::cout << "i :  " << i << "\n";
+				std::cout << "precoalWeight :  " <<  precoalWeight <<"\n";
+				std::cout << "Number of players in that partition: \n";
+                std::cout << nbPlayersInParti << "\n";				
+				// This works -- and weights of precoalitions are already in descending order.
+				// IMPORTANT!!! Data type for this matrix should be in C++
+				std::vector<std::vector<bigFloat>> helpPGIs(precoalWeight, std::vector<bigFloat>(nbPlayersInParti, 0));
+				std::vector<bigFloat> helpSolution(nbPlayersInParti);
+				std::vector<bigFloat> sortedHelpSolution(nbPlayersInParti);
+				for (longUInt ii=0; ii < nbPlayersInParti; ii++){
+					weightsVector[ii] = g->getWeights()[g->getPrecoalitions()[kk][ii]];
+				}
+				// Delete later: output weightsVector
+				std::cout << "weightsVector:" << "\n";
+				for (auto it : weightsVector) {
+						std::cout << it << "\n";
+				}
+				std::cout << "End of weightsVector \n";
+				//
+				std::cout << "Loop for helpPGIs: \n";
+				for (longUInt iii=0; iii < precoalWeight; iii++){
+					if (nbPlayersInParti > 1){
+						auto helpGame = new Game(iii+1, weightsVector, false);
+						extPGI->calculate(helpGame, helpSolution);
+						helpGame->getPermutation().reverse(helpSolution,sortedHelpSolution);
+						std::cout << "weight: " << iii << "\n";
+						for (longUInt ii=0; ii < nbPlayersInParti; ii++){
+							helpPGIs[iii][ii] = sortedHelpSolution[ii];
+							std::cout << "ii : " << ii  << "\n";
+							std::cout << "helpPGIs[iii][ii]: " << helpPGIs[iii][ii] << "\n";
+						}
+						delete helpGame;
+					}
+					else{
+						helpPGIs[iii][0] = 1;
+						std::cout << "helpPGIs[iii][0]: " << helpPGIs[iii][0] << "\n";
+					}
+				}
+				std::cout << "End of for-loop for weights for helpPGIs ! \n";
+				// J.St. -- Comment: Matrix helpPGIs should be fine ...
+				    if (i>0){
+					  // J.St. -- R code has got to go later ...
+					  //for (jj in (1:nbPlayersInParti)){
+					  //	for (ii in ((q-w[i]):(q-1))){
+					  //	  intPGIs[jj] = intPGIs[jj] + interm[ii] * helpPGIs[q-ii,jj]
+					  //	}
+					  //}
+						for (longUInt ii=0; ii < nbPlayersInParti; ii++){
+							for (longUInt weight=quota-precoalWeight; weight <= (quota-1); weight++){
+								gCalculator->to_bigInt(&big_tmp, interm[weight-1]);
+								big_float = big_tmp.get_d();
+								std::cout << "ii in i>1 : " << ii << "  interm[weight-1]: " << big_float << "\n";
+								std::cout << "ii in i>1 : " << ii << "  helpPGIs[quota-weight-1][ii]: " << helpPGIs[quota-weight-1][ii] << "\n";
+								intPGIs[ii] += big_float*helpPGIs[quota-weight-1][ii];
+								std::cout << "ii in i>1 : " << ii << "  intPGIs[ii]: " << intPGIs[ii] << "\n";
+							}
+						}
+						std::cout << "End of for loop for i>1 reached. \n";
+					}
+					if (i < (g->getNumberOfPrecoalitions())-1){
+						   // J.St. -- R code has got to go later ...
+						  //wi=w[-i]
+						  //intermForwards = ForwardCountingPerWeight_AllSteps(length(wi),q,wi)
+						  //intermForwardsCheck = forwardsCheck 
+						  auto interm2 = new lint::LargeNumber[quota];
+					      gCalculator->alloc_largeNumberArray(interm2, quota);
+						  for (longUInt weight = 0; weight < quota -1; weight++){
+							  interm2[weight] = interm[weight];
+						  }
+						  for (longUInt j=i+1; j < g->getNumberOfPrecoalitions(); j++){
+							longUInt precoalWeight_j = precoalitionGame->getWeights()[j];
+							std::cout << "j:" << j << "\n";
+							std::cout << "precoalWeight_j:" << precoalWeight_j << "\n";
+							if (quota <= (precoalWeight+precoalWeight_j)){
+							  for (longUInt jj=0; jj <nbPlayersInParti; jj++){
+								intPGIs[jj] += helpPGIs[quota-precoalWeight_j-1][jj];
+								std::cout << "jj in i<n and if : " << jj << "  intPGIs[ii]: " << intPGIs[jj] << "\n";
+							  }
+							}
+							else{
+							  diff = quota-precoalWeight-precoalWeight_j;
+							  std::cout << "diff:" << diff << "\n";
+							  lower = 1;
+							  if (diff > 1) {lower = diff;}
+							  std::cout << "lower:" << lower << "\n";
+							  for (longUInt jj=0; jj <nbPlayersInParti; jj++){
+								for (longUInt weight=lower; weight <= (quota-precoalWeight-1); weight++){
+								  	gCalculator->to_bigInt(&big_tmp, interm2[weight-1]);
+									big_float = big_tmp.get_d();
+									intPGIs[jj] += big_float*helpPGIs[quota-precoalWeight_j-weight-1][jj];
+									std::cout << "jj in i<n and else : " << jj << "  interm2[weight-1]: " << big_float << "\n";
+									std::cout << "jj in i<n and else : " << jj << "  helpPGIs[quota-precoalWeight_j-weight-1][jj]: " << helpPGIs[quota-precoalWeight_j-weight-1][jj] << "\n";
+									std::cout << "jj in i<n and else : " << jj << "  intPGIs[ii]: " << intPGIs[jj] << "\n";
+								}
+							  }
+							}  
+							// Update interm2
+							for (longUInt weight = quota; weight > precoalWeight_j; --weight) {
+								if (weight - precoalWeight_j - 1 == 0) {
+									gCalculator->increment(interm2[weight - 1]);
+								} else {
+									gCalculator->plusEqual(interm2[weight - 1], interm2[weight - precoalWeight_j - 1]);
+								}
+							}
+							//for (x in q:w[j]){
+							//  if ((x-w[j]==0))
+							//	intermForwardsCheck[x] = intermForwardsCheck[x] +1
+							//  else
+							//	intermForwardsCheck[x] = intermForwardsCheck[x] + intermForwardsCheck[x-w[j]]
+							//}
+						} // end for j */
+						std::cout << "End of for loop for j reached. \n";
+						gCalculator->free_largeNumberArray(interm2);
+						delete[] interm2;
+					} // end if 
+					// Update interm
+					for (longUInt weight = quota; weight > precoalWeight; --weight) {
+							if ((weight - precoalWeight) == 0) {
+									gCalculator->increment(interm[weight - 1]);
+							} else {
+									gCalculator->plusEqual(interm[weight - 1], interm[weight - precoalWeight - 1]);
+							}
+					}
+					std::cout << "solution for i:" << i << "\n";
+					gCalculator->to_bigInt(&big_tmp, rawExternalSolution[i]);
+					big_float = big_tmp.get_d();
+					std::cout << "rawExternalSolution[i]: " << big_float << "\n";
+					std::cout << "externalSolution[i]: " << externalSolution[i] << "\n";
+					for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
+						std::cout << "ii : " << ii << " intPGIs[ii] : " << intPGIs[ii] << "\n";
+						solution[g->getPrecoalitions()[kk][ii]] = (intPGIs[ii] / big_float)*externalSolution[i];
+						std::cout << "solution[g->getPrecoalitions()[kk][ii]] :  " << solution[g->getPrecoalitions()[kk][ii]] << "\n";
+					}
+			} // for i
+			gCalculator->free_largeNumberArray(interm);
+			delete[] interm;
 	}
 	
 	delete precoalitionGame;
@@ -164,54 +226,6 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 	return solution;
 }
 
-void epic::index::OwenExtendedPGI::forward_counting_per_weight_next_step(Game* g, lint::LargeNumber* ret_ptr, std::vector<epic::longUInt> weights, longUInt player_limit, bool first_step) {
-	/*
-	 * INITIALIZATION
-	 */
-	longUInt player_count = (weights.size() < g->getNumberOfNonZeroPlayers()) ? weights.size() : g->getNumberOfNonZeroPlayers();
-	longUInt upper_sum = 0;
-	auto upper = new longUInt[player_count];
-
-	{ // initialize upper-array
-		for (longUInt j = 0; j < player_count; ++j) {
-			upper_sum += weights[j];
-			if (upper_sum < g->getQuota()) {
-				upper[j] = upper_sum;
-			} else {
-				upper[j] = g->getQuota();
-			}
-		}
-	}
-
-	if (first_step) {
-		for (longUInt i = 0; i < g->getQuota(); ++i) {
-			gCalculator->assign_zero(ret_ptr[i]);
-		}
-
-		for (longUInt i = 0; i < player_limit; ++i) {
-			longUInt wi = weights[i];
-
-			for (longUInt x = upper[i] + 1; x > wi; --x) {
-				if (x - wi - 1 == 0) {
-					gCalculator->increment(ret_ptr[x - 2]);
-				} else {
-					gCalculator->plusEqual(ret_ptr[x - 2], ret_ptr[x - wi - 2]);
-				}
-			}
-		}
-	}
-
-	longUInt w_limit = weights[player_limit];
-	for (longUInt x = upper[player_limit] + 1; x > w_limit; --x) {
-		if (x - w_limit - 1 == 0) {
-			gCalculator->increment(ret_ptr[x - 2]);
-		} else {
-			gCalculator->plusEqual(ret_ptr[x - 2], ret_ptr[x - w_limit - 2]);
-			}
-	}
-
-	delete[] upper;
-}
 
 std::string epic::index::OwenExtendedPGI::getFullName() {
 	return "OwenExtendedPGI";
