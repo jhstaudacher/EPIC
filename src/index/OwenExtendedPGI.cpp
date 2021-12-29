@@ -162,7 +162,7 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 									// std:cout << "jj in i<n and else : " << jj << "  intPGIs[ii]: " << intPGIs[jj] << "\n";
 								}
 							  }
-							}  
+							}  // end else
 							// Update interm2
 							for (longUInt weight = quota; weight > precoalWeight_j; --weight) {
 								if (weight - precoalWeight_j - 1 == 0) {
@@ -183,7 +183,7 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 							} else {
 									gCalculator->plusEqual(interm[weight - 1], interm[weight - precoalWeight - 1]);
 							}
-					}
+					} // end for weight
 					// std:cout << "solution for i:" << i << "\n";
 					gCalculator->to_bigInt(&big_tmp, rawExternalSolution[i]);
 					big_float = big_tmp.get_d();
@@ -194,7 +194,7 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 						solution[g->getPrecoalitions()[kk][ii]] = (intPGIs[ii] / big_float)*externalSolution[i];
 						// std:cout << "solution[g->getPrecoalitions()[kk][ii]] :  " << solution[g->getPrecoalitions()[kk][ii]] << "\n";
 					}
-			} // for i
+			} // end for i
 			gCalculator->free_largeNumberArray(interm);
 			delete[] interm;
 	}
@@ -216,9 +216,10 @@ std::string epic::index::OwenExtendedPGI::getFullName() {
 epic::longUInt epic::index::OwenExtendedPGI::getMemoryRequirement(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
 
-	bigInt memory = (g->getWeightSum() + 1 - g->getQuota()) * gCalculator->getLargeNumberSize() * 4; // c, cw, cw2, cwi -- tba
-	memory += g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize();											   // banzhafInternal (tba)
-	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;															   // winternal
+	bigInt memory = g->getNumberOfNonZeroPlayers() * (g->getQuota() - 2) * gCalculator->getLargeNumberSize(); // crude approximation for helpPGIs
+	memory += (g->getQuota()) * gCalculator->getLargeNumberSize() * 2; // interm, interm2
+	memory += g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize();											 
+	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;															   
 	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;
