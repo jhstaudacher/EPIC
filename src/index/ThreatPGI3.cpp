@@ -45,7 +45,7 @@ std::vector<epic::bigFloat> epic::index::ThreatPGI3::calculate(Game* g_) {
 		std::vector<longUInt> weightsVector(nbIntGame);
 		std::vector<bigFloat> intSolution(nbIntGame);
 		std::vector<bigFloat> sortedSolution(nbIntGame);
-		std::vector<bigFloat> intPGIs(nbIntGame);
+		std::vector<bigFloat> intPGIs(nbPlayersInParti);
 		for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
 			weightsVector[0] =  g->getWeights()[g->getPrecoalitions()[i][ii]];
 			weightsVector[1] =  g->getPrecoalitionWeights()[i] - weightsVector[0];
