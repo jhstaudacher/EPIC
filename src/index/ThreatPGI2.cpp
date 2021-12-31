@@ -10,88 +10,66 @@ epic::index::ThreatPGI2::ThreatPGI2() : PowerIndexWithPrecoalitions() {}
 
 std::vector<epic::bigFloat> epic::index::ThreatPGI2::calculate(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
+	std::vector<bigFloat> solution(g->getNumberOfPlayers(), 0);
 
-	std::vector<bigFloat> solution(g->getNumberOfPlayers());
-	longUInt quota = g->getQuota();
-	
-	std::vector<longUInt> preCoalitionWeights = g->getPrecoalitionWeights();
-	/* std::cout << "prec weights" << "\n";
-	for (auto it : preCoalitionWeights ){
-		std::cout << it << "\n";
-	}
-	std::cout <<"\n"; */
+	PublicGood* pgi = new PublicGood();
 
-	// Create game object from weights of precoalitions with original quota
-	auto precoalitionGame = new Game(quota, preCoalitionWeights, false);
-	
-	std::vector<bigFloat> externalSolution(g->getNumberOfPrecoalitions());
-	
 	bigFloat denominator = 0.0;
-	
-	PublicGood* extPGI = new PublicGood();
-	
-	extPGI->calculate(precoalitionGame, externalSolution);
-	/* std::cout << "externalSolution:" << "\n";
-	for (auto it : externalSolution) {
-			std::cout << it << "\n";
-	}
-	std::cout << "\n"; */
-	
-	
 	for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); i++) {
 		longUInt nbPlayersInParti = g->getPrecoalitions()[i].size();
 		longUInt nbIntGame = g->getNumberOfPrecoalitions() + nbPlayersInParti - 1;
-		denominator = 0.0;
+
 		std::vector<longUInt> weightsVector(nbIntGame);
-		std::vector<bigFloat> intSolution(nbIntGame);
-		std::vector<bigFloat> sortedSolution(nbIntGame);
-		for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
-			weightsVector[ii] = g->getWeights()[g->getPrecoalitions()[i][ii]];
+		{ // fill weightsVector containing the player weights of precoalition i followed by the precoalition weights except precoalition i
+			for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
+				weightsVector[ii] = g->getWeights()[g->getPrecoalitions()[i][ii]];
+			}
+			for (longUInt j = 0; j < i; j++) {
+				weightsVector[j+nbPlayersInParti] = g->getPrecoalitionWeights()[j];
+			}
+			for (longUInt j = i+1; j < g->getNumberOfPrecoalitions(); j++) {
+				weightsVector[j+nbPlayersInParti-1] = g->getPrecoalitionWeights()[j];
+			}
 		}
-		for (longUInt j = 0; j < i; j++) {
-			weightsVector[j+nbPlayersInParti] = g->getPrecoalitionWeights()[j];
-		}
-		for (longUInt j = i+1; j < g->getNumberOfPrecoalitions(); j++) {
-			weightsVector[j+nbPlayersInParti-1] = g->getPrecoalitionWeights()[j];
-		}
+
 		// Create internal game for precoalition i
-		auto intGame = new Game(quota, weightsVector, false);
-		
-		// Reuse PublicGood-Object we already have ...
-	    extPGI->calculate(intGame,intSolution); 
-		//
-		/* std::cout << "intSolution:" << i << "\n";
-		for (auto it : intSolution) {
-			std::cout << it << "\n";
-		}
-		std::cout << "\n";*/
-		//
+		auto intGame = new Game(g->getQuota(), weightsVector, false);
+
+		std::vector<bigFloat> intSolution(nbIntGame);
+		pgi->calculate(intGame,intSolution);
+
+		std::vector<bigFloat> sortedSolution(nbIntGame);
 		intGame->getPermutation().reverse(intSolution,sortedSolution);
-		//
-		/* std::cout << "sortedSolution:" << i << "\n";
-		for (auto it : sortedSolution) {
-			std::cout << it << "\n";
-		}
-		std::cout << "\n"; */
-		
+
+		denominator = 0.0;
 		for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
 			denominator += sortedSolution[ii];
 		}
-		// std:cout << denominator << "\n";
 		for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
 			if (denominator > 0){
-				solution[g->getPrecoalitions()[i][ii]] = externalSolution[i] * (sortedSolution[ii] / denominator);
-			} else
-			{
-				solution[g->getPrecoalitions()[i][ii]] = 0.0;
-			}
+				solution[g->getPrecoalitions()[i][ii]] = sortedSolution[ii] / denominator;
+			} // else solution[g->getPrecoalitions()[i][ii]] = 0.0;
 		}
-		delete intGame;
-    }
 
-	
+		delete intGame;
+	}
+
+
+	std::vector<bigFloat> externalSolution(g->getNumberOfPrecoalitions());
+	// Create game object from weights of precoalitions with original quota
+	auto precoalitionGame = new Game(g->getQuota(), g->getPrecoalitionWeights(), false);
+	pgi->calculate(precoalitionGame, externalSolution);
+
+	// scale solution
+	for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); ++i) {
+		for (longUInt ii = 0; ii < g->getPrecoalitions()[i].size(); ++ii) {
+			solution[g->getPrecoalitions()[i][ii]] *= externalSolution[i];
+		}
+	}
+
+
 	delete precoalitionGame;
-	delete extPGI;
+	delete pgi;
 
 	return solution;
 }
@@ -104,8 +82,8 @@ epic::longUInt epic::index::ThreatPGI2::getMemoryRequirement(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
 
 	bigInt memory = (g->getWeightSum() + 1 - g->getQuota()) * gCalculator->getLargeNumberSize(); 
-	memory += g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize() * 4;											   
-	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;															 
+	memory += g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize() * 4;
+	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;
 	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;
