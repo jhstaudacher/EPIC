@@ -83,8 +83,8 @@ std::vector<epic::bigFloat> epic::Game::getSolution() const {
 }
 
 void epic::Game::setSolution(const std::vector<bigFloat>& pre_solution) {
-	mSolution.resize(mWeights.size() + mExcludedNullPlayer.size());
-	mPermutation.reverse(pre_solution, mSolution, bigFloat(0));
+	mSolution.resize(mWeights.size() + mExcludedNullPlayer.size(), bigFloat(0));
+	mPermutation.reverse(pre_solution, mSolution);
 }
 
 void epic::Game::setSingleValueSolution(const bigFloat& value) {
