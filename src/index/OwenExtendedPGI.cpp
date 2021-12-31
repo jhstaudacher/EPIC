@@ -131,18 +131,11 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 						}
 					} // end else
 
-					// Update interm2
-					for (longUInt weight = g->getQuota(); weight > precoalWeight_j; --weight) {
-						gCalculator->plusEqual(interm2[weight - 1], interm2[weight - precoalWeight_j - 1]);
-					}
+					updateInterm(g, interm2, precoalWeight_j);
 				} // end for j
 			} // end if
 
-
-			// Update interm
-			for (longUInt weight = g->getQuota(); weight > precoalWeight; --weight) {
-				gCalculator->plusEqual(interm[weight - 1], interm[weight - precoalWeight - 1]);
-			}
+			updateInterm(g, interm, precoalWeight);
 
 
 			// fill solution vector with internal PGI to scale it later
@@ -219,4 +212,10 @@ epic::bigInt epic::index::OwenExtendedPGI::getMaxValueRequirement(ItfUpperBoundA
 
 epic::lint::Operation epic::index::OwenExtendedPGI::getOperationRequirement() {
 	return lint::Operation::multiplication;
+}
+
+void epic::index::OwenExtendedPGI::updateInterm(Game* g, lint::LargeNumber interm[], longUInt weight_limit) {
+	for (longUInt weight = g->getQuota(); weight > weight_limit; --weight) {
+		gCalculator->plusEqual(interm[weight - 1], interm[weight - weight_limit - 1]);
+	}
 }

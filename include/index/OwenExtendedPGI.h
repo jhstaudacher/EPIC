@@ -14,6 +14,9 @@ public:
 	longUInt getMemoryRequirement(Game* g) override;
 	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
 	lint::Operation getOperationRequirement() override;
+
+private:
+	void updateInterm(Game* g, lint::LargeNumber interm[], longUInt weight_limit);
 };
 
 } // namespace epic::index
