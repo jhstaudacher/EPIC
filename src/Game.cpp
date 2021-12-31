@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-epic::Game::Game(longUInt quota, std::vector<longUInt>& weights, bool flag_withoutNullPlayers) {
+epic::Game::Game(longUInt quota, const std::vector<longUInt>& weights, bool flag_withoutNullPlayers) {
 	mQuota = quota;
 	mSolution = {};
 	mFlagNullPlayerHandling = flag_withoutNullPlayers;

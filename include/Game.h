@@ -157,7 +157,7 @@ public:
 	 * @param weights A vector that includes the weights (each element represents a players weight)
 	 * @param flag_filterOutNullPlayers A flag which decides whether null players should be sorted out, i.e. ignored during the power index computation (assign power index zero at the end)
 	 */
-	Game(longUInt quota, std::vector<longUInt>& weights, bool flag_filterOutNullPlayers);
+	Game(longUInt quota, const std::vector<longUInt>& weights, bool flag_filterOutNullPlayers);
 
 	/**
 	 * Get the Permutation-object representing the sorting of the players weight (compared to the order given at construction time.
