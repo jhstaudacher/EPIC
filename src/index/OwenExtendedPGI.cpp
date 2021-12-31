@@ -66,28 +66,24 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 			longUInt kk = precoalitionGame->getPermutation().inverseIndex(i);
 			//We need to process precoalitions by their weights ...
 			longUInt nbPlayersInParti = g->getPrecoalitions()[kk].size();
-			std::vector<longUInt> weightsVector(nbPlayersInParti);
 			longUInt precoalWeight = precoalitionGame->getWeights()[i];
-			long lower;
-			long diff;
-
-			// This works -- and weights of precoalitions are already in descending order.
-			std::vector<bigFloat> helpSolution(nbPlayersInParti);
-			std::vector<bigFloat> sortedHelpSolution(nbPlayersInParti);
+			std::vector<longUInt> weightsVector(nbPlayersInParti);
 			for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
 				weightsVector[ii] = g->getWeights()[g->getPrecoalitions()[kk][ii]];
 			}
-			// Delete later: output weightsVector
+
+			long lower;
+			long diff;
+
+			std::vector<bigFloat> helpSolution(nbPlayersInParti);
+
 
 			// calculate helpPGIs
 			for (longUInt iii = 0; iii < precoalWeight; iii++) {
 				if (nbPlayersInParti > 1) {
 					auto helpGame = new Game(iii + 1, weightsVector, false);
 					pgi->calculate(helpGame, helpSolution);
-					helpGame->getPermutation().reverse(helpSolution, sortedHelpSolution);
-					for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
-						helpPGIs[iii][ii] = sortedHelpSolution[ii];
-					}
+					helpGame->getPermutation().reverse(helpSolution, helpPGIs[iii]);
 					delete helpGame;
 				} else {
 					helpPGIs[iii][0] = 1;
