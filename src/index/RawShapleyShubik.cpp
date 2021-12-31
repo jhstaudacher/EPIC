@@ -5,7 +5,8 @@
 
 #include <algorithm>
 
-epic::index::RawShapleyShubik::RawShapleyShubik() : SwingsPerPlayerAndCardinality() {}
+epic::index::RawShapleyShubik::RawShapleyShubik()
+	: SwingsPerPlayerAndCardinality() {}
 
 std::vector<epic::bigFloat> epic::index::RawShapleyShubik::calculate(Game* g) {
 	// ssi(x, y): ShapleyShubik matrix - number of times player x is a swing player in a coalition of cardinality y

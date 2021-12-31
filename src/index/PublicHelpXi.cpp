@@ -5,7 +5,8 @@
 
 #include <iostream>
 
-epic::index::PublicHelpXi::PublicHelpXi(Game* g) : SwingsPerPlayerAndCardinality() {
+epic::index::PublicHelpXi::PublicHelpXi(Game* g)
+	: SwingsPerPlayerAndCardinality() {
 	if (g->getNumberOfNullPlayers() > 0 && g->getFlagNullPlayerHandling()) {
 		throw std::invalid_argument(log::invalidFlagF);
 	}

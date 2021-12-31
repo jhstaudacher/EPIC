@@ -2,7 +2,8 @@
 
 #include "Logging.h"
 
-epic::index::PublicHelpTheta::PublicHelpTheta(Game* g) : RawPublicHelpThetaSD(g) {}
+epic::index::PublicHelpTheta::PublicHelpTheta(Game* g)
+	: RawPublicHelpThetaSD(g) {}
 
 std::vector<epic::bigFloat> epic::index::PublicHelpTheta::calculate(Game* g) {
 	auto big_wci = new bigInt[g->getNumberOfPlayers()];

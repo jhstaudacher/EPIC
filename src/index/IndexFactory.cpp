@@ -5,8 +5,8 @@
 #include "index/AbsolutePowerIndexG.h"
 #include "index/AbsolutePublicGood.h"
 #include "index/Banzhaf.h"
-#include "index/BanzhafOwen.h"
 #include "index/BanzhafBelow.h"
+#include "index/BanzhafOwen.h"
 #include "index/ColemanCollective.h"
 #include "index/ColemanInitiative.h"
 #include "index/ColemanPreventive.h"
@@ -47,10 +47,10 @@
 #include "index/SingleValueWS.h"
 #include "index/SolidarityPGI.h"
 #include "index/SymmetricCoalitionalBanzhaf.h"
-#include "index/Tijs.h"
 #include "index/ThreatPGI1.h"
 #include "index/ThreatPGI2.h"
 #include "index/ThreatPGI3.h"
+#include "index/Tijs.h"
 #include "index/UnionPGI.h"
 
 const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std::string>> epic::index::IndexFactory::cIndexNames = {

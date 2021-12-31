@@ -3,7 +3,8 @@
 #include "Logging.h"
 #include "lint/GlobalCalculator.h"
 
-epic::index::FelsenthalIndex::FelsenthalIndex(Game* g) : RawFelsenthal(g) {}
+epic::index::FelsenthalIndex::FelsenthalIndex(Game* g)
+	: RawFelsenthal(g) {}
 
 std::vector<epic::bigFloat> epic::index::FelsenthalIndex::calculate(Game* g) {
 	// if a veto player exists, that player gets assigned 1 while all other players get assigned 0

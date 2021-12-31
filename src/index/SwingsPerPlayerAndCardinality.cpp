@@ -2,7 +2,8 @@
 
 #include "lint/GlobalCalculator.h"
 
-epic::index::SwingsPerPlayerAndCardinality::SwingsPerPlayerAndCardinality() : ItfPowerIndex() {}
+epic::index::SwingsPerPlayerAndCardinality::SwingsPerPlayerAndCardinality()
+	: ItfPowerIndex() {}
 
 epic::longUInt epic::index::SwingsPerPlayerAndCardinality::getMemoryRequirement(Game* g) {
 	bigInt memory = bigInt(g->getWeightSum() + 1 - g->getQuota()) * (g->getNumberOfNonZeroPlayers() + 1) * gCalculator->getLargeNumberSize() * 2; // n_wc, helper_wc

@@ -3,7 +3,8 @@
 #include "Logging.h"
 #include "lint/GlobalCalculator.h"
 
-epic::index::RawJohnston::RawJohnston(Game* g) : PowerIndexWithWinningCoalitions() {
+epic::index::RawJohnston::RawJohnston(Game* g)
+	: PowerIndexWithWinningCoalitions() {
 	// if a veto player exists then throw an error
 	if (g->getNumberOfVetoPlayers() > 0) {
 		throw std::invalid_argument("Veto player detected. The Johnston index only works without veto player. Please check your input values.");
@@ -260,7 +261,7 @@ void epic::index::RawJohnston::subsetSumFromSmallestPerWeight(Game* g, Array2d<l
 
 		longUInt idx;
 		for (longUInt i = g->getNumberOfNonZeroPlayers() - 2; i < g->getNumberOfNonZeroPlayers(); --i) { //  i <= 0
-			idx = g->getNumberOfNonZeroPlayers() - i - 2;									   // previous dimension
+			idx = g->getNumberOfNonZeroPlayers() - i - 2;												 // previous dimension
 			for (longUInt x = upper[i]; x > w[i]; --x) {
 				h(idx + 1, x - 1) = h(idx, x - 1) + h(idx, x - w[i] - 1);
 			}
@@ -353,12 +354,12 @@ std::string epic::index::RawJohnston::getFullName() {
 
 epic::longUInt epic::index::RawJohnston::getMemoryRequirement(Game* g) {
 	// h gets deleted before forwardsArray gets allocated. sizeof(forwardsArray) >= sizeof(h)
-	bigInt memory = g->getWeights()[0] * c_sizeof_longUInt;									// surplusSums
-	memory += g->getNumberOfNonZeroPlayers() * g->getQuota() * c_sizeof_longUInt;						// deficiencySums
-	memory += g->getNumberOfNonZeroPlayers() * g->getNumberOfNonZeroPlayers() * gCalculator->getLargeNumberSize();	// qmwcs
-	memory += g->getQuota() * (g->getNumberOfNonZeroPlayers() - 1) * gCalculator->getLargeNumberSize(); // interm
-	memory += g->getQuota() * g->getNumberOfNonZeroPlayers() * gCalculator->getLargeNumberSize();		// forwardsArray
-	memory += g->getNumberOfNonZeroPlayers() * c_sizeof_longUInt;											// forward_counting_per_weight_cardinality_next_step::upper
+	bigInt memory = g->getWeights()[0] * c_sizeof_longUInt;														   // surplusSums
+	memory += g->getNumberOfNonZeroPlayers() * g->getQuota() * c_sizeof_longUInt;								   // deficiencySums
+	memory += g->getNumberOfNonZeroPlayers() * g->getNumberOfNonZeroPlayers() * gCalculator->getLargeNumberSize(); // qmwcs
+	memory += g->getQuota() * (g->getNumberOfNonZeroPlayers() - 1) * gCalculator->getLargeNumberSize();			   // interm
+	memory += g->getQuota() * g->getNumberOfNonZeroPlayers() * gCalculator->getLargeNumberSize();				   // forwardsArray
+	memory += g->getNumberOfNonZeroPlayers() * c_sizeof_longUInt;												   // forward_counting_per_weight_cardinality_next_step::upper
 	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;

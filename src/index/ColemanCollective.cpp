@@ -3,7 +3,8 @@
 #include "Logging.h"
 #include "lint/GlobalCalculator.h"
 
-epic::index::ColemanCollective::ColemanCollective() : PowerIndexWithWinningCoalitions() {}
+epic::index::ColemanCollective::ColemanCollective()
+	: PowerIndexWithWinningCoalitions() {}
 
 std::vector<epic::bigFloat> epic::index::ColemanCollective::calculate(Game* g) {
 	// n_wc[x]: number of winning coalitions of weight x.
@@ -47,7 +48,7 @@ std::string epic::index::ColemanCollective::getFullName() {
 epic::longUInt epic::index::ColemanCollective::getMemoryRequirement(Game* g) {
 	bigInt memory = gCalculator->getLargeNumberSize();
 	memory *= g->getWeightSum() + 1 - g->getQuota(); // n_wc
-	memory += gCalculator->getLargeNumberSize();		   // total_wc
+	memory += gCalculator->getLargeNumberSize();	 // total_wc
 	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;

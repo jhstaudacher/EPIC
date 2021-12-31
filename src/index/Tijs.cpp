@@ -3,7 +3,8 @@
 #include "Logging.h"
 #include "types.h"
 
-epic::index::Tijs::Tijs() : ItfPowerIndex() {}
+epic::index::Tijs::Tijs()
+	: ItfPowerIndex() {}
 
 std::vector<epic::bigFloat> epic::index::Tijs::calculate(Game* g) {
 	std::vector<bigFloat> solution(g->getNumberOfPlayers());

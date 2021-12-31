@@ -1,11 +1,11 @@
 #include "SystemControlUnit.h"
 
+#include "FastUpperBoundApproximation.h"
 #include "HardwareInfo.h"
 #include "Logging.h"
 #include "index/IndexFactory.h"
-#include "types.h"
 #include "lint/GlobalCalculator.h"
-#include "FastUpperBoundApproximation.h"
+#include "types.h"
 
 #include <chrono>
 #include <cmath>

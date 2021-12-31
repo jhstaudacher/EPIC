@@ -4,8 +4,8 @@
 #include "index/PublicGood.h"
 #include "lint/GlobalCalculator.h"
 
-
-epic::index::SolidarityPGI::SolidarityPGI() : PowerIndexWithPrecoalitions() {}
+epic::index::SolidarityPGI::SolidarityPGI()
+	: PowerIndexWithPrecoalitions() {}
 
 std::vector<epic::bigFloat> epic::index::SolidarityPGI::calculate(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
@@ -40,9 +40,9 @@ std::string epic::index::SolidarityPGI::getFullName() {
 epic::longUInt epic::index::SolidarityPGI::getMemoryRequirement(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
 
-	bigInt memory = (g->getWeightSum() + 1 - g->getQuota()) * gCalculator->getLargeNumberSize(); 
-	memory += g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize();											   
-	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;															 
+	bigInt memory = (g->getWeightSum() + 1 - g->getQuota()) * gCalculator->getLargeNumberSize();
+	memory += g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize();
+	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;
 	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;

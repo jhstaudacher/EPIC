@@ -6,7 +6,8 @@
 
 #include <iostream>
 
-epic::index::AbsolutePublicGood::AbsolutePublicGood() : RawPublicGood() {}
+epic::index::AbsolutePublicGood::AbsolutePublicGood()
+	: RawPublicGood() {}
 
 std::vector<epic::bigFloat> epic::index::AbsolutePublicGood::calculate(Game* g) {
 	bigInt total_mwc;

@@ -2,7 +2,8 @@
 
 #include "lint/GlobalCalculator.h"
 
-epic::index::SingleValueW::SingleValueW() : RawBanzhaf() {}
+epic::index::SingleValueW::SingleValueW()
+	: RawBanzhaf() {}
 
 std::vector<epic::bigFloat> epic::index::SingleValueW::calculate(Game* g) {
 	// n_wc[x]: number of winning coalitions of weight x.

@@ -3,7 +3,8 @@
 #include "Logging.h"
 #include "lint/GlobalCalculator.h"
 
-epic::index::ColemanPreventive::ColemanPreventive()	: RawBanzhaf() {}
+epic::index::ColemanPreventive::ColemanPreventive()
+	: RawBanzhaf() {}
 
 std::vector<epic::bigFloat> epic::index::ColemanPreventive::calculate(Game* g) {
 	// n_wc[x]: number of winning coalitions of weight x.

@@ -72,7 +72,7 @@ private:
 		N,			   /**< Nevison (based on the Dubey-Shapley identity)*/
 		NPH,		   /**< Nevison (based on raw Public Help theta) */
 		O,			   /**< Owen */
-		OPGI,			   /**< Owen Extended Public Good Index */
+		OPGI,		   /**< Owen Extended Public Good Index */
 		PG,			   /**< Public Good */
 		PHT,		   /**< Public Help theta (based on the Dubey-Shapley identity)*/
 		PHTPH,		   /**< Public Help theta (based on raw Public Help theta) */

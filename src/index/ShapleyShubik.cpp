@@ -4,7 +4,8 @@
 
 #include <algorithm>
 
-epic::index::ShapleyShubik::ShapleyShubik() : RawShapleyShubik() {}
+epic::index::ShapleyShubik::ShapleyShubik()
+	: RawShapleyShubik() {}
 
 std::vector<epic::bigFloat> epic::index::ShapleyShubik::calculate(Game* g) {
 	std::vector<bigFloat> solution = RawShapleyShubik::calculate(g);

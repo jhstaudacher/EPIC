@@ -5,7 +5,8 @@
 
 #include <cmath>
 
-epic::index::BanzhafOwen::BanzhafOwen() : PowerIndexWithPrecoalitions() {}
+epic::index::BanzhafOwen::BanzhafOwen()
+	: PowerIndexWithPrecoalitions() {}
 
 std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
@@ -111,8 +112,8 @@ epic::longUInt epic::index::BanzhafOwen::getMemoryRequirement(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
 
 	bigInt memory = (g->getWeightSum() + 1 - g->getQuota()) * gCalculator->getLargeNumberSize() * 4; // c, cw, cw2, cwi
-	memory += g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize();											   // banzhafInternal
-	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;															   // winternal
+	memory += g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize();						 // banzhafInternal
+	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;										 // winternal
 	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;

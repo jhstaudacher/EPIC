@@ -3,7 +3,8 @@
 #include "Array.h"
 #include "Logging.h"
 
-epic::index::PowerIndexG::PowerIndexG(Game* g) : RawPowerIndexG(g) {}
+epic::index::PowerIndexG::PowerIndexG(Game* g)
+	: RawPowerIndexG(g) {}
 
 std::vector<epic::bigFloat> epic::index::PowerIndexG::calculate(Game* g) {
 	auto solution = RawPowerIndexG::calculate(g);

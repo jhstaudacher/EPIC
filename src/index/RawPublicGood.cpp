@@ -5,7 +5,8 @@
 
 #include <iostream>
 
-epic::index::RawPublicGood::RawPublicGood() : ItfPowerIndex() {}
+epic::index::RawPublicGood::RawPublicGood()
+	: ItfPowerIndex() {}
 
 std::vector<epic::bigFloat> epic::index::RawPublicGood::calculate(Game* g) {
 	auto mwc = new lint::LargeNumber[g->getNumberOfPlayers()];
@@ -42,7 +43,7 @@ epic::longUInt epic::index::RawPublicGood::getMemoryRequirement(Game* g) {
 	bigInt memory = g->getNumberOfNonZeroPlayers() * gCalculator->getLargeNumberSize(); // mwc
 
 	// The memory needed inside the calculateMinimalWinningCoalitionsPerPlayer() function
-	memory += g->getQuota() * gCalculator->getLargeNumberSize();			  // f
+	memory += g->getQuota() * gCalculator->getLargeNumberSize();		   // f
 	memory += (g->getQuota() + 1) * gCalculator->getLargeNumberSize() * 2; // b, b_helper
 	// don't add solution vector since it gets allocated after the previous arrays are already freed.
 	memory /= cMemUnit_factor;

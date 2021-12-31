@@ -2,7 +2,8 @@
 
 #include "Logging.h"
 
-epic::index::NevisonPH::NevisonPH(Game* g) : RawPublicHelpTheta(g) {}
+epic::index::NevisonPH::NevisonPH(Game* g)
+	: RawPublicHelpTheta(g) {}
 
 std::vector<epic::bigFloat> epic::index::NevisonPH::calculate(Game* g) {
 	// big_wci[x]: same as wci but represented as bigInt

@@ -44,8 +44,7 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 		for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
 			solution[g->getPrecoalitions()[kk][ii]] = sortedSolution[ii];
 		}
-	}
-	else { // There is no dictator precoalition
+	} else { // There is no dictator precoalition
 		bigInt big_tmp;
 
 		auto interm = new lint::LargeNumber[g->getQuota()];
@@ -74,7 +73,6 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 				weightsVector[ii] = g->getWeights()[g->getPrecoalitions()[kk][ii]];
 			}
 
-
 			// calculate helpPGIs
 			std::vector<bigFloat> helpSolution(nbPlayersInParti);
 			for (longUInt iii = 0; iii < precoalWeight; iii++) {
@@ -91,7 +89,6 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 				}
 			}
 			helpSolution.clear();
-
 
 			// calculate intPGIs
 			if (i > 0) {
@@ -133,10 +130,9 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 
 					updateInterm(g, interm2, precoalWeight_j);
 				} // end for j
-			} // end if
+			}	  // end if
 
 			updateInterm(g, interm, precoalWeight);
-
 
 			// fill solution vector with internal PGI to scale it later
 			for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
@@ -150,7 +146,6 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 		delete[] interm;
 		gCalculator->free_largeNumberArray(interm2);
 		delete[] interm2;
-
 
 		// calculate external games
 		std::vector<bigFloat> externalSolution(g->getNumberOfPrecoalitions());

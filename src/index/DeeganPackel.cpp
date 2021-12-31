@@ -3,7 +3,8 @@
 #include "Logging.h"
 #include "lint/GlobalCalculator.h"
 
-epic::index::DeeganPackel::DeeganPackel() : RawDeeganPackel() {}
+epic::index::DeeganPackel::DeeganPackel()
+	: RawDeeganPackel() {}
 
 std::vector<epic::bigFloat> epic::index::DeeganPackel::calculate(Game* g) {
 	// total_mwc: number of minimal winning coalitions.

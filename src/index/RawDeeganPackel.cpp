@@ -4,7 +4,8 @@
 
 #include <iostream>
 
-epic::index::RawDeeganPackel::RawDeeganPackel() : ItfPowerIndex() {}
+epic::index::RawDeeganPackel::RawDeeganPackel()
+	: ItfPowerIndex() {}
 
 std::vector<epic::bigFloat> epic::index::RawDeeganPackel::calculate(Game* g) {
 	//note: the players are sorted by weight in descending ordering!

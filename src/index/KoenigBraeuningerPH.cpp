@@ -2,7 +2,8 @@
 
 #include "Logging.h"
 
-epic::index::KoenigBraeuningerPH::KoenigBraeuningerPH(Game* g) : RawPublicHelpTheta(g) {}
+epic::index::KoenigBraeuningerPH::KoenigBraeuningerPH(Game* g)
+	: RawPublicHelpTheta(g) {}
 
 std::vector<epic::bigFloat> epic::index::KoenigBraeuningerPH::calculate(Game* g) {
 	// big_wci[x]: number of winning coalitions for player x represented as bigInt

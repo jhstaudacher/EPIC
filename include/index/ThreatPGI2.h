@@ -18,4 +18,4 @@ public:
 
 } // namespace epic::index
 
-#endif 
+#endif

@@ -1,8 +1,8 @@
 #include "index/PublicGood.h"
 
-#include "lint/GlobalCalculator.h"
 #include "Array.h"
 #include "Logging.h"
+#include "lint/GlobalCalculator.h"
 
 std::vector<epic::bigFloat> epic::index::PublicGood::calculate(Game* g) {
 	std::vector<bigFloat> solution;

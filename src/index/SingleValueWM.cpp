@@ -1,6 +1,7 @@
 #include "index/SingleValueWM.h"
 
-epic::index::SingleValueWM::SingleValueWM() : DeeganPackel() {}
+epic::index::SingleValueWM::SingleValueWM()
+	: DeeganPackel() {}
 
 std::vector<epic::bigFloat> epic::index::SingleValueWM::calculate(Game* g) {
 	bigInt total_mwc;

@@ -4,8 +4,8 @@
 #include "index/PublicGood.h"
 #include "lint/GlobalCalculator.h"
 
-
-epic::index::ThreatPGI3::ThreatPGI3() : PowerIndexWithPrecoalitions() {}
+epic::index::ThreatPGI3::ThreatPGI3()
+	: PowerIndexWithPrecoalitions() {}
 
 std::vector<epic::bigFloat> epic::index::ThreatPGI3::calculate(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
@@ -25,18 +25,18 @@ std::vector<epic::bigFloat> epic::index::ThreatPGI3::calculate(Game* g_) {
 
 		for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
 			{ // fill weightsVector with the weight of player ii, the weight of precoalition i without player ii followed by the weights of the remaining precoalitions except precoalition i
-				weightsVector[0] =  g->getWeights()[g->getPrecoalitions()[i][ii]];
-				weightsVector[1] =  g->getPrecoalitionWeights()[i] - weightsVector[0];
+				weightsVector[0] = g->getWeights()[g->getPrecoalitions()[i][ii]];
+				weightsVector[1] = g->getPrecoalitionWeights()[i] - weightsVector[0];
 				for (longUInt j = 0; j < i; j++) {
-					weightsVector[j+2] = g->getPrecoalitionWeights()[j];
+					weightsVector[j + 2] = g->getPrecoalitionWeights()[j];
 				}
-				for (longUInt j = i+1; j < g->getNumberOfPrecoalitions(); j++) {
-					weightsVector[j+1] = g->getPrecoalitionWeights()[j];
+				for (longUInt j = i + 1; j < g->getNumberOfPrecoalitions(); j++) {
+					weightsVector[j + 1] = g->getPrecoalitionWeights()[j];
 				}
 			}
 
 			auto intGame = new Game(g->getQuota(), weightsVector, false);
-			pgi->calculate(intGame,intSolution);
+			pgi->calculate(intGame, intSolution);
 			intPGIs[ii] = intSolution[intGame->getPermutation().applyIndex(0)]; // the solution for player ii
 
 			delete intGame;
@@ -54,7 +54,7 @@ std::vector<epic::bigFloat> epic::index::ThreatPGI3::calculate(Game* g_) {
 				solution[g->getPrecoalitions()[i][ii]] = cFloatOne / nbPlayersInParti;
 			}
 		}
-    }
+	}
 
 	intSolution.clear();
 	intPGIs.clear();
@@ -67,7 +67,6 @@ std::vector<epic::bigFloat> epic::index::ThreatPGI3::calculate(Game* g_) {
 
 	delete precoalitionGame;
 	delete pgi;
-
 
 	// scale solution
 	for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); i++) {
@@ -87,8 +86,8 @@ epic::longUInt epic::index::ThreatPGI3::getMemoryRequirement(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
 
 	bigInt memory = (g->getWeightSum() + 1 - g->getQuota()) * gCalculator->getLargeNumberSize();
-	memory += g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize() * 4;											
-	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;															  
+	memory += g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize() * 4;
+	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;
 	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;

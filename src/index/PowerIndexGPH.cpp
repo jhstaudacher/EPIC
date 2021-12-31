@@ -3,7 +3,8 @@
 #include "Array.h"
 #include "Logging.h"
 
-epic::index::PowerIndexGPH::PowerIndexGPH(Game* g) : RawPublicHelpTheta(g) {
+epic::index::PowerIndexGPH::PowerIndexGPH(Game* g)
+	: RawPublicHelpTheta(g) {
 	if (g->getNumberOfNullPlayers() > 0 && !g->getFlagNullPlayerHandling()) {
 		throw std::invalid_argument(log::missingFlagF);
 	}

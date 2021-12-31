@@ -2,7 +2,8 @@
 
 #include "Logging.h"
 
-epic::index::Johnston::Johnston(Game* g) : RawJohnston(g) {}
+epic::index::Johnston::Johnston(Game* g)
+	: RawJohnston(g) {}
 
 std::vector<epic::bigFloat> epic::index::Johnston::calculate(Game* g) {
 	std::vector<bigFloat> solution = RawJohnston::calculate(g);

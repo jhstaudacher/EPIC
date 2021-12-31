@@ -4,7 +4,8 @@
 #include "Logging.h"
 #include "lint/GlobalCalculator.h"
 
-epic::index::BanzhafBelow::BanzhafBelow() : RawBanzhafBelow() {}
+epic::index::BanzhafBelow::BanzhafBelow()
+	: RawBanzhafBelow() {}
 
 std::vector<epic::bigFloat> epic::index::BanzhafBelow::calculate(Game* g) {
 	// n_sp[x]: number of times player x is a swing player

@@ -2,7 +2,8 @@
 
 #include "lint/GlobalCalculator.h"
 
-epic::index::RawFelsenthal::RawFelsenthal(Game* g) : ItfPowerIndex() {
+epic::index::RawFelsenthal::RawFelsenthal(Game* g)
+	: ItfPowerIndex() {
 	// total_csum: cumulative sum of weights
 	bigInt total_csum;
 
@@ -158,7 +159,7 @@ std::string epic::index::RawFelsenthal::getFullName() {
 
 epic::longUInt epic::index::RawFelsenthal::getMemoryRequirement(Game* g) {
 	bigInt memory = (mMinsize + 1) * (g->getQuota() + 1) * gCalculator->getLargeNumberSize() * 2; // f, b
-	memory += g->getNumberOfNonZeroPlayers() * gCalculator->getLargeNumberSize();								 // mwcs
+	memory += g->getNumberOfNonZeroPlayers() * gCalculator->getLargeNumberSize();				  // mwcs
 	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;

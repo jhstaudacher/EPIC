@@ -2,7 +2,6 @@
 #define EPIC_INDEX_PUBLICGOOD_H_
 
 #include "RawPublicGood.h"
-
 #include "lint/LargeNumber.h"
 
 namespace epic::index {

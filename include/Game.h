@@ -19,7 +19,8 @@ public:
 	/**
 	 * Default constructor representing a empty permutation, i.e. a permutation of length zero.
 	 */
-	Permutation() : mP() {};
+	Permutation()
+		: mP(){};
 
 	/**
 	 * Constructor to represent the permutation given as parameter.
@@ -28,7 +29,8 @@ public:
 	 *
 	 * @note This class does not only hold a copy of the given permutation-vector but also a second vector of the same size for storing the inverse permutation.
 	 */
-	Permutation(const std::vector<size_t>& permutation) : mP(permutation) {
+	Permutation(const std::vector<size_t>& permutation)
+		: mP(permutation) {
 		mI.resize(mP.size());
 		for (size_t i = 0; i < mP.size(); ++i) {
 			mI[mP[i]] = i;
@@ -55,7 +57,7 @@ public:
 	 * @note Both, the values and destination array must at least be as large as the permutation itself, i.e. |values| >= getSize() and |destination| >= getSize().  Even if the arrays are larger, only the first getSize() elements get processed.
 	 */
 	template<class T> void apply(const T* values, T* destination) const {
-		for(size_t i = 0; i < mI.size(); ++i) {
+		for (size_t i = 0; i < mI.size(); ++i) {
 			destination[mI[i]] = values[i];
 		}
 	}
@@ -95,7 +97,7 @@ public:
 	 * @note Both, the values and destination array must at least be as large as the permutation itself, i.e. |values| >= getSize() and |destination| >= getSize(). Even if the arrays are larger, only the first getSize() elements get processed.
 	 */
 	template<class T> void reverse(const T* values, T* destination) const {
-		for(size_t i = 0; i < mP.size(); ++i) {
+		for (size_t i = 0; i < mP.size(); ++i) {
 			destination[mP[i]] = values[i];
 		}
 	}
@@ -124,9 +126,9 @@ public:
 		return mP.size();
 	}
 
-	private:
-		std::vector<size_t> mP; // permutation
-		std::vector<size_t> mI; // inverse (permutation)
+private:
+	std::vector<size_t> mP; // permutation
+	std::vector<size_t> mI; // inverse (permutation)
 };
 
 /**
@@ -273,7 +275,7 @@ private:
 
 	std::vector<bigFloat> mSolution; // A vector to store the solution of the game
 
-	 bool mFlagNullPlayerHandling; // true iff the null-players are filtered out
+	bool mFlagNullPlayerHandling; // true iff the null-players are filtered out
 
 	/**
 	 * Sorting the internal weights (mWeights) in decreasing order
@@ -294,7 +296,7 @@ protected:
 	std::vector<longUInt> mWeights; // The player's weights
 
 	Permutation mPermutation; // The permutation describing the sorting process from unsorted to descending sorted weights
-}; /* class Game */
+};							  /* class Game */
 
 /**
  * Extending the Game class with important values for the computation of power indices with precoalitions.

@@ -3,8 +3,8 @@
 #include "Array.h"
 #include "lint/GlobalCalculator.h"
 
-
-epic::index::Owen::Owen() : PowerIndexWithPrecoalitions() {}
+epic::index::Owen::Owen()
+	: PowerIndexWithPrecoalitions() {}
 
 std::vector<epic::bigFloat> epic::index::Owen::calculate(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
@@ -40,10 +40,10 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate(Game* g_) {
 
 		auto shapleysInternal = new bigInt[g->getNumberOfPlayers()]();
 
-		Array2dOffset<lint::LargeNumber> cw2(g->getWeightSum() + 1,g->getMaxPrecoalitionSize(), g->getQuota(), 0);
+		Array2dOffset<lint::LargeNumber> cw2(g->getWeightSum() + 1, g->getMaxPrecoalitionSize(), g->getQuota(), 0);
 		gCalculator->allocInit_largeNumberArray(cw2.getArrayPointer(), cw2.getNumberOfElements());
 
-		Array2dOffset<lint::LargeNumber> cwi(g->getWeightSum() + 1,g->getMaxPrecoalitionSize(), g->getQuota(), 0);
+		Array2dOffset<lint::LargeNumber> cwi(g->getWeightSum() + 1, g->getMaxPrecoalitionSize(), g->getQuota(), 0);
 		gCalculator->alloc_largeNumberArray(cwi.getArrayPointer(), cwi.getNumberOfElements());
 
 		std::vector<longUInt> winternal(g->getMaxPrecoalitionSize());
@@ -134,11 +134,11 @@ epic::longUInt epic::index::Owen::getMemoryRequirement(Game* g_) {
 
 	bigInt memory = g->getNumberOfPrecoalitions() * c_sizeof_longUInt; // g->getPrecoalitionWeights()
 	longUInt max = std::max(g->getMaxPrecoalitionSize(), g->getNumberOfPrecoalitions());
-	memory += max * GMPHelper::size_of_float(bigInt::factorial(max));												// factorial
-	memory += (g->getWeightSum() + 1 - g->getQuota()) * g->getNumberOfPrecoalitions() * gCalculator->getLargeNumberSize() * 2;		// cc, cw
-	memory += g->getNumberOfPlayers() * GMPHelper::size_of_int(bigInt::factorial(g->getMaxPrecoalitionSize()));					// shapleyInternal (only very rough approximation
-	memory += (g->getWeightSum() + 1 - g->getQuota()) *g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize() * 2; // cw2, cwi
-	memory +=g->getMaxPrecoalitionSize() * c_sizeof_longUInt;																		// winternal
+	memory += max * GMPHelper::size_of_float(bigInt::factorial(max));														   // factorial
+	memory += (g->getWeightSum() + 1 - g->getQuota()) * g->getNumberOfPrecoalitions() * gCalculator->getLargeNumberSize() * 2; // cc, cw
+	memory += g->getNumberOfPlayers() * GMPHelper::size_of_int(bigInt::factorial(g->getMaxPrecoalitionSize()));				   // shapleyInternal (only very rough approximation
+	memory += (g->getWeightSum() + 1 - g->getQuota()) * g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize() * 2;   // cw2, cwi
+	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;																   // winternal
 
 	memory /= cMemUnit_factor;
 	longUInt ret = 0;

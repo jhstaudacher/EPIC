@@ -4,7 +4,8 @@
 
 #include <iostream>
 
-epic::index::HarsanyiNashIndex::HarsanyiNashIndex() : ItfPowerIndex() {}
+epic::index::HarsanyiNashIndex::HarsanyiNashIndex()
+	: ItfPowerIndex() {}
 
 std::vector<epic::bigFloat> epic::index::HarsanyiNashIndex::calculate(Game* g) {
 	std::vector<bigFloat> solution(g->getNumberOfPlayers());

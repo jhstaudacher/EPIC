@@ -5,7 +5,8 @@
 
 #include <iostream>
 
-epic::index::KoenigBraeuninger::KoenigBraeuninger(Game* g) : RawBanzhaf() {
+epic::index::KoenigBraeuninger::KoenigBraeuninger(Game* g)
+	: RawBanzhaf() {
 	if (g->getNumberOfNullPlayers() > 0 && g->getFlagNullPlayerHandling()) {
 		throw std::invalid_argument(log::invalidFlagF);
 	}

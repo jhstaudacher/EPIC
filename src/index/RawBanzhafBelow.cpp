@@ -4,7 +4,8 @@
 
 #include <iostream>
 
-epic::index::RawBanzhafBelow::RawBanzhafBelow() : ItfPowerIndex() {}
+epic::index::RawBanzhafBelow::RawBanzhafBelow()
+	: ItfPowerIndex() {}
 
 std::vector<epic::bigFloat> epic::index::RawBanzhafBelow::calculate(Game* g) {
 	// n_sp[x]: number of times player x is a swing player
@@ -41,7 +42,7 @@ std::string epic::index::RawBanzhafBelow::getFullName() {
 }
 
 epic::longUInt epic::index::RawBanzhafBelow::getMemoryRequirement(Game* g) {
-	bigInt memory = g->getNumberOfNonZeroPlayers() * gCalculator->getLargeNumberSize();						 // n_sp;
+	bigInt memory = g->getNumberOfNonZeroPlayers() * gCalculator->getLargeNumberSize();		   // n_sp;
 	memory += (g->getWeightSum() + 1 - g->getQuota()) * gCalculator->getLargeNumberSize() * 2; // n_wc + helper
 	memory /= cMemUnit_factor;
 

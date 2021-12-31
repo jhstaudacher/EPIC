@@ -5,7 +5,8 @@
 
 #include <cmath>
 
-epic::index::SymmetricCoalitionalBanzhaf::SymmetricCoalitionalBanzhaf() : PowerIndexWithPrecoalitions() {}
+epic::index::SymmetricCoalitionalBanzhaf::SymmetricCoalitionalBanzhaf()
+	: PowerIndexWithPrecoalitions() {}
 
 std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
@@ -47,7 +48,7 @@ std::vector<epic::bigFloat> epic::index::SymmetricCoalitionalBanzhaf::calculate(
 
 	generalizedBackwardCountingPerWeight(g, cc, g->getPrecoalitionWeights(), g->getNumberOfPrecoalitions());
 
-	bigFloat ExternalMultiplier = 1 / (pow(2, (g->getNumberOfPrecoalitions())-1));
+	bigFloat ExternalMultiplier = 1 / (pow(2, (g->getNumberOfPrecoalitions()) - 1));
 	for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); i++) {
 		int nbPlayersInParti = g->getPrecoalitions()[i].size();
 		//initialize winternal
@@ -121,13 +122,13 @@ epic::longUInt epic::index::SymmetricCoalitionalBanzhaf::getMemoryRequirement(Ga
 	auto g = static_cast<PrecoalitionGame*>(g_);
 
 	bigInt memory = (g->getWeightSum() + 1 - g->getQuota()) * gCalculator->getLargeNumberSize() * 2; // cc, cw
-	memory += g->getNumberOfPrecoalitions() * c_sizeof_longUInt;																   // g->getPrecoalitionWeights()
+	memory += g->getNumberOfPrecoalitions() * c_sizeof_longUInt;									 // g->getPrecoalitionWeights()
 	longUInt max = std::max(g->getMaxPrecoalitionSize(), g->getNumberOfPrecoalitions());
-	memory += max * GMPHelper::size_of_float(bigInt::factorial(max));												// factorial
-	memory += g->getNumberOfPlayers() * GMPHelper::size_of_int(bigInt::factorial(g->getMaxPrecoalitionSize()));					// shapleyInternal (only very rough approximation
-	memory += g->getNumberOfPlayers() * GMPHelper::size_of_int(bigInt::factorial(g->getNumberOfPrecoalitions()));						// banzhafExternal
+	memory += max * GMPHelper::size_of_float(bigInt::factorial(max));														 // factorial
+	memory += g->getNumberOfPlayers() * GMPHelper::size_of_int(bigInt::factorial(g->getMaxPrecoalitionSize()));				 // shapleyInternal (only very rough approximation
+	memory += g->getNumberOfPlayers() * GMPHelper::size_of_int(bigInt::factorial(g->getNumberOfPrecoalitions()));			 // banzhafExternal
 	memory += (g->getWeightSum() + 1 - g->getQuota()) * g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize() * 2; // cw2, cwi
-	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;																		// winternal
+	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;																 // winternal
 
 	longUInt ret = 0;
 	if (memory.fits_ulong_p()) {

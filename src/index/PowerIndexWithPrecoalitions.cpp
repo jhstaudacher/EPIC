@@ -2,7 +2,8 @@
 
 #include "lint/GlobalCalculator.h"
 
-epic::index::PowerIndexWithPrecoalitions::PowerIndexWithPrecoalitions() : ItfPowerIndex() {}
+epic::index::PowerIndexWithPrecoalitions::PowerIndexWithPrecoalitions()
+	: ItfPowerIndex() {}
 
 void epic::index::PowerIndexWithPrecoalitions::coalitionsContainingPlayerFromAbove(PrecoalitionGame* g, ArrayOffset<lint::LargeNumber>& cw, ArrayOffset<lint::LargeNumber>& cc, longUInt wi) {
 	for (longUInt i = g->getQuota(); i <= g->getWeightSum(); ++i) {

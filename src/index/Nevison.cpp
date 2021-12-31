@@ -6,7 +6,8 @@
 
 #include <iostream>
 
-epic::index::Nevison::Nevison(Game* g) : RawBanzhaf() {
+epic::index::Nevison::Nevison(Game* g)
+	: RawBanzhaf() {
 	if (g->getNumberOfNullPlayers() > 0 && g->getFlagNullPlayerHandling()) {
 		throw std::invalid_argument(log::invalidFlagF);
 	}

@@ -4,8 +4,8 @@
 #include "lint/GlobalCalculator.h"
 
 epic::longUInt epic::index::RawPublicHelpTheta::getMemoryRequirement(Game* g) {
-	bigInt memory = (g->getWeightSum() + 1 - g->getQuota()) * gCalculator->getLargeNumberSize() * 2;	// n_wc, helper
-	memory += g->getNumberOfPlayers() * gCalculator->getLargeNumberSize();								// wci
+	bigInt memory = (g->getWeightSum() + 1 - g->getQuota()) * gCalculator->getLargeNumberSize() * 2;  // n_wc, helper
+	memory += g->getNumberOfPlayers() * gCalculator->getLargeNumberSize();							  // wci
 	memory += GMPHelper::size_of_int(bigInt(1) << g->getNumberOfPlayers()) * g->getNumberOfPlayers(); // big_wci
 	memory /= cMemUnit_factor;
 
@@ -25,7 +25,8 @@ epic::lint::Operation epic::index::RawPublicHelpTheta::getOperationRequirement()
 	return lint::Operation::addition;
 }
 
-epic::index::RawPublicHelpTheta::RawPublicHelpTheta(Game* g) : PowerIndexWithWinningCoalitions() {
+epic::index::RawPublicHelpTheta::RawPublicHelpTheta(Game* g)
+	: PowerIndexWithWinningCoalitions() {
 	if (g->getNumberOfNullPlayers() > 0 && g->getFlagNullPlayerHandling()) {
 		throw std::invalid_argument(log::invalidFlagF);
 	}

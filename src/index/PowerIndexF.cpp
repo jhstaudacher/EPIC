@@ -3,7 +3,8 @@
 #include "Logging.h"
 #include "lint/GlobalCalculator.h"
 
-epic::index::PowerIndexF::PowerIndexF(Game* g) : SwingsPerPlayerAndCardinality() {
+epic::index::PowerIndexF::PowerIndexF(Game* g)
+	: SwingsPerPlayerAndCardinality() {
 	if (g->getNumberOfNullPlayers() > 0 && !g->getFlagNullPlayerHandling()) {
 		throw std::invalid_argument(log::missingFlagF);
 	}

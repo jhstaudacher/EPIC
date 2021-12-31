@@ -2,7 +2,8 @@
 
 #include "lint/GlobalCalculator.h"
 
-epic::index::SingleValueWS::SingleValueWS(Game* g) : RawFelsenthal(g) {}
+epic::index::SingleValueWS::SingleValueWS(Game* g)
+	: RawFelsenthal(g) {}
 
 std::vector<epic::bigFloat> epic::index::SingleValueWS::calculate(Game* g) {
 	// mwcs: number of minimal winning coalitions for each player i

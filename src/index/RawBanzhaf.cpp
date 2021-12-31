@@ -4,7 +4,8 @@
 
 #include <iostream>
 
-epic::index::RawBanzhaf::RawBanzhaf() : PowerIndexWithWinningCoalitions() {}
+epic::index::RawBanzhaf::RawBanzhaf()
+	: PowerIndexWithWinningCoalitions() {}
 
 std::vector<epic::bigFloat> epic::index::RawBanzhaf::calculate(Game* g) {
 	// n_sp[x]: number of times player x is a swing player
@@ -41,7 +42,7 @@ std::string epic::index::RawBanzhaf::getFullName() {
 }
 
 epic::longUInt epic::index::RawBanzhaf::getMemoryRequirement(Game* g) {
-	bigInt memory = g->getNumberOfNonZeroPlayers() * gCalculator->getLargeNumberSize();						 // n_sp;
+	bigInt memory = g->getNumberOfNonZeroPlayers() * gCalculator->getLargeNumberSize();		   // n_sp;
 	memory += (g->getWeightSum() + 1 - g->getQuota()) * gCalculator->getLargeNumberSize() * 2; // n_wc + helper
 	memory /= cMemUnit_factor;
 
@@ -126,7 +127,7 @@ void epic::index::RawBanzhaf::numberOfTimesPlayerIsSwingPlayer(Game* g, ArrayOff
 	gCalculator->free_largeNumberArray(helper.getArrayPointer());
 }
 
-void epic::index::RawBanzhaf::numberOfSwingPlayer(Game*g, lint::LargeNumber n_sp[], lint::LargeNumber& total_sp) {
+void epic::index::RawBanzhaf::numberOfSwingPlayer(Game* g, lint::LargeNumber n_sp[], lint::LargeNumber& total_sp) {
 	for (longUInt i = 0; i < g->getNumberOfNonZeroPlayers(); ++i) {
 		gCalculator->plusEqual(total_sp, n_sp[i]);
 	}

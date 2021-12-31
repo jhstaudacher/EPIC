@@ -3,7 +3,8 @@
 #include "Logging.h"
 #include "lint/GlobalCalculator.h"
 
-epic::index::RawPublicHelpThetaSD::RawPublicHelpThetaSD(Game* g) : RawBanzhaf() {
+epic::index::RawPublicHelpThetaSD::RawPublicHelpThetaSD(Game* g)
+	: RawBanzhaf() {
 	if (g->getNumberOfNullPlayers() > 0 && g->getFlagNullPlayerHandling()) {
 		throw std::invalid_argument(log::invalidFlagF);
 	}

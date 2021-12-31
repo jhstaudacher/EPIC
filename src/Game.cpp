@@ -209,10 +209,6 @@ epic::longUInt epic::Game::findNullPlayersFromBelow(bool flag_withoutNullPlayers
 	}
 }
 
-
-
-
-
 /*
  *
  * ##########################
@@ -221,7 +217,8 @@ epic::longUInt epic::Game::findNullPlayersFromBelow(bool flag_withoutNullPlayers
  *
  */
 
-epic::PrecoalitionGame::PrecoalitionGame(longUInt quota, std::vector<longUInt>& untreated_weights, bool flag_withoutNullPlayers, std::vector<std::vector<int>>& precoalitions) : Game(quota, untreated_weights, flag_withoutNullPlayers) {
+epic::PrecoalitionGame::PrecoalitionGame(longUInt quota, std::vector<longUInt>& untreated_weights, bool flag_withoutNullPlayers, std::vector<std::vector<int>>& precoalitions)
+	: Game(quota, untreated_weights, flag_withoutNullPlayers) {
 	mPrecoalitions = precoalitions;
 
 	sortPrecoalitions();
@@ -243,8 +240,8 @@ epic::PrecoalitionGame::PrecoalitionGame(longUInt quota, std::vector<longUInt>& 
 }
 
 void epic::PrecoalitionGame::sortPrecoalitions() {
-	for (auto& prec: mPrecoalitions) {
-		for (auto& it: prec) {
+	for (auto& prec : mPrecoalitions) {
+		for (auto& it : prec) {
 			it = mPermutation.applyIndex(it);
 		}
 	}

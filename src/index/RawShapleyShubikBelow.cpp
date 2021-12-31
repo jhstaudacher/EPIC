@@ -5,7 +5,8 @@
 
 #include <algorithm>
 
-epic::index::RawShapleyShubikBelow::RawShapleyShubikBelow() : ItfPowerIndex() {}
+epic::index::RawShapleyShubikBelow::RawShapleyShubikBelow()
+	: ItfPowerIndex() {}
 
 std::vector<epic::bigFloat> epic::index::RawShapleyShubikBelow::calculate(Game* g) {
 	// ssi(x, y): ShapleyShubik matrix - number of times player x is a swing player in a coalition of cardinality y
@@ -102,8 +103,8 @@ void epic::index::RawShapleyShubikBelow::numberOfLosingCoalitionsPerWeightAndCar
 	for (longUInt i = 0; i < g->getNumberOfNonZeroPlayers(); ++i) { // i: player index
 		longUInt wi = g->getWeights()[i];
 
-		for (longInt w = g->getQuota() - wi - 1; w >= 0; --w) { // w: weight
-			for (longUInt c = 0; c < g->getNumberOfNonZeroPlayers(); ++c) {   // c: cardinality
+		for (longInt w = g->getQuota() - wi - 1; w >= 0; --w) {				// w: weight
+			for (longUInt c = 0; c < g->getNumberOfNonZeroPlayers(); ++c) { // c: cardinality
 				gCalculator->plusEqual(n_lc(w + wi, c + 1), n_lc(w, c));
 			}
 		}
@@ -122,20 +123,20 @@ void epic::index::RawShapleyShubikBelow::swingsPerPlayerAndCardinality(Game* g, 
 		longUInt wi = g->getWeights()[i];
 
 		longUInt m = std::min(wi, g->getQuota());
-		for (longUInt w = 0; w < m; ++w) {						 // w: weight
+		for (longUInt w = 0; w < m; ++w) {									// w: weight
 			for (longUInt c = 0; c < g->getNumberOfNonZeroPlayers(); ++c) { // c: cardinality
 				gCalculator->assign(helper(w, c), n_lc(w, c));
 			}
 		}
 
-		for (longUInt w = wi; w < g->getQuota(); ++w) {		  // w: weight
+		for (longUInt w = wi; w < g->getQuota(); ++w) {						 // w: weight
 			for (longUInt c = 1; c <= g->getNumberOfNonZeroPlayers(); ++c) { // c: cardinality
 				gCalculator->minus(helper(w, c), n_lc(w, c), helper(w - wi, c - 1));
 			}
 		}
 
 		m = wi > g->getQuota() ? 0UL : g->getQuota() - wi;
-		for (longUInt w = m; w < g->getQuota(); ++w) {		 // w: weight
+		for (longUInt w = m; w < g->getQuota(); ++w) {						// w: weight
 			for (longUInt c = 0; c < g->getNumberOfNonZeroPlayers(); ++c) { // c: cardinality
 				gCalculator->plusEqual(raw_ssi(i, c + 1), helper(w, c));
 			}
