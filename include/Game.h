@@ -66,19 +66,12 @@ public:
 	 * @tparam T The vector's content type
 	 * @param values The original vector to be permuted (stays unchanged)
 	 * @param destination The return vector to store the result
-	 * @param fill_value The value to be used if the values vector is smaller than the permutation size (getSize())
 	 *
-	 * @note The destination vector must at least be as large as the permutation itself, i.e. destination.size() >= getSize(). If the values vector is smaller than getSize(), the remaining elements are interpreted as being of value fill_value. Even if the values vector is large, only the first getSize() elements get processed.
+	 * @note Both, the values and destination vector must at least be as large as the permutation itself, i.e. values.size() >= getSize() and destination.size() >= getSize(). Only the first getSize() elements get processed.
 	 */
-	template<class T> void apply(const std::vector<T>& values, std::vector<T>& destination, T fill_value = 0) const {
-		size_t i = 0;
-		size_t min_size = std::min(mI.size(), values.size());
-		for (; i < min_size; ++i) {
+	template<class T> void apply(const std::vector<T>& values, std::vector<T>& destination) const {
+		for (size_t i = 0; i < getSize(); ++i) {
 			destination[mI[i]] = values[i];
-		}
-
-		for (; i < mI.size(); ++i) {
-			destination[mI[i]] = fill_value;
 		}
 	}
 
@@ -113,21 +106,12 @@ public:
 	 * @tparam T The vector's content type
 	 * @param values The original vector to be permuted (stays unchanged)
 	 * @param destination The return vector to store the result
-	 * @param fill_value The value to be used if the values vector is smaller then the permutation size (getSize())
 	 *
-	 * @note The destination vector must be as large as the permutation itself, i.e. destination.size() >= getSize(). If the values vector is smaller than getSize(), the remaining elements are interpreted as being of value fill_value. Even if the values vector is larger, only the first getSize() elements get processed.
+	 * @note Both, the values and destination vector must be as large as the permutation itself, i.e. value.size >= getSize() and destination.size() >= getSize(). Only the first getSize() elements get processed.
 	 */
-	template<class T> void reverse(const std::vector<T>& values, std::vector<T>& destination, T fill_value = 0) const {
-		destination.resize(mP.size()); // ensure at least the same size as mP
-
-		size_t i = 0;
-		size_t min_size = std::min(mP.size(), values.size());
-		for (; i < min_size; ++i) {
+	template<class T> void reverse(const std::vector<T>& values, std::vector<T>& destination) const {
+		for (size_t i = 0; i < getSize(); ++i) {
 			destination[mP[i]] = values[i];
-		}
-
-		for (; i < mP.size(); ++i) {
-			destination[mP[i]] = fill_value;
 		}
 	}
 
