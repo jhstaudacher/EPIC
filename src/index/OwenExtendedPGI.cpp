@@ -1,211 +1,198 @@
 #include "index/OwenExtendedPGI.h"
-#include "index/PublicGood.h"
 
 #include "Logging.h"
+#include "index/PublicGood.h"
 #include "lint/GlobalCalculator.h"
 
 #include <cmath>
 
-epic::index::OwenExtendedPGI::OwenExtendedPGI() : PowerIndexWithPrecoalitions() {}
+epic::index::OwenExtendedPGI::OwenExtendedPGI()
+	: PowerIndexWithPrecoalitions() {}
 
 std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
-
-	std::vector<bigFloat> solution(g->getNumberOfPlayers(),0.0);
-	longUInt quota = g->getQuota();
-	mpf_class big_float("0");
-	
-	std::vector<longUInt> preCoalitionWeights = g->getPrecoalitionWeights();
-	// std::cout << "prec weights" << "\n";
-	//for (auto it : preCoalitionWeights ){
-		// std::cout << it << "\n";
-	//}
-	// std::cout <<"\n";
+	std::vector<bigFloat> solution;
 
 	// Create game object from weights of precoalitions with original quota
-	auto precoalitionGame = new Game(quota, preCoalitionWeights, false);
-	
-	std::vector<bigFloat> externalSolution(g->getNumberOfPrecoalitions());
-	auto rawExternalSolution = new lint::LargeNumber[g->getNumberOfPrecoalitions()];
-	gCalculator->allocInit_largeNumberArray(rawExternalSolution,g->getNumberOfPrecoalitions()); 
-	
-	bigFloat denominator = 0;
-	
-	PublicGood* extPGI = new PublicGood();
-	
-	extPGI->calculate(precoalitionGame, externalSolution);
-	// std::cout << "externalSolution:" << "\n";
-	// for (auto it : externalSolution) {
-			// std::cout << it << "\n";
-	//}
-	// std::cout << "\n";
-	//
-	
-	RawPublicGood* rawExtPGI = new RawPublicGood();
-	rawExtPGI->calculate(precoalitionGame, rawExternalSolution);
-	
-	bigInt big_tmp;
-	
-	
-    //players in precoalitionGame are already in descending order	
-	if (precoalitionGame->getWeights()[0] >= quota){
+	auto precoalitionGame = new Game(g->getQuota(), g->getPrecoalitionWeights(), false);
+	PublicGood* pgi = new PublicGood();
+
+	//players in precoalitionGame are already in descending order
+	if (precoalitionGame->getWeights()[0] >= g->getQuota()) {
 		longUInt kk = precoalitionGame->getPermutation().inverseIndex(0);
 		longUInt nbPlayersInParti = g->getPrecoalitions()[kk].size();
-		std::vector<longUInt> weightsVector(nbPlayersInParti);
-		std::vector<bigFloat> intSolution(nbPlayersInParti);
-		std::vector<bigFloat> sortedSolution(nbPlayersInParti);
-		for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
-			weightsVector[ii] =  g->getWeights()[g->getPrecoalitions()[kk][ii]];
-	    }
-		auto intGame = new Game(quota, weightsVector, false);
-		// Reuse PublicGood-Object we already have ...
-		extPGI->calculate(intGame,intSolution); 
-		intGame->getPermutation().reverse(intSolution,sortedSolution);
-		for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
-			solution[g->getPrecoalitions()[kk][ii]] =  sortedSolution[ii];
-	    }
-		delete intGame;
-	}
-    // Else: There is no dictator precoalition	
-	else {
-			auto interm = new lint::LargeNumber[quota];
-			gCalculator->alloc_largeNumberArray(interm, quota);
-			gCalculator->assign_one(interm[0]);
-			for (longUInt weight = 1; weight < quota; weight++) {
-				gCalculator->assign_zero(interm[weight]);
+
+		Game* intGame = nullptr;
+		{
+			std::vector<longUInt> weightsVector(nbPlayersInParti);
+			for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
+				weightsVector[ii] = g->getWeights()[g->getPrecoalitions()[kk][ii]];
 			}
-			for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); i++) {
-				longUInt kk = precoalitionGame->getPermutation().inverseIndex(i);
-				//We need to process precoalitions by their weights ...
-				longUInt nbPlayersInParti = g->getPrecoalitions()[kk].size();
-				std::vector<bigFloat> intPGIs(nbPlayersInParti);
-				std::vector<longUInt> weightsVector(nbPlayersInParti);
-				longUInt precoalWeight = precoalitionGame->getWeights()[i];
-				long lower;
-				long diff;
-				// std::cout << "i :  " << i << "\n";
-				// std::cout << "precoalWeight :  " <<  precoalWeight <<"\n";
-				// std::cout << "Number of players in that partition: \n";
-                // std::cout << nbPlayersInParti << "\n";				
-				// This works -- and weights of precoalitions are already in descending order.
-				std::vector<std::vector<bigFloat>> helpPGIs(precoalWeight, std::vector<bigFloat>(nbPlayersInParti, 0));
-				std::vector<bigFloat> helpSolution(nbPlayersInParti);
-				std::vector<bigFloat> sortedHelpSolution(nbPlayersInParti);
-				for (longUInt ii=0; ii < nbPlayersInParti; ii++){
-					weightsVector[ii] = g->getWeights()[g->getPrecoalitions()[kk][ii]];
-				}
-				// Delete later: output weightsVector
-				// std::cout << "weightsVector:" << "\n";
-				//for (auto it : weightsVector) {
-						// std::cout << it << "\n";
-				//}
-				// std::cout << "End of weightsVector \n";
-				//
-				for (longUInt iii=0; iii < precoalWeight; iii++){
-					if (nbPlayersInParti > 1){
-						auto helpGame = new Game(iii+1, weightsVector, false);
-						extPGI->calculate(helpGame, helpSolution);
-						helpGame->getPermutation().reverse(helpSolution,sortedHelpSolution);
-						// std::cout << "weight: " << iii << "\n";
-						for (longUInt ii=0; ii < nbPlayersInParti; ii++){
-							helpPGIs[iii][ii] = sortedHelpSolution[ii];
-							// std::cout << "ii : " << ii  << "\n";
-							// std::cout << "helpPGIs[iii][ii]: " << helpPGIs[iii][ii] << "\n";
-						}
-						delete helpGame;
-					}
-					else{
-						helpPGIs[iii][0] = 1;
-						// std::cout << "helpPGIs[iii][0]: " << helpPGIs[iii][0] << "\n";
-					}
-				}
-				//std::cout << i << "  End of for-loop for weights for helpPGIs ! \n";
-				    if (i>0){
-						for (longUInt ii=0; ii < nbPlayersInParti; ii++){
-							for (longUInt weight=quota-precoalWeight; weight <= (quota-1); weight++){
-								gCalculator->to_bigInt(&big_tmp, interm[weight-1]);
-								big_float = big_tmp.get_d();
-								// std::cout << "ii in i>1 : " << ii << "  interm[weight-1]: " << big_float << "\n";
-								// std::cout << "ii in i>1 : " << ii << "  helpPGIs[quota-weight-1][ii]: " << helpPGIs[quota-weight-1][ii] << "\n";
-								intPGIs[ii] += big_float*helpPGIs[quota-weight-1][ii];
-								// std::cout << "ii in i>1 : " << ii << "  intPGIs[ii]: " << intPGIs[ii] << "\n";
-							}
-						}
-						// std::cout << "End of for loop for i>1 reached. \n";
-					}
-					if (i < (g->getNumberOfPrecoalitions())-1){
-						  auto interm2 = new lint::LargeNumber[quota];
-					      gCalculator->alloc_largeNumberArray(interm2, quota);
-						  gCalculator->assign_one(interm2[0]);
-						  for (longUInt weight = 0; weight <= quota -1; weight++){
-							  gCalculator->assign(interm2[weight], interm[weight]);
-						  }
-						  for (longUInt j=i+1; j < g->getNumberOfPrecoalitions(); j++){
-							longUInt precoalWeight_j = precoalitionGame->getWeights()[j];
-							// std::cout << "j:" << j << "\n";
-							// std::cout << "precoalWeight_j:" << precoalWeight_j << "\n";
-							if (quota <= (precoalWeight+precoalWeight_j)){
-							  for (longUInt jj=0; jj <nbPlayersInParti; jj++){
-								intPGIs[jj] += helpPGIs[quota-precoalWeight_j-1][jj];
-								// std::cout << "jj in i<n and if : " << jj << "  intPGIs[ii]: " << intPGIs[jj] << "\n";
-							  }
-							}
-							else{
-							  diff = quota-precoalWeight-precoalWeight_j;
-							  // std::cout << "diff:" << diff << "\n";
-							  lower = 1;
-							  if (diff > 1) {lower = diff;}
-							  // std::cout << "lower:" << lower << "\n";
-							  for (longUInt jj=0; jj <nbPlayersInParti; jj++){
-								for (longUInt weight=lower; weight <= (quota-precoalWeight-1); weight++){
-								  	gCalculator->to_bigInt(&big_tmp, interm2[weight-1]);
-									big_float = big_tmp.get_d();
-									intPGIs[jj] += big_float*helpPGIs[quota-precoalWeight_j-weight-1][jj];
-									// std::cout << "jj in i<n and else : " << jj << "  interm2[weight-1]: " << big_float << "\n";
-									// std::cout << "jj in i<n and else : " << jj << "  helpPGIs[quota-precoalWeight_j-weight-1][jj]: " << helpPGIs[quota-precoalWeight_j-weight-1][jj] << "\n";
-									// std::cout << "jj in i<n and else : " << jj << "  intPGIs[ii]: " << intPGIs[jj] << "\n";
-								}
-							  }
-							}  // end else
-							// Update interm2
-							for (longUInt weight = quota; weight > precoalWeight_j; --weight) {
-									gCalculator->plusEqual(interm2[weight - 1], interm2[weight - precoalWeight_j - 1]);
-							}
-						} // end for j */
-						// std::cout << "End of for loop for j reached. \n";
-						gCalculator->free_largeNumberArray(interm2);
-						delete[] interm2;
-					} // end if 
-					//std::cout << "End of if-clause reached. Deleted interm2 \n";
-					//std::cout << "i :  " << i << "\n";
-					// Update interm
-					for (longUInt weight = quota; weight > precoalWeight; --weight) {
-								gCalculator->plusEqual(interm[weight - 1], interm[weight - precoalWeight - 1]);
-					} // end for weight
-					//std::cout << "solution for i:" << i << "\n";
-					gCalculator->to_bigInt(&big_tmp, rawExternalSolution[i]);
-					big_float = big_tmp.get_d();
-					// std::cout << "rawExternalSolution[i]: " << big_float << "\n";
-					// std::cout << "externalSolution[i]: " << externalSolution[i] << "\n";
-					for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
-						// std::cout << "ii : " << ii << " intPGIs[ii] : " << intPGIs[ii] << "\n";
-						solution[g->getPrecoalitions()[kk][ii]] = (intPGIs[ii] / big_float)*externalSolution[i];
-						// std::cout << "solution[g->getPrecoalitions()[kk][ii]] :  " << solution[g->getPrecoalitions()[kk][ii]] << "\n";
-					}
-			} // end for i
-			gCalculator->free_largeNumberArray(interm);
-			delete[] interm;
+			intGame = new Game(g->getQuota(), weightsVector, false);
+		}
+
+		std::vector<bigFloat> sortedSolution(nbPlayersInParti);
+		{
+			std::vector<bigFloat> intSolution(nbPlayersInParti);
+			pgi->calculate(intGame, intSolution);
+
+			intGame->getPermutation().reverse(intSolution, sortedSolution);
+		}
+		delete intGame;
+
+		solution.resize(g->getNumberOfPlayers(), 0.0); // initialize with zero
+		for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
+			solution[g->getPrecoalitions()[kk][ii]] = sortedSolution[ii];
+		}
 	}
-	
+	else { // There is no dictator precoalition
+
+		bigFloat big_float("0");
+		bigInt big_tmp;
+
+		auto interm = new lint::LargeNumber[g->getQuota()];
+		gCalculator->allocInit_largeNumberArray(interm, g->getQuota());
+		gCalculator->assign_one(interm[0]);
+
+		solution.resize(g->getNumberOfPlayers(), 0.0); // initialize with zero
+		std::vector<bigFloat> intPGIs(g->getMaxPrecoalitionSize());
+		std::vector<std::vector<bigFloat>> helpPGIs(precoalitionGame->getWeights()[0], std::vector<bigFloat>(g->getMaxPrecoalitionSize()));
+
+		for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); i++) {
+			for (auto& it : intPGIs) {
+				it = 0;
+			}
+
+			longUInt kk = precoalitionGame->getPermutation().inverseIndex(i);
+			//We need to process precoalitions by their weights ...
+			longUInt nbPlayersInParti = g->getPrecoalitions()[kk].size();
+			std::vector<longUInt> weightsVector(nbPlayersInParti);
+			longUInt precoalWeight = precoalitionGame->getWeights()[i];
+			long lower;
+			long diff;
+
+			// This works -- and weights of precoalitions are already in descending order.
+			std::vector<bigFloat> helpSolution(nbPlayersInParti);
+			std::vector<bigFloat> sortedHelpSolution(nbPlayersInParti);
+			for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
+				weightsVector[ii] = g->getWeights()[g->getPrecoalitions()[kk][ii]];
+			}
+			// Delete later: output weightsVector
+
+			// calculate helpPGIs
+			for (longUInt iii = 0; iii < precoalWeight; iii++) {
+				if (nbPlayersInParti > 1) {
+					auto helpGame = new Game(iii + 1, weightsVector, false);
+					pgi->calculate(helpGame, helpSolution);
+					helpGame->getPermutation().reverse(helpSolution, sortedHelpSolution);
+					for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
+						helpPGIs[iii][ii] = sortedHelpSolution[ii];
+					}
+					delete helpGame;
+				} else {
+					helpPGIs[iii][0] = 1;
+					for (longUInt ii = 1; ii < nbPlayersInParti; ++ii) {
+						helpPGIs[iii][ii] = 0;
+					}
+				}
+			}
+
+			if (i > 0) {
+				for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
+					for (longUInt weight = g->getQuota() - precoalWeight; weight <= (g->getQuota() - 1); weight++) {
+						gCalculator->to_bigInt(&big_tmp, interm[weight - 1]);
+						big_float = big_tmp;
+						intPGIs[ii] += big_float * helpPGIs[g->getQuota() - weight - 1][ii];
+					}
+				}
+			}
+			if (i < (g->getNumberOfPrecoalitions()) - 1) {
+				auto interm2 = new lint::LargeNumber[g->getQuota()];
+				gCalculator->alloc_largeNumberArray(interm2, g->getQuota());
+				gCalculator->assign_one(interm2[0]);
+				for (longUInt weight = 0; weight <= g->getQuota() - 1; weight++) {
+					gCalculator->assign(interm2[weight], interm[weight]);
+				}
+				for (longUInt j = i + 1; j < g->getNumberOfPrecoalitions(); j++) {
+					longUInt precoalWeight_j = precoalitionGame->getWeights()[j];
+					if (g->getQuota() <= (precoalWeight + precoalWeight_j)) {
+						for (longUInt jj = 0; jj < nbPlayersInParti; jj++) {
+							intPGIs[jj] += helpPGIs[g->getQuota() - precoalWeight_j - 1][jj];
+						}
+					} else {
+						diff = g->getQuota() - precoalWeight - precoalWeight_j;
+						lower = 1;
+						if (diff > 1) {
+							lower = diff;
+						}
+
+						for (longUInt jj = 0; jj < nbPlayersInParti; jj++) {
+							for (longUInt weight = lower; weight <= (g->getQuota() - precoalWeight - 1); weight++) {
+								gCalculator->to_bigInt(&big_tmp, interm2[weight - 1]);
+								big_float = big_tmp;
+								intPGIs[jj] += big_float * helpPGIs[g->getQuota() - precoalWeight_j - weight - 1][jj];
+							}
+						}
+					} // end else
+
+					// Update interm2
+					for (longUInt weight = g->getQuota(); weight > precoalWeight_j; --weight) {
+						gCalculator->plusEqual(interm2[weight - 1], interm2[weight - precoalWeight_j - 1]);
+					}
+				} // end for j
+
+				gCalculator->free_largeNumberArray(interm2);
+				delete[] interm2;
+			} // end if
+
+			// Update interm
+			for (longUInt weight = g->getQuota(); weight > precoalWeight; --weight) {
+				gCalculator->plusEqual(interm[weight - 1], interm[weight - precoalWeight - 1]);
+			}
+
+			for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
+				solution[g->getPrecoalitions()[kk][ii]] = intPGIs[ii];
+			}
+		} // end for i
+
+		intPGIs.clear();
+		helpPGIs.clear();
+		gCalculator->free_largeNumberArray(interm);
+		delete[] interm;
+
+
+		// calculate external games
+		std::vector<bigFloat> externalSolution(g->getNumberOfPrecoalitions());
+		pgi->calculate(precoalitionGame, externalSolution);
+
+		RawPublicGood* rpgi = new RawPublicGood();
+		auto rawExternalSolution = new lint::LargeNumber[g->getNumberOfPrecoalitions()];
+		gCalculator->allocInit_largeNumberArray(rawExternalSolution, g->getNumberOfPrecoalitions());
+		rpgi->calculate(precoalitionGame, rawExternalSolution);
+		delete rpgi;
+
+		// scale the solution
+		for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); i++) {
+			longUInt kk = precoalitionGame->getPermutation().inverseIndex(i);
+			longUInt nbPlayersInParti = g->getPrecoalitions()[kk].size();
+
+			gCalculator->to_bigInt(&big_tmp, rawExternalSolution[i]);
+			big_float = big_tmp;
+			for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
+				solution[g->getPrecoalitions()[kk][ii]] /= big_float;
+				solution[g->getPrecoalitions()[kk][ii]] *= externalSolution[i];
+			}
+		}
+
+		gCalculator->free_largeNumberArray(rawExternalSolution);
+		delete[] rawExternalSolution;
+	}
+
 	delete precoalitionGame;
-	delete extPGI;
-	delete rawExtPGI;
-	gCalculator->free_largeNumberArray(rawExternalSolution);
-	delete[] rawExternalSolution;
+	delete pgi;
 
 	return solution;
 }
-
 
 std::string epic::index::OwenExtendedPGI::getFullName() {
 	return "OwenExtendedPGI";
@@ -215,9 +202,9 @@ epic::longUInt epic::index::OwenExtendedPGI::getMemoryRequirement(Game* g_) {
 	auto g = static_cast<PrecoalitionGame*>(g_);
 
 	bigInt memory = g->getNumberOfNonZeroPlayers() * (g->getQuota() - 2) * gCalculator->getLargeNumberSize(); // crude approximation for helpPGIs
-	memory += (g->getQuota()) * gCalculator->getLargeNumberSize() * 2; // interm, interm2
-	memory += g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize();											 
-	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;															   
+	memory += (g->getQuota()) * gCalculator->getLargeNumberSize() * 2;										  // interm, interm2
+	memory += g->getMaxPrecoalitionSize() * gCalculator->getLargeNumberSize();
+	memory += g->getMaxPrecoalitionSize() * c_sizeof_longUInt;
 	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;
