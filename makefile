@@ -20,6 +20,7 @@ INC_DIR=include
 SRCS=$(shell find $(SRC_DIR) -name "*.cpp") # find all source files (.cpp)
 OBJS=$(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS)) # generate list of object files (.o)
 
+
 CFLAGS= -Ofast -Wall -std=c++17 -I$(INC_DIR)
 
 # Add the path to your manual GMP installation to the variable below using the -L prefix (e.g. LDFLAGS=-Lpath/to/gmp-lib -lgmpxx -lgmp)
@@ -34,6 +35,29 @@ $(TARGET): $(OBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CXX) -c -o $@ $< $(CFLAGS)
+
+
+#
+#
+#
+TEST_DIR=unittests
+TESTS=$(shell find $(TEST_DIR) -name "*.cpp") # find all test files (.cpp)
+TEST_OBJS=$(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))+$(patsubst $(TEST_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(TESTS)) # add .o files for the tests
+TEST_TARGET=testtarget
+
+.PHONY: test
+test:
+	@cd $(TEST_DIR); find * -type d -exec mkdir -p -- ../$(BUILD_DIR)/{} \;
+	$(MAKE) $(TEST_TARGET)
+
+$(TEST_TARGET): $(TEST_OBJS)
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CXX) -c -o $@ $< $(CFLAGS)
+
+$(BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp
 	$(CXX) -c -o $@ $< $(CFLAGS)
 
 
