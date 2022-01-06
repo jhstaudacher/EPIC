@@ -43,19 +43,20 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 #
 TEST_DIR=unittests
 TESTS=$(shell find $(TEST_DIR) -name "*.cpp") # find all test files (.cpp)
-TEST_OBJS=$(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))+$(patsubst $(TEST_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(TESTS)) # add .o files for the tests
+TEST_OBJS=$(filter-out $(BUILD_DIR)/main.o,$(OBJS)) # copy OBJS without original main file
+TEST_OBJS+=$(patsubst $(TEST_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(TESTS)) # add test specific .o files
 TEST_TARGET=testtarget
 
 .PHONY: test
 test:
-	@cd $(TEST_DIR); find * -type d -exec mkdir -p -- ../$(BUILD_DIR)/{} \;
+	@echo $(TEST_OBJS)
+	@cd $(SRC_DIR); find * -type d -exec mkdir -p -- ../$(BUILD_DIR)/{} \; # create directory-hierarchy from SRC_DIR in BUILD_DIR
+	@cd $(TEST_DIR); find * -type d -exec mkdir -p -- ../$(BUILD_DIR)/{} \; # create directory-hierarchy from TEST_DIR in BUILD_DIR
 	$(MAKE) $(TEST_TARGET)
 
 $(TEST_TARGET): $(TEST_OBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) -c -o $@ $< $(CFLAGS)
 
 $(BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp
 	$(CXX) -c -o $@ $< $(CFLAGS)
