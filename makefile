@@ -45,11 +45,10 @@ TEST_DIR=unittests
 TESTS=$(shell find $(TEST_DIR) -name "*.cpp") # find all test files (.cpp)
 TEST_OBJS=$(filter-out $(BUILD_DIR)/main.o,$(OBJS)) # copy OBJS without original main file
 TEST_OBJS+=$(patsubst $(TEST_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(TESTS)) # add test specific .o files
-TEST_TARGET=testtarget
+TEST_TARGET=test
 
 .PHONY: test
 test:
-	@echo $(TEST_OBJS)
 	@cd $(SRC_DIR); find * -type d -exec mkdir -p -- ../$(BUILD_DIR)/{} \; # create directory-hierarchy from SRC_DIR in BUILD_DIR
 	@cd $(TEST_DIR); find * -type d -exec mkdir -p -- ../$(BUILD_DIR)/{} \; # create directory-hierarchy from TEST_DIR in BUILD_DIR
 	$(MAKE) $(TEST_TARGET)
@@ -92,3 +91,4 @@ clean:
 	rm -f $(TARGET)
 	rm -rf $(DOC_DIR)
 	rm -f $(DOC_TARGET)
+	rm -f $(TEST_TARGET)
