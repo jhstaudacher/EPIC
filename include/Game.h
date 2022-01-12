@@ -282,7 +282,7 @@ private:
 	 *
 	 * @return The sorting permutation (sortWeights()[x] = the pre-sorted index of sorted index x)
 	 */
-	std::vector<longUInt> sortWeights();
+	std::vector<size_t> sortWeights();
 
 	/**
 	 * A function to sort out the player, who are in no minimum winning coalitions

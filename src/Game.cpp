@@ -108,15 +108,15 @@ epic::longUInt epic::Game::playerIndexToNumber(longUInt index) const {
 	return mPermutation.inverseIndex(index) + 1;
 }
 
-std::vector<epic::longUInt> epic::Game::sortWeights() {
-	std::vector<std::pair<longUInt, longUInt>> weight_index_pair(mWeights.size());
-	for (longUInt i = 0; i < mWeights.size(); ++i) {
+std::vector<size_t> epic::Game::sortWeights() {
+	std::vector<std::pair<longUInt, size_t>> weight_index_pair(mWeights.size());
+	for (size_t i = 0; i < mWeights.size(); ++i) {
 		weight_index_pair[i] = std::make_pair(mWeights[i], i);
 	}
 	std::sort(weight_index_pair.begin(), weight_index_pair.end(), std::greater<>());
 
-	std::vector<longUInt> p(mWeights.size());
-	for (longUInt i = 0; i < mWeights.size(); ++i) {
+	std::vector<size_t> p(mWeights.size());
+	for (size_t i = 0; i < mWeights.size(); ++i) {
 		mWeights[i] = weight_index_pair[i].first;
 		p[i] = weight_index_pair[i].second;
 	}
