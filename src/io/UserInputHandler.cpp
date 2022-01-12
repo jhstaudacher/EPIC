@@ -194,7 +194,7 @@ bool epic::io::UserInputHandler::parseCommandLine(int numberOfArguments, char* v
 				if ((mIndex.compare("SCB") == 0) || (mIndex.compare("BO") == 0) || (mIndex.compare("O") == 0)) {
 					std::string argument = "-p";
 					if (argument.compare(vectorOfArguments[optind]) != 0) {
-						std::cout << "missing argument for precoalition games: -p" << std::endl;
+						std::cout << "missing argument for precoalition games: -p (which has to be before -w)" << std::endl;
 						return false;
 					}
 				}
