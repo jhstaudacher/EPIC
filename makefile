@@ -4,6 +4,7 @@ help:
 	@echo "The following rules are available:"
 	@echo "all:   compile the application"
 	@echo "docs:  create the documentation ($(DOC_TARGET), docs/html/index.html)"
+	@echo "test:  compile the unittests"
 	@echo "clean: remove all compilation and documentation products"
 	@echo "help:  shows this useful message"
 
@@ -38,9 +39,6 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) -c -o $@ $< $(CFLAGS)
 
 
-#
-#
-#
 TEST_DIR=unittests
 TESTS=$(shell find $(TEST_DIR) -name "*.cpp") # find all test files (.cpp)
 TEST_OBJS=$(filter-out $(BUILD_DIR)/main.o,$(OBJS)) # copy OBJS without original main file
