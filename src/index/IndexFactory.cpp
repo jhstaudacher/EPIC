@@ -6,6 +6,7 @@
 #include "index/AbsolutePublicGood.h"
 #include "index/Banzhaf.h"
 #include "index/BanzhafOwen.h"
+#include "index/BanzhafOwenBelow.h"
 #include "index/BanzhafBelow.h"
 #include "index/ColemanCollective.h"
 #include "index/ColemanInitiative.h"
@@ -19,6 +20,7 @@
 #include "index/Nevison.h"
 #include "index/NevisonPH.h"
 #include "index/Owen.h"
+#include "index/OwenBelow.h"
 #include "index/PowerIndexF.h"
 #include "index/PowerIndexG.h"
 #include "index/PowerIndexGPH.h"
@@ -45,6 +47,7 @@
 #include "index/SingleValueWM.h"
 #include "index/SingleValueWS.h"
 #include "index/SymmetricCoalitionalBanzhaf.h"
+#include "index/SymmetricCoalitionalBanzhafBelow.h"
 #include "index/Tijs.h"
 
 const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std::string>> epic::index::IndexFactory::cIndexNames = {
@@ -54,6 +57,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{APIG, {"APIG", "absolute null-player-free Power Index G (based on the Dubey-Shapley identity)"}},
 	{BZ, {"BZ", "Banzhaf"}},
 	{BO, {"BO", "Banzhaf-Owen"}},
+	{BOB, {"BOB", "Banzhaf-Owen from below"}},
 	{BZB, {"BZB", "Banzhaf below"}},
 	{CC, {"CC", "Coleman collective"}},
 	{CI, {"CI", "Coleman initiative"}},
@@ -67,6 +71,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{N, {"N", "Nevison (based on the Dubey-Shapley identity)"}},
 	{NPH, {"NPH", "Nevsion (based on raw Public Help theta)"}},
 	{O, {"O", "Owen"}},
+	{OB, {"OB", "Owen from below"}},
 	{PG, {"PG", "Public Good"}},
 	{PHT, {"PHT", "Public Help theta (based on the Dubey-Shapley identity)"}},
 	{PHTPH, {"PHTPH", "Public Help theta (based on the raw Public Help theta)"}},
@@ -87,6 +92,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{RPIF, {"RPIF", "raw null-player-free Power Index F"}},
 	{RSH, {"RSH", "raw Shapley Shubik"}},
 	{SCB, {"SCB", "Symmetric Coalitional Banzhaf"}},
+	{SCBB, {"SCBB", "Symmetric Coalitional Banzhaf from below"}},
 	{RSHB, {"RSHB", "raw Shapley Shubik below"}},
 	{SH, {"SH", "Shapley Shubik"}},
 	{SHB, {"SHB", "Shapley Shubik below"}},
@@ -108,6 +114,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::ABZ: index = new AbsoluteBanzhaf(g, approx, int_representation); break;
 		case IndexType::BZ: index = new Banzhaf(g, approx, int_representation); break;
 		case IndexType::BO: index = new BanzhafOwen(g, approx, int_representation); break;
+		case IndexType::BOB: index = new BanzhafOwenBelow(g, approx, int_representation); break;
 		case IndexType::BZB: index = new BanzhafBelow(g, approx, int_representation); break;
 		case IndexType::APG: index = new AbsolutePublicGood(g, approx, int_representation); break;
 		case IndexType::APIG: index = new AbsolutePowerIndexG(g, approx, int_representation); break;
@@ -123,6 +130,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::N: index = new Nevison(g, approx, int_representation); break;
 		case IndexType::NPH: index = new NevisonPH(g, approx, int_representation); break;
 		case IndexType::O: index = new Owen(g, approx, int_representation); break;
+		case IndexType::OB: index = new OwenBelow(g, approx, int_representation); break;
 		case IndexType::PG: index = new PublicGood(g, approx, int_representation); break;
 		case IndexType::PHT: index = new PublicHelpTheta(g, approx, int_representation); break;
 		case IndexType::PHTPH: index = new PublicHelpThetaPH(g, approx, int_representation); break;
@@ -143,6 +151,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::RPIF: index = new RawPowerIndexF(g, approx, int_representation); break;
 		case IndexType::RSH: index = new RawShapleyShubik(g, approx, int_representation); break;
 		case IndexType::SCB: index = new SymmetricCoalitionalBanzhaf(g, approx, int_representation); break;
+		case IndexType::SCBB: index = new SymmetricCoalitionalBanzhafBelow(g, approx, int_representation); break;
 		case IndexType::RSHB: index = new RawShapleyShubikBelow(g, approx, int_representation); break;
 		case IndexType::SH: index = new ShapleyShubik(g, approx, int_representation); break;
 		case IndexType::SHB: index = new ShapleyShubikBelow(g, approx, int_representation); break;

@@ -59,6 +59,7 @@ private:
 		APIG,		   /**< absolute null-player-free Power Index G (based on the Dubey-Shapley identity)*/
 		BZ,			   /**< Banzhaf */
 		BO,			   /**< Banzhaf-Owen */
+		BOB,		   /**< Banzhaf-Owen from below */
 		BZB,		   /**< Banzhaf below */
 		CC,			   /**< Coleman collective */
 		CI,			   /**< Coleman initiative */
@@ -72,6 +73,7 @@ private:
 		N,			   /**< Nevison (based on the Dubey-Shapley identity)*/
 		NPH,		   /**< Nevison (based on raw Public Help theta) */
 		O,			   /**< Owen */
+		OB,			   /**< Owen from below */
 		PG,			   /**< Public Good */
 		PHT,		   /**< Public Help theta (based on the Dubey-Shapley identity)*/
 		PHTPH,		   /**< Public Help theta (based on raw Public Help theta) */
@@ -92,6 +94,7 @@ private:
 		RPIF,		   /**< raw null-player-free Power Index F */
 		RSH,		   /**< raw Shapley Shubik */
 		SCB,		   /**< symmetric Coalitional Banzhaf */
+		SCBB,		   /**< symmetric Coalitional Banzhaf from below */
 		RSHB,		   /**< raw Shapley Shubik from below */
 		SH,			   /**< Shapley Shubik */
 		SHB,		   /**< Shapley Shubik from below */

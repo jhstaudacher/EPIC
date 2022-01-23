@@ -71,6 +71,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `APIG` | Absolute Power Index G (based on the Dubey-Shapley identity) |
 | `BZ` | Banzhaf |
 | `BO` | Banzhaf Owen |
+| `BOB` | Banzhaf Owen from below |
 | `BZB` | Banzhaf from below |
 | `CC` | Coleman Collective |
 | `CI` | Coleman Initiative |
@@ -84,6 +85,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `N` | Nevison (based on the Dubey-Shapley identity)|
 | `NPH` | Nevison (based on Raw Public Help Theta) |
 | `O` | Owen |
+| `OB` | Owen from below |
 | `PG` | Public Good |
 | `PHT` | Public Help Theta (based on the Dubey-Shapley identity) |
 | `PHTPH` | Public Help Theta (based on Raw Public Help Theta) |
@@ -104,6 +106,7 @@ First open a terminal and go to the `epic/` directory: `cd <path_to>/epic`. Afte
 | `RPIF` | Raw Power Index F |
 | `RSH` | Raw Shapley Shubik |
 | `SCB` | Symmetric Coalitional Banzhaf |
+| `SCBB` | Symmetric Coalitional Banzhaf from below |
 | `RSHB` | Raw Shapley Shubik from below |
 | `SH` | Shapley Shubik |
 | `SHB` | Shapley Shubik from below |
