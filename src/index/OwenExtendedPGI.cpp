@@ -19,30 +19,39 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 
 	//players in precoalitionGame are already in descending order
 	if (precoalitionGame->getWeights()[0] >= g->getQuota()) {
-		longUInt kk = precoalitionGame->getPermutation().inverseIndex(0);
-		longUInt nbPlayersInParti = g->getPrecoalitions()[kk].size();
-
-		Game* intGame = nullptr;
-		{
-			std::vector<longUInt> weightsVector(nbPlayersInParti);
-			for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
-				weightsVector[ii] = g->getWeights()[g->getPrecoalitions()[kk][ii]];
-			}
-			intGame = new Game(g->getQuota(), weightsVector, false);
-		}
-
-		std::vector<bigFloat> sortedSolution(nbPlayersInParti);
-		{
-			std::vector<bigFloat> intSolution(nbPlayersInParti);
-			pgi->calculate(intGame, intSolution);
-
-			intGame->getPermutation().reverse(intSolution, sortedSolution);
-		}
-		delete intGame;
-
 		solution.resize(g->getNumberOfPlayers(), 0.0); // initialize with zero
-		for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
-			solution[g->getPrecoalitions()[kk][ii]] = sortedSolution[ii];
+		
+		// Find out number of dictator precoalitions
+		longUInt nbDictatorCoalitions;
+		nbDictatorCoalitions = 0;
+		while (precoalitionGame->getWeights()[nbDictatorCoalitions] >= g->getQuota()) {
+			nbDictatorCoalitions++;
+		}
+		for (longUInt jd =0; jd < nbDictatorCoalitions; jd++){
+			longUInt kk = precoalitionGame->getPermutation().inverseIndex(jd);
+			longUInt nbPlayersInParti = g->getPrecoalitions()[kk].size();
+
+			Game* intGame = nullptr;
+			{
+				std::vector<longUInt> weightsVector(nbPlayersInParti);
+				for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
+					weightsVector[ii] = g->getWeights()[g->getPrecoalitions()[kk][ii]];
+				}
+				intGame = new Game(g->getQuota(), weightsVector, false);
+			}
+
+			std::vector<bigFloat> sortedSolution(nbPlayersInParti);
+			{
+				std::vector<bigFloat> intSolution(nbPlayersInParti);
+				pgi->calculate(intGame, intSolution);
+
+				intGame->getPermutation().reverse(intSolution, sortedSolution);
+			}
+			delete intGame;
+
+			for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
+				solution[g->getPrecoalitions()[kk][ii]] = sortedSolution[ii]/nbDictatorCoalitions;
+			}
 		}
 	} else { // There is no dictator precoalition
 		bigInt big_tmp;
@@ -166,8 +175,13 @@ std::vector<epic::bigFloat> epic::index::OwenExtendedPGI::calculate(Game* g_) {
 			gCalculator->to_bigInt(&big_tmp, rawExternalSolution[i]);
 			big_float = big_tmp;
 			for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
-				solution[g->getPrecoalitions()[kk][ii]] /= big_float;
-				solution[g->getPrecoalitions()[kk][ii]] *= externalSolution[i];
+				if (big_float > 1.0e-15){
+					solution[g->getPrecoalitions()[kk][ii]] /= big_float;
+					solution[g->getPrecoalitions()[kk][ii]] *= externalSolution[i];
+				}
+				else{
+					solution[g->getPrecoalitions()[kk][ii]] = 0.0;
+				}	
 			}
 		}
 
