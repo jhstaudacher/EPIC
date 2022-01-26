@@ -1,49 +1,43 @@
 #include "index/ColemanCollective.h"
 
 #include "Logging.h"
+#include "lint/GlobalCalculator.h"
 
-epic::index::ColemanCollective::ColemanCollective(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
-	: PowerIndexWithWinningCoalitions(g) {
-	bigInt max_value = approx->upperBound_numberOfWinningCoalitionsPerWeight();
-	mCalculator = lint::ItfLargeNumberCalculator::new_calculator(max_value, lint::Operation::addition, int_representation);
-}
+epic::index::ColemanCollective::ColemanCollective()
+	: PowerIndexWithWinningCoalitions() {}
 
-epic::index::ColemanCollective::~ColemanCollective() {
-	lint::ItfLargeNumberCalculator::delete_calculator(mCalculator);
-}
-
-std::vector<epic::bigFloat> epic::index::ColemanCollective::calculate() {
+std::vector<epic::bigFloat> epic::index::ColemanCollective::calculate(Game* g) {
 	// n_wc[x]: number of winning coalitions of weight x.
-	ArrayOffset<lint::LargeNumber> n_wc(mGame.getWeightSum() + 1, mGame.getQuota());
-	mCalculator->allocInit_largeNumberArray(n_wc.getArrayPointer(), n_wc.getNumberOfElements());
-	numberOfWinningCoalitionsPerWeight(n_wc);
+	ArrayOffset<lint::LargeNumber> n_wc(g->getWeightSum() + 1, g->getQuota());
+	gCalculator->allocInit_largeNumberArray(n_wc.getArrayPointer(), n_wc.getNumberOfElements());
+	numberOfWinningCoalitionsPerWeight(g, n_wc);
 
 	// total_wc: number of winning coalitions (summing up)
 	lint::LargeNumber total_wc;
-	mCalculator->allocInit_largeNumber(total_wc);
-	numberOfWinningCoalitions(n_wc, total_wc);
+	gCalculator->allocInit_largeNumber(total_wc);
+	numberOfWinningCoalitions(g, n_wc, total_wc);
 
 	//delete n_wc[]
-	mCalculator->free_largeNumberArray(n_wc.getArrayPointer());
+	gCalculator->free_largeNumberArray(n_wc.getArrayPointer());
 
-	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
+	std::vector<bigFloat> solution(g->getNumberOfPlayers());
 	{
 		bigInt big_total_wc;
-		mCalculator->to_bigInt(&big_total_wc, total_wc);
+		gCalculator->to_bigInt(&big_total_wc, total_wc);
 
-		log::out << log::info << "Total number of winning coalitions: " << big_total_wc * (bigInt(1) << mGame.getNumberOfPlayersWithWeight0()) << log::endl;
+		log::out << log::info << "Total number of winning coalitions: " << big_total_wc * (bigInt(1) << g->getNumberOfPlayersWithWeight0()) << log::endl;
 
-		//total number of winning coalitions / maximal number of winning coalitions(= 2^mNonZeroPlayerCount)
+		//total number of winning coalitions / maximal number of winning coalitions(= 2^g->getNumberOfNonZeroPlayers())
 		bigFloat big_total_wc_float = big_total_wc;
-		bigInt maximum_big_total_wc = bigInt(1) << mNonZeroPlayerCount; // = 2^mNonZeroPlayerCount
+		bigInt maximum_big_total_wc = bigInt(1) << g->getNumberOfNonZeroPlayers(); // = 2^g->getNumberOfNonZeroPlayers()
 		big_total_wc_float /= maximum_big_total_wc;
 
-		for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
+		for (longUInt i = 0; i < g->getNumberOfPlayers(); ++i) {
 			solution[i] = big_total_wc_float;
 		}
 	}
 
-	mCalculator->free_largeNumber(total_wc);
+	gCalculator->free_largeNumber(total_wc);
 	return solution;
 }
 
@@ -51,10 +45,10 @@ std::string epic::index::ColemanCollective::getFullName() {
 	return "ColemanCollective";
 }
 
-epic::longUInt epic::index::ColemanCollective::getMemoryRequirement() {
-	bigInt memory = mCalculator->getLargeNumberSize();
-	memory *= mGame.getWeightSum() + 1 - mGame.getQuota(); // n_wc
-	memory += mCalculator->getLargeNumberSize();		   // total_wc
+epic::longUInt epic::index::ColemanCollective::getMemoryRequirement(Game* g) {
+	bigInt memory = gCalculator->getLargeNumberSize();
+	memory *= g->getWeightSum() + 1 - g->getQuota(); // n_wc
+	memory += gCalculator->getLargeNumberSize();	 // total_wc
 	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;
@@ -63,4 +57,12 @@ epic::longUInt epic::index::ColemanCollective::getMemoryRequirement() {
 	}
 
 	return ret;
+}
+
+epic::bigInt epic::index::ColemanCollective::getMaxValueRequirement(ItfUpperBoundApproximation* approx) {
+	return approx->upperBound_numberOfWinningCoalitionsPerWeight();
+}
+
+epic::lint::Operation epic::index::ColemanCollective::getOperationRequirement() {
+	return lint::Operation::addition;
 }

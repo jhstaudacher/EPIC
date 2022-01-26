@@ -17,9 +17,9 @@ namespace epic::index {
  */
 class SingleValueWM : public DeeganPackel {
 public:
-	SingleValueWM(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
+	SingleValueWM();
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
 };
 

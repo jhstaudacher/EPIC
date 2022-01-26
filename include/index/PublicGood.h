@@ -2,6 +2,7 @@
 #define EPIC_INDEX_PUBLICGOOD_H_
 
 #include "RawPublicGood.h"
+#include "lint/LargeNumber.h"
 
 namespace epic::index {
 
@@ -26,17 +27,16 @@ namespace epic::index {
  */
 class PublicGood : public RawPublicGood {
 public:
-	/**
-	 * Construct the PublicGood object
-	 *
-	 * @param g The Game for which the PublicGood index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
-	 */
-	PublicGood(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
-
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
+
+	/**
+	 * Another interface to the calculate()-function allowing passing in the solution vector to avoid unnecessary allocations.
+	 *
+	 * @param g A Game-object for which the power index should be calculated
+	 * @param solution Return vector the solution will be stored in (will be resized to g->getNumberOfPlayers() elements)
+	 */
+	void calculate(Game* g, std::vector<bigFloat>& solution);
 };
 
 } /* namespace epic::index */

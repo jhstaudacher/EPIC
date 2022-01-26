@@ -72,17 +72,16 @@ public:
        *
        * This method only produced user output (e.g. warnings). Even if the hardware does not meet the requirements this method will not throw an exception. Doing so enables the user to try the calculation. If the memory requirement is larger than the available one, the user gets asked whether to continue or not.
        *
-       * @param index_ptr PowerIndex defining the requirements
+       * @param memory_requirement The required memory (given in cMemUnitName)
        * @return If the calculation should be done or not (user decision)
        */
-	bool checkHardware(index::ItfPowerIndex* index_ptr);
+	bool checkHardware(longUInt memory_requirement);
 
 	/**
-       * A function that will estimate the time needed for the computation and outputting it to the screen.
-       *
-       * @return Number of seconds the calculation will take
-       */
-
+	  * A function that will estimate the time needed for the computation and outputting it to the screen.
+	  *
+	  * @return Number of seconds the calculation will take
+	  */
 	void estimateTime();
 
 private:
@@ -95,10 +94,12 @@ private:
        * An instance of class UserInputHandler
        */
 	io::UserInputHandler* mUserInputHandler;
+
 	/**
 	    * A method to find the gcd of an integer vector
 	    */
 	longUInt findGCD(std::vector<longUInt>& vector);
+
 	/**
 		* Base method to find the gcd of integer numbers
 		*/

@@ -30,7 +30,7 @@ public:
 	 *
 	 * @return A powerindex instance.
 	 */
-	static ItfPowerIndex* new_powerIndex(const std::string& short_name, Game& g, IntRepresentation int_representation = DEFAULT);
+	static ItfPowerIndex* new_powerIndex(const std::string& short_name, Game* g, IntRepresentation int_representation = DEFAULT);
 
 	/**
 	 * Delete a powerindex instance
@@ -72,6 +72,7 @@ private:
 		N,			   /**< Nevison (based on the Dubey-Shapley identity)*/
 		NPH,		   /**< Nevison (based on raw Public Help theta) */
 		O,			   /**< Owen */
+		OPGI,		   /**< Owen Extended Public Good Index */
 		PG,			   /**< Public Good */
 		PHT,		   /**< Public Help theta (based on the Dubey-Shapley identity)*/
 		PHTPH,		   /**< Public Help theta (based on raw Public Help theta) */
@@ -91,11 +92,16 @@ private:
 		RPIG,		   /**< raw null-player-free Power Index G (based on the Dubey-Shapley identity) */
 		RPIF,		   /**< raw null-player-free Power Index F */
 		RSH,		   /**< raw Shapley Shubik */
-		SCB,		   /**< symmetric Coalitional Banzhaf */
 		RSHB,		   /**< raw Shapley Shubik from below */
+		SCB,		   /**< symmetric Coalitional Banzhaf */
+		SPGI,		   /**< Solidarity Public Good */
 		SH,			   /**< Shapley Shubik */
 		SHB,		   /**< Shapley Shubik from below */
 		T,			   /**< Tijs */
+		TPGI1,		   /**< Threat Public Good Index 1 */
+		TPGI2,		   /**< Threat Public Good Index 2 */
+		TPGI3,		   /**< Threat Public Good Index 3 */
+		UPGI,		   /**< Union Public Good */
 		W,			   /**< The number of winning coalitions */
 		WM,			   /**< The number of minimal winning coalitions */
 		WS			   /**< The number of minimal winning coalitions of smalles cardinality */

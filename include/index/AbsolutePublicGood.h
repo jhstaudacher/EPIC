@@ -26,25 +26,19 @@ namespace epic::index {
  */
 class AbsolutePublicGood : public RawPublicGood {
 public:
-	/**
-	 * Construct the AbsolutePublicGood object
-	 *
-	 * @param g The Game for which the AbsolutePublicGood index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
-	 */
-	AbsolutePublicGood(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
+	AbsolutePublicGood();
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
 
 protected:
-	/*
+	/**
 	 * A function to compute the total number of minimal winning coalitions
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param total_mwc The total number of minimal winning coalitions
 	 */
-	void numberOfMinimalWinningCoalitions(bigInt* total_mwc);
+	void numberOfMinimalWinningCoalitions(Game* g, bigInt* total_mwc);
 };
 
 } /* namespace epic::index */

@@ -29,23 +29,18 @@ namespace epic::index {
 class RawDeeganPackel : public ItfPowerIndex {
 public:
 	/*
-	 * Construct the RawDeeganPackel object
-	 *
-	 * @param g The Game for which the RawDeeganPackel index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 * @param low_memory A Flag to use a less memory consuming (but slower!) integer representation
-	 *
 	 * 	first iteration: formula f was compute for player n-1 already; other iteration: 'decrement' f for player n-2 ...
 	 *  first iteration: formula b for player n-1 will be initialize; other iteration: 'increment' b for player n-2
 	 *  each iteration: f(i-1,k,x) <=> f(k,x); b(i,k,x) <=> b(k,y) -> compute unscaled-DP[i] = f(i-1,k,x)*b(i,k,q-x) <=> f(k,x)* b(k,y)
 	 *  DP[i]= unscaled-DP[i] / total-number-of-minimal-winning-coalitions
 	 */
-	RawDeeganPackel(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
-	~RawDeeganPackel() override;
+	RawDeeganPackel();
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement() override;
+	longUInt getMemoryRequirement(Game* g) override;
+	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
+	lint::Operation getOperationRequirement() override;
 };
 
 } /* namespace epic::index */
