@@ -27,19 +27,13 @@ namespace epic::index {
 class FelsenthalIndex : public RawFelsenthal {
 public:
 	/**
-	 * Construct the FelsenthalIndex object
-	 *
-	 * @param g The Game for which the FelsenthalIndex index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
-	 *
-	 * Scales the results calculated by the RawFelsenthal index.
+	 * @param g The Game object for which the FelsenthalIndex should later be calculated
 	 */
-	FelsenthalIndex(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
+	FelsenthalIndex(Game* g);
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement() override;
+	longUInt getMemoryRequirement(Game* g) override;
 };
 
 } /* namespace epic::index */

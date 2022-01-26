@@ -34,17 +34,13 @@ namespace epic::index {
  */
 class HarsanyiNashIndex : public ItfPowerIndex {
 public:
-	/**
-	 * Construct the HarsanyiNash object
-	 *
-	 * @param g The Game for which the HarsanyiNash index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 */
-	HarsanyiNashIndex(Game& g);
+	HarsanyiNashIndex();
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement() override;
+	longUInt getMemoryRequirement(Game* g) override;
+	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
+	lint::Operation getOperationRequirement() override;
 };
 
 } /* namespace epic::index */

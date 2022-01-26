@@ -5,8 +5,8 @@
 #include "index/AbsolutePowerIndexG.h"
 #include "index/AbsolutePublicGood.h"
 #include "index/Banzhaf.h"
-#include "index/BanzhafOwen.h"
 #include "index/BanzhafBelow.h"
+#include "index/BanzhafOwen.h"
 #include "index/ColemanCollective.h"
 #include "index/ColemanInitiative.h"
 #include "index/ColemanPreventive.h"
@@ -19,6 +19,7 @@
 #include "index/Nevison.h"
 #include "index/NevisonPH.h"
 #include "index/Owen.h"
+#include "index/OwenExtendedPGI.h"
 #include "index/PowerIndexF.h"
 #include "index/PowerIndexG.h"
 #include "index/PowerIndexGPH.h"
@@ -44,8 +45,13 @@
 #include "index/SingleValueW.h"
 #include "index/SingleValueWM.h"
 #include "index/SingleValueWS.h"
+#include "index/SolidarityPGI.h"
 #include "index/SymmetricCoalitionalBanzhaf.h"
+#include "index/ThreatPGI1.h"
+#include "index/ThreatPGI2.h"
+#include "index/ThreatPGI3.h"
 #include "index/Tijs.h"
+#include "index/UnionPGI.h"
 
 const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std::string>> epic::index::IndexFactory::cIndexNames = {
 	{INVALID_INDEX, {"INVALID", "invalid index"}},
@@ -67,6 +73,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{N, {"N", "Nevison (based on the Dubey-Shapley identity)"}},
 	{NPH, {"NPH", "Nevsion (based on raw Public Help theta)"}},
 	{O, {"O", "Owen"}},
+	{OPGI, {"OPGI", "Owen Extended Public Good Index"}},
 	{PG, {"PG", "Public Good"}},
 	{PHT, {"PHT", "Public Help theta (based on the Dubey-Shapley identity)"}},
 	{PHTPH, {"PHTPH", "Public Help theta (based on the raw Public Help theta)"}},
@@ -90,7 +97,12 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{RSHB, {"RSHB", "raw Shapley Shubik below"}},
 	{SH, {"SH", "Shapley Shubik"}},
 	{SHB, {"SHB", "Shapley Shubik below"}},
+	{SPGI, {"SPGI", "Solidarity Public Good Index"}},
+	{UPGI, {"UPGI", "Union Public Good Index"}},
 	{T, {"T", "Tijs"}},
+	{TPGI1, {"TPGI1", "Threat Public Good Index 1"}},
+	{TPGI2, {"TPGI2", "Threat Public Good Index 2"}},
+	{TPGI3, {"TPGI3", "Threat Public Good Index 3"}},
 	{W, {"W", "Number of winning coalitions"}},
 	{WM, {"WM", "Number of minimal winning coalitions"}},
 	{WS, {"WS", "Number of minimal winning coalitions of smallest cardinality"}}};
@@ -99,60 +111,64 @@ bool epic::index::IndexFactory::validateIndex(const std::string& short_name) {
 	return getIndexType(short_name) != INVALID_INDEX;
 }
 
-epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std::string& short_name, Game& g, IntRepresentation int_representation) {
+epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std::string& short_name, Game* g, IntRepresentation int_representation) {
 	ItfPowerIndex* index = nullptr;
-	ItfUpperBoundApproximation* approx = new FastUpperBoundApproximation(g);
 
 	switch (getIndexType(short_name)) {
 		case IndexType::INVALID_INDEX: index = nullptr; break;
-		case IndexType::ABZ: index = new AbsoluteBanzhaf(g, approx, int_representation); break;
-		case IndexType::BZ: index = new Banzhaf(g, approx, int_representation); break;
-		case IndexType::BO: index = new BanzhafOwen(g, approx, int_representation); break;
-		case IndexType::BZB: index = new BanzhafBelow(g, approx, int_representation); break;
-		case IndexType::APG: index = new AbsolutePublicGood(g, approx, int_representation); break;
-		case IndexType::APIG: index = new AbsolutePowerIndexG(g, approx, int_representation); break;
-		case IndexType::CC: index = new ColemanCollective(g, approx, int_representation); break;
-		case IndexType::CI: index = new ColemanInitiative(g, approx, int_representation); break;
-		case IndexType::CP: index = new ColemanPreventive(g, approx, int_representation); break;
-		case IndexType::DP: index = new DeeganPackel(g, approx, int_representation); break;
-		case IndexType::FT: index = new FelsenthalIndex(g, approx, int_representation); break;
-		case IndexType::HN: index = new HarsanyiNashIndex(g); break;
-		case IndexType::J: index = new Johnston(g, approx, int_representation); break;
-		case IndexType::KB: index = new KoenigBraeuninger(g, approx, int_representation); break;
-		case IndexType::KBPH: index = new KoenigBraeuningerPH(g, approx, int_representation); break;
-		case IndexType::N: index = new Nevison(g, approx, int_representation); break;
-		case IndexType::NPH: index = new NevisonPH(g, approx, int_representation); break;
-		case IndexType::O: index = new Owen(g, approx, int_representation); break;
-		case IndexType::PG: index = new PublicGood(g, approx, int_representation); break;
-		case IndexType::PHT: index = new PublicHelpTheta(g, approx, int_representation); break;
-		case IndexType::PHTPH: index = new PublicHelpThetaPH(g, approx, int_representation); break;
-		case IndexType::PHX: index = new PublicHelpXi(g, approx, int_representation); break;
-		case IndexType::PIF: index = new PowerIndexF(g, approx, int_representation); break;
-		case IndexType::PIG: index = new PowerIndexG(g, approx, int_representation); break;
-		case IndexType::PIGPH: index = new PowerIndexGPH(g, approx, int_representation); break;
-		case IndexType::RA: index = new Rae(g, approx, int_representation); break;
-		case IndexType::RBZ: index = new RawBanzhaf(g, approx, int_representation); break;
-		case IndexType::RBZB: index = new RawBanzhafBelow(g, approx, int_representation); break;
-		case IndexType::RDP: index = new RawDeeganPackel(g, approx, int_representation); break;
-		case IndexType::RFT: index = new RawFelsenthal(g, approx, int_representation); break;
-		case IndexType::RJ: index = new RawJohnston(g, approx, int_representation); break;
-		case IndexType::RPG: index = new RawPublicGood(g, approx, int_representation); break;
-		case IndexType::RPHT: index = new RawPublicHelpTheta(g, approx, int_representation); break;
-		case IndexType::RPHTSD: index = new RawPublicHelpThetaSD(g, approx, int_representation); break;
-		case IndexType::RPIG: index = new RawPowerIndexG(g, approx, int_representation); break;
-		case IndexType::RPIF: index = new RawPowerIndexF(g, approx, int_representation); break;
-		case IndexType::RSH: index = new RawShapleyShubik(g, approx, int_representation); break;
-		case IndexType::SCB: index = new SymmetricCoalitionalBanzhaf(g, approx, int_representation); break;
-		case IndexType::RSHB: index = new RawShapleyShubikBelow(g, approx, int_representation); break;
-		case IndexType::SH: index = new ShapleyShubik(g, approx, int_representation); break;
-		case IndexType::SHB: index = new ShapleyShubikBelow(g, approx, int_representation); break;
-		case IndexType::T: index = new Tijs(g); break;
-		case IndexType::W: index = new SingleValueW(g, approx, int_representation); break;
-		case IndexType::WM: index = new SingleValueWM(g, approx, int_representation); break;
-		case IndexType::WS: index = new SingleValueWS(g, approx, int_representation); break;
+		case IndexType::ABZ: index = new AbsoluteBanzhaf(); break;
+		case IndexType::BZ: index = new Banzhaf(); break;
+		case IndexType::BO: index = new BanzhafOwen(); break;
+		case IndexType::BZB: index = new BanzhafBelow(); break;
+		case IndexType::APG: index = new AbsolutePublicGood(); break;
+		case IndexType::APIG: index = new AbsolutePowerIndexG(g); break;
+		case IndexType::CC: index = new ColemanCollective(); break;
+		case IndexType::CI: index = new ColemanInitiative(); break;
+		case IndexType::CP: index = new ColemanPreventive(); break;
+		case IndexType::DP: index = new DeeganPackel(); break;
+		case IndexType::FT: index = new FelsenthalIndex(g); break;
+		case IndexType::HN: index = new HarsanyiNashIndex(); break;
+		case IndexType::J: index = new Johnston(g); break;
+		case IndexType::KB: index = new KoenigBraeuninger(g); break;
+		case IndexType::KBPH: index = new KoenigBraeuningerPH(g); break;
+		case IndexType::N: index = new Nevison(g); break;
+		case IndexType::NPH: index = new NevisonPH(g); break;
+		case IndexType::O: index = new Owen(); break;
+		case IndexType::OPGI: index = new OwenExtendedPGI(); break;
+		case IndexType::PG: index = new PublicGood(); break;
+		case IndexType::PHT: index = new PublicHelpTheta(g); break;
+		case IndexType::PHTPH: index = new PublicHelpThetaPH(g); break;
+		case IndexType::PHX: index = new PublicHelpXi(g); break;
+		case IndexType::PIF: index = new PowerIndexF(g); break;
+		case IndexType::PIG: index = new PowerIndexG(g); break;
+		case IndexType::PIGPH: index = new PowerIndexGPH(g); break;
+		case IndexType::RA: index = new Rae(g); break;
+		case IndexType::RBZ: index = new RawBanzhaf(); break;
+		case IndexType::RBZB: index = new RawBanzhafBelow(); break;
+		case IndexType::RDP: index = new RawDeeganPackel(); break;
+		case IndexType::RFT: index = new RawFelsenthal(g); break;
+		case IndexType::RJ: index = new RawJohnston(g); break;
+		case IndexType::RPG: index = new RawPublicGood(); break;
+		case IndexType::RPHT: index = new RawPublicHelpTheta(g); break;
+		case IndexType::RPHTSD: index = new RawPublicHelpThetaSD(g); break;
+		case IndexType::RPIG: index = new RawPowerIndexG(g); break;
+		case IndexType::RPIF: index = new RawPowerIndexF(g); break;
+		case IndexType::RSH: index = new RawShapleyShubik(); break;
+		case IndexType::SCB: index = new SymmetricCoalitionalBanzhaf(); break;
+		case IndexType::RSHB: index = new RawShapleyShubikBelow(); break;
+		case IndexType::SH: index = new ShapleyShubik(); break;
+		case IndexType::SHB: index = new ShapleyShubikBelow(); break;
+		case IndexType::SPGI: index = new SolidarityPGI(); break;
+		case IndexType::T: index = new Tijs(); break;
+		case IndexType::TPGI1: index = new ThreatPGI1(); break;
+		case IndexType::TPGI2: index = new ThreatPGI2(); break;
+		case IndexType::TPGI3: index = new ThreatPGI3(); break;
+		case IndexType::UPGI: index = new UnionPGI(); break;
+		case IndexType::W: index = new SingleValueW(); break;
+		case IndexType::WM: index = new SingleValueWM(); break;
+		case IndexType::WS: index = new SingleValueWS(g); break;
 	}
 
-	delete approx;
 	return index;
 }
 

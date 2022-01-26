@@ -28,20 +28,22 @@ namespace epic::index {
  */
 class RawBanzhaf : public PowerIndexWithWinningCoalitions {
 public:
-	RawBanzhaf(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
-	~RawBanzhaf() override;
+	RawBanzhaf();
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement() override;
+	longUInt getMemoryRequirement(Game* g) override;
+	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
+	lint::Operation getOperationRequirement() override;
 
 protected:
 	/**
 	 * Calculating how often each player is a swing player.
 	 *
-	 * @param n_sp A return array. n_sp[x] will be the number how often player x is a swing player. The array must have enough memory for at least mNonZeroPlayerCount entries. Each entry must be initialized with zero!
+	 * @param g The Game object for the current calculation
+	 * @param n_sp A return array. n_sp[x] will be the number how often player x is a swing player. The array must have enough memory for at least g.getNumberOfNonZeroPlayers() entries. Each entry must be initialized with zero!
 	 */
-	void numberOfTimesPlayerIsSwingPlayer(lint::LargeNumber n_sp[]);
+	void numberOfTimesPlayerIsSwingPlayer(Game* g, lint::LargeNumber n_sp[]);
 
 	/**
 	 * Calculating how often each player is a swing player.
@@ -49,20 +51,22 @@ protected:
 	 * This function is the same as numberOfTimesPlayerIsSwingPlayer(lint::ChineseNumber n_sp[]) but here you can pass the n_wc array. This is useful if the n_wc values are needed outside this function as well and is therefore already calculated.
 	 * The n_wc array must be filled in the range [quota, weightsum].
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param n_wc The array containing the number of winning coalitions. n_wc[x]: number of winning coalitions of weight x. The array must be filled in the range [quota, weightsum]!
-	 * @param n_sp A return array. n_sp[x] will be the number how often player x is a swing player. The array must have enough memory for at least mNonZeroPlayerCount entries. Each entry must be initialized with zero!
+	 * @param n_sp A return array. n_sp[x] will be the number how often player x is a swing player. The array must have enough memory for at least g.getNumberOfNonZeroPlayers() entries. Each entry must be initialized with zero!
 	 */
-	void numberOfTimesPlayerIsSwingPlayer(ArrayOffset<lint::LargeNumber>& n_wc, lint::LargeNumber n_sp[]);
+	void numberOfTimesPlayerIsSwingPlayer(Game* g, ArrayOffset<lint::LargeNumber>& n_wc, lint::LargeNumber n_sp[]);
 
 	/**
 	 * Calculating the total number of all swings
 	 *
 	 * This function sums up the array calculated by one of the numberOfTimesPlayerIsSwingPlayer() functions.
 	 *
-	 * @param n_sp An Array containing the number of swing players. n_sp[x]: number of times player x is a swing player. This array must be filled in the range [0, mNonZeroPlayerCount].
+	 * @param g The Game object for the current calculation
+	 * @param n_sp An Array containing the number of swing players. n_sp[x]: number of times player x is a swing player. This array must be filled in the range [0, g.getNumberOfNonZeroPlayers()].
 	 * @param total_sp A return parameter containing the calculated sum
 	 */
-	void numberOfSwingPlayer(lint::LargeNumber n_sp[], lint::LargeNumber& total_sp);
+	void numberOfSwingPlayer(Game* g, lint::LargeNumber n_sp[], lint::LargeNumber& total_sp);
 };
 
 } /* namespace epic::index */

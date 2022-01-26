@@ -20,11 +20,15 @@ namespace epic::index {
  */
 class SingleValueWS : public RawFelsenthal {
 public:
-	SingleValueWS(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
+	/**
+	 *
+	 * @param g The Game-object for which the SingleValueWS should later be calculated
+	 */
+	SingleValueWS(Game* g);
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement() override;
+	longUInt getMemoryRequirement(Game* g) override;
 };
 
 } // namespace epic::index

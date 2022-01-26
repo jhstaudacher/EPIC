@@ -30,13 +30,11 @@ public:
 	 * This index is basically Public Good, but not calculated with minimal winning coalitions alone, but with all null player free winning coalitions
 	 * This index makes only sense, if null players are filtered out. See Alvarez-Mozos, M., Ferreira, F., Alonso-Meijide, J.M. and Pinto, A.A. (2015) Characterizations of power indices based on null player free winning coalitions for more information, especially the index g definition 4.2
 	 *
-	 * @param g The Game for which the AbsolutePowerIndexG index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
+	 * @param g The Game for which the AbsolutePowerIndexG index should later be calculated.
 	 */
-	AbsolutePowerIndexG(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
+	AbsolutePowerIndexG(Game* g);
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
 };
 

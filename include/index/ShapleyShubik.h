@@ -25,16 +25,9 @@ namespace epic::index {
  */
 class ShapleyShubik : public RawShapleyShubik {
 public:
-	/**
-	 * Construct the ShapleyShubik object
-	 *
-	 * @param g The Game for which the ShapleyShubik index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
-	 */
-	ShapleyShubik(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
+	ShapleyShubik();
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
 };
 

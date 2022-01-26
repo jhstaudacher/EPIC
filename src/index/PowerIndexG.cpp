@@ -3,12 +3,11 @@
 #include "Array.h"
 #include "Logging.h"
 
-epic::index::PowerIndexG::PowerIndexG(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
-	: RawPowerIndexG(g, approx, int_representation) {
-}
+epic::index::PowerIndexG::PowerIndexG(Game* g)
+	: RawPowerIndexG(g) {}
 
-std::vector<epic::bigFloat> epic::index::PowerIndexG::calculate() {
-	auto solution = RawPowerIndexG::calculate();
+std::vector<epic::bigFloat> epic::index::PowerIndexG::calculate(Game* g) {
+	auto solution = RawPowerIndexG::calculate(g);
 
 	bigFloat sum_swc = 0;
 	for (const auto& it : solution) {
@@ -17,8 +16,8 @@ std::vector<epic::bigFloat> epic::index::PowerIndexG::calculate() {
 
 	if (log::out.getLogLevel() <= log::info) {
 		log::out << log::info << "Number of winning coalitions a player belongs to: " << log::endl;
-		for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
-			log::out << "Player " << mGame.playerIndexToNumber(i) << ": " << solution[i] << log::endl;
+		for (longUInt i = 0; i < g->getNumberOfPlayers(); ++i) {
+			log::out << "Player " << g->playerIndexToNumber(i) << ": " << solution[i] << log::endl;
 		}
 	}
 

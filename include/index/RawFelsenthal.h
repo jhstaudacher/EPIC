@@ -31,9 +31,7 @@ public:
 	/**
 	 * Construct the RawFelsenthal index object
 	 *
-	 * @param g The Game for which the RawFelsenthal index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
+	 * @param g The Game for which the RawFelsenthal index should later be calculated.
 	 *
 	 * Nearly similar to the Deegan Packel algorithm. But at this time in achieving
 	 * the minimum winning coalitions of the smallest size are interested only.
@@ -42,22 +40,23 @@ public:
 	 * Please note, the weights are sorted in descending order.
 	 * Furthermore, the number of minimally winning coalitions of least size of each player is now determined.
 	 * Using this, the index is calculated as follows: (MWCS of player i) / (SUM of MWCS of all players)
-	 *
 	 */
-	RawFelsenthal(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
-	~RawFelsenthal() override;
+	RawFelsenthal(Game* g);
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement() override;
+	longUInt getMemoryRequirement(Game* g) override;
+	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
+	lint::Operation getOperationRequirement() override;
 
 protected:
 	/**
 	 * calculating the number of minimal winning coalitions of least size per player
 	 *
+	 * @param g The Game object for the current calculation
 	 * @param mwcs The return array, mwcs[x]: the number of minimal winning coalitions of least size player x belongs to. The array mus have enough memory for at least numberOfPlayers entries. Each entry must be initialized with zero!
 	 */
-	void minimal_winning_coalitions_of_least_size(lint::LargeNumber mwcs[]);
+	void minimal_winning_coalitions_of_least_size(Game* g, lint::LargeNumber mwcs[]);
 
 private:
 	/**

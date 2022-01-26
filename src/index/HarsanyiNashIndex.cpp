@@ -4,24 +4,23 @@
 
 #include <iostream>
 
-epic::index::HarsanyiNashIndex::HarsanyiNashIndex(Game& g)
-	: ItfPowerIndex(g) {
-}
+epic::index::HarsanyiNashIndex::HarsanyiNashIndex()
+	: ItfPowerIndex() {}
 
-std::vector<epic::bigFloat> epic::index::HarsanyiNashIndex::calculate() {
-	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
+std::vector<epic::bigFloat> epic::index::HarsanyiNashIndex::calculate(Game* g) {
+	std::vector<bigFloat> solution(g->getNumberOfPlayers());
 
-	if (mGame.getNumberOfVetoPlayers() == 1) {
-		for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
-			if (mGame.getVetoPlayerVector()[i]) {
+	if (g->getNumberOfVetoPlayers() == 1) {
+		for (longUInt i = 0; i < g->getNumberOfPlayers(); ++i) {
+			if (g->getVetoPlayerVector()[i]) {
 				solution[i] = 1.0f;
 			} else {
 				solution[i] = 0.0f;
 			}
 		}
 	} else {
-		bigFloat s = 1.0f / (double)mGame.getNumberOfPlayers();
-		for (longUInt i = 0; i < mGame.getNumberOfPlayers(); ++i) {
+		bigFloat s = 1.0f / (double)g->getNumberOfPlayers();
+		for (longUInt i = 0; i < g->getNumberOfPlayers(); ++i) {
 			solution[i] = s;
 		}
 	}
@@ -33,7 +32,15 @@ std::string epic::index::HarsanyiNashIndex::getFullName() {
 	return "Harsanyi-Nash";
 }
 
-epic::longUInt epic::index::HarsanyiNashIndex::getMemoryRequirement() {
+epic::longUInt epic::index::HarsanyiNashIndex::getMemoryRequirement(Game* g) {
 	bigFloat c_1 = 1;
-	return (mGame.getNumberOfPlayers() * GMPHelper::size_of_float(c_1)) / cMemUnit_factor;
+	return (g->getNumberOfPlayers() * GMPHelper::size_of_float(c_1)) / cMemUnit_factor;
+}
+
+epic::bigInt epic::index::HarsanyiNashIndex::getMaxValueRequirement(ItfUpperBoundApproximation* approx) {
+	return 0;
+}
+
+epic::lint::Operation epic::index::HarsanyiNashIndex::getOperationRequirement() {
+	return lint::Operation::addition;
 }

@@ -27,19 +27,13 @@ namespace epic::index {
  */
 class ColemanCollective : public PowerIndexWithWinningCoalitions {
 public:
-	/**
-	 * Construct the ColemanCollective object
-	 *
-	 * @param g The Game for which the ColemanCollective index should be calculated.
-	 * @param approx A specialized approximation object to approximate the largest needed numbers.
-	 * @param int_representation Defines the kind of integer representation to use for the calculation (gets passed to ItfLargeNumberCalculator::new_calculator()).
-	 */
-	ColemanCollective(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation = DEFAULT);
-	~ColemanCollective() override;
+	ColemanCollective();
 
-	std::vector<bigFloat> calculate() override;
+	std::vector<bigFloat> calculate(Game* g) override;
 	std::string getFullName() override;
-	longUInt getMemoryRequirement() override;
+	longUInt getMemoryRequirement(Game* g) override;
+	bigInt getMaxValueRequirement(ItfUpperBoundApproximation* approx) override;
+	lint::Operation getOperationRequirement() override;
 };
 
 } /* namespace epic::index */
