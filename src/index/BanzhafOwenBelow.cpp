@@ -21,19 +21,19 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwenBelow::calculate() {
 	std::vector<bigFloat> solution(mGame.getNumberOfPlayers());
 	longUInt quota = mGame.getQuota();
 
-	auto c = new lint::LargeNumber[quota-1];
-	mCalculator->allocInit_largeNumberArray(c, quota-1);
+	auto c = new lint::LargeNumber[quota - 1];
+	mCalculator->allocInit_largeNumberArray(c, quota - 1);
 
 	generalizedForwardCountingPerWeight(c, mPartW, mNbPart, 1);
 
-	auto cwo = new lint::LargeNumber[quota-1];
-	mCalculator->allocInit_largeNumberArray(cwo, quota-1);
+	auto cwo = new lint::LargeNumber[quota - 1];
+	mCalculator->allocInit_largeNumberArray(cwo, quota - 1);
 
-	auto cwo2 = new lint::LargeNumber[quota-1];
-	mCalculator->allocInit_largeNumberArray(cwo2, quota-1);
+	auto cwo2 = new lint::LargeNumber[quota - 1];
+	mCalculator->allocInit_largeNumberArray(cwo2, quota - 1);
 
-	auto cwoi = new lint::LargeNumber[quota-1];
-	mCalculator->allocInit_largeNumberArray(cwoi, quota-1);
+	auto cwoi = new lint::LargeNumber[quota - 1];
+	mCalculator->allocInit_largeNumberArray(cwoi, quota - 1);
 
 	auto banzhafsInternal = new lint::LargeNumber[mMaxPartSize];
 	mCalculator->alloc_largeNumberArray(banzhafsInternal, mMaxPartSize);
@@ -47,11 +47,11 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwenBelow::calculate() {
 	auto winternal = new longUInt[mMaxPartSize];
 
 	// Work out number of swings on level of precoalitions
-	for (longUInt i = 0; i < mNbPart; i++) {		
+	for (longUInt i = 0; i < mNbPart; i++) {
 		coalitionsWithoutPlayerFromBelow(cwo, c, mPartW[i]);
 
-		//replicate vector cwo onto cwo2
-		for (longUInt ii = 0; ii < quota-1; ii++) {
+		// replicate vector cwo onto cwo2
+		for (longUInt ii = 0; ii < quota - 1; ii++) {
 			mCalculator->assign(cwo2[ii], cwo[ii]);
 		}
 
@@ -62,17 +62,17 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwenBelow::calculate() {
 				mCalculator->assign_zero(banzhafsInternal[x]);
 			}
 
-			generalizedForwardCountingPerWeight(cwo2, winternal, nbPlayersInParti, 1);			
+			generalizedForwardCountingPerWeight(cwo2, winternal, nbPlayersInParti, 1);
 
 			for (longUInt ii = 0; ii < nbPlayersInParti; ii++) {
 				coalitionsWithoutPlayerFromBelow(cwoi, cwo2, winternal[ii]);
 
-				longUInt max = std::max((longUInt)1, quota-winternal[ii]);
-				for (longUInt iii = max; iii <= quota-1; iii++) {
-					mCalculator->plusEqual(banzhafsInternal[ii], cwoi[iii-1]);
+				longUInt max = std::max((longUInt)1, quota - winternal[ii]);
+				for (longUInt iii = max; iii <= quota - 1; iii++) {
+					mCalculator->plusEqual(banzhafsInternal[ii], cwoi[iii - 1]);
 				}
-				//for dictator player
-				if (winternal[ii] >= quota){
+				// for dictator player
+				if (winternal[ii] >= quota) {
 					mCalculator->increment(banzhafsInternal[ii]);
 				}
 
@@ -82,18 +82,18 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwenBelow::calculate() {
 					InternalMultiplier = 1 / bigFloat(mBigTmp);
 				}
 
-				mCalculator->to_bigInt(&mBigTmp, banzhafsInternal[ii]);				
+				mCalculator->to_bigInt(&mBigTmp, banzhafsInternal[ii]);
 				solution[mGame.getPrecoalitions()[i][ii]] = ExternalMultiplier * InternalMultiplier * mBigTmp;
 			}
 		} else {
-			//get sum of vector
+			// get sum of vector
 			mCalculator->assign_zero(mTmp);
-			longUInt max = std::max((longUInt)0, quota-mPartW[i]);
-			for (longUInt ii = max; ii <= quota-1; ++ii) {
-				mCalculator->plusEqual(mTmp, cwo[ii-1]);
+			longUInt max = std::max((longUInt)0, quota - mPartW[i]);
+			for (longUInt ii = max; ii <= quota - 1; ++ii) {
+				mCalculator->plusEqual(mTmp, cwo[ii - 1]);
 			}
-			//for dictator player
-			if (mPartW[i] >= quota){
+			// for dictator player
+			if (mPartW[i] >= quota) {
 				mCalculator->increment(mTmp);
 			}
 			bigInt banzhafs_external;
@@ -110,7 +110,7 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwenBelow::calculate() {
 	mCalculator->free_largeNumberArray(cwoi);
 	mCalculator->free_largeNumberArray(c);
 	mCalculator->free_largeNumberArray(cwo);
-	
+
 	return solution;
 }
 
@@ -120,8 +120,8 @@ std::string epic::index::BanzhafOwenBelow::getFullName() {
 
 epic::longUInt epic::index::BanzhafOwenBelow::getMemoryRequirement() {
 	bigInt memory = (mGame.getWeightSum() + 1 - mGame.getQuota()) * mCalculator->getLargeNumberSize() * 4;
-	memory += mMaxPartSize * mCalculator->getLargeNumberSize();											  
-	memory += mMaxPartSize * c_sizeof_longUInt;															   
+	memory += mMaxPartSize * mCalculator->getLargeNumberSize();
+	memory += mMaxPartSize * c_sizeof_longUInt;
 	memory /= cMemUnit_factor;
 
 	longUInt ret = 0;

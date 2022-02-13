@@ -1,12 +1,12 @@
 #include "index/OwenBelow.h"
-#include "Game.h"
+
 #include "../include/FastUpperBoundApproximation.h"
 #include "../include/index/ShapleyShubik.h"
-
 #include "Array.h"
+#include "Game.h"
 
-#include <numeric>
 #include <Logging.h>
+#include <numeric>
 
 epic::index::OwenBelow::OwenBelow(Game& g, ItfUpperBoundApproximation* approx, IntRepresentation int_representation)
 	: PowerIndexWithPrecoalitions(g) {
@@ -48,44 +48,43 @@ std::vector<epic::bigFloat> epic::index::OwenBelow::calculate() {
 	auto shapleysInternal = new bigInt[mGame.getNumberOfPlayers()]();
 
 	Array2d<lint::LargeNumber> cwo2;
-	cwo2.alloc(quota, mMaxPartSize+1);
+	cwo2.alloc(quota, mMaxPartSize + 1);
 	mCalculator->allocInit_largeNumberArray(cwo2.getArrayPointer(), cwo2.getNumberOfElements());
 
 	Array2d<lint::LargeNumber> cwoi;
-	cwoi.alloc(quota, mMaxPartSize+1);
+	cwoi.alloc(quota, mMaxPartSize + 1);
 	mCalculator->allocInit_largeNumberArray(cwoi.getArrayPointer(), cwoi.getNumberOfElements());
 
 	auto winternal = new longUInt[mMaxPartSize];
 	bigInt factor;
-	
+
 	for (longUInt i = 0; i < mNbPart; ++i) {
 		longUInt nbPlayersInPartI = mGame.getPrecoalitions()[i].size();
 		// initialize winternal
 		for (longUInt z = 0; z < nbPlayersInPartI; ++z) {
 			winternal[z] = mGame.getWeights()[mGame.getPrecoalitions()[i][z]];
 		}
-		
-		coalitionsCardinalityWithoutPlayerFromBelow(cc, cwo, mNbPart-1, i, mPartW, 0, -1);
+
+		coalitionsCardinalityWithoutPlayerFromBelow(cc, cwo, mNbPart - 1, i, mPartW, 0, -1);
 		for (int s = 0; s < ((int)mNbPart); ++s) {
 			s = s - 1;
-			factor = factorial[s+1] * factorial[mNbPart - s - 2];
+			factor = factorial[s + 1] * factorial[mNbPart - s - 2];
 			if (nbPlayersInPartI > 1) {
 				for (longUInt x = 0; x < quota; ++x) {
-					for (longUInt y = 0; y < (mMaxPartSize+1); ++y) {
+					for (longUInt y = 0; y < (mMaxPartSize + 1); ++y) {
 						mCalculator->assign_zero(cwo2(x, y));
 					}
-					if (s >= 0){
+					if (s >= 0) {
 						mCalculator->assign(cwo2(x, 0), cwo(x, s));
-					}						
+					}
 				}
-				if (s == -1){
+				if (s == -1) {
 					generalizedForwardCountingPerWeightCardinality(cwo2, winternal, nbPlayersInPartI, (longUInt)1, (longUInt)1, true);
-				}
-				else{
+				} else {
 					generalizedForwardCountingPerWeightCardinality(cwo2, winternal, nbPlayersInPartI, (longUInt)1, (longUInt)1, false);
 				}
 				for (longUInt x = 0; x < quota; ++x) {
-					for (longUInt y = 0; y < (mMaxPartSize+1); ++y) {
+					for (longUInt y = 0; y < (mMaxPartSize + 1); ++y) {
 						mCalculator->assign(cwoi(x, y), cwo2(x, y));
 					}
 				}
@@ -96,22 +95,22 @@ std::vector<epic::bigFloat> epic::index::OwenBelow::calculate() {
 			} else {
 				mCalculator->assign_zero(mTmp);
 				longUInt max = 0;
-				if ( quota > mPartW[i]){
-					max = quota-mPartW[i]-1;
+				if (quota > mPartW[i]) {
+					max = quota - mPartW[i] - 1;
 				}
-				if (s >= 0){
-					for (longUInt z = max; z < quota-1; ++z) {
+				if (s >= 0) {
+					for (longUInt z = max; z < quota - 1; ++z) {
 						mCalculator->plusEqual(mTmp, cwo(z, s));
 					}
 				}
-				
-				if (s == -1){
-					if(mPartW[i] >= quota){
+
+				if (s == -1) {
+					if (mPartW[i] >= quota) {
 						mCalculator->increment(mTmp);
 					}
 				}
 				mCalculator->to_bigInt(&mBigTmp, mTmp);
-				shapleysInternal[mGame.getPrecoalitions()[i][0]] += mBigTmp * factorial[s+1] * factorial[mNbPart-s-2];
+				shapleysInternal[mGame.getPrecoalitions()[i][0]] += mBigTmp * factorial[s + 1] * factorial[mNbPart - s - 2];
 			}
 			s++;
 		}
@@ -126,7 +125,7 @@ std::vector<epic::bigFloat> epic::index::OwenBelow::calculate() {
 		for (longUInt part = 0; part < mNbPart; ++part) {
 			longUInt nbPlayersInParti = mGame.getPrecoalitions()[part].size();
 			factor = factorial[nbPlayersInParti] * factorial[mNbPart];
-		
+
 			for (longUInt i = 0; i < nbPlayersInParti; ++i) {
 				longUInt player = mGame.getPrecoalitions()[part][i];
 				solution[player] = shapleysInternal[player];
@@ -135,7 +134,7 @@ std::vector<epic::bigFloat> epic::index::OwenBelow::calculate() {
 		}
 	}
 	delete[] factorial;
-	delete[] shapleysInternal;	
+	delete[] shapleysInternal;
 
 	return solution;
 }
@@ -165,25 +164,25 @@ epic::longUInt epic::index::OwenBelow::getMemoryRequirement() {
 void epic::index::OwenBelow::updateInternalShapleyShubik(bigInt* internal_ssi, Array2d<lint::LargeNumber>& cwoi, longUInt precoalition, longUInt player, longUInt* weights, bigInt* factorial, bigInt& scale_factor, int s) {
 	longUInt n = mGame.getPrecoalitions()[precoalition].size();
 
-	for (longUInt sinternal = 0; sinternal < n; ++sinternal) {	
+	for (longUInt sinternal = 0; sinternal < n; ++sinternal) {
 		mCalculator->assign_zero(mTmp);
-		//log::out << "max: " << mGame.getQuota()-weights[player] << log::endl;
-		longUInt max = std::max((longUInt)1, mGame.getQuota()-weights[player]);
-		//TESTING replaced w=mGame.getQuota()-weights[player] with max
+		// log::out << "max: " << mGame.getQuota()-weights[player] << log::endl;
+		longUInt max = std::max((longUInt)1, mGame.getQuota() - weights[player]);
+		// TESTING replaced w=mGame.getQuota()-weights[player] with max
 		for (longUInt w = max; w < mGame.getQuota(); ++w) {
-			//log::out << "cwoi: " << cwoi(w-1, sinternal).uint << log::endl;
-			mCalculator->plusEqual(mTmp, cwoi(w-1, sinternal));
+			// log::out << "cwoi: " << cwoi(w-1, sinternal).uint << log::endl;
+			mCalculator->plusEqual(mTmp, cwoi(w - 1, sinternal));
 		}
 
-		//for dictator
-		if (s == -1){
-			if (sinternal == 0){
-				if (weights[player] >= mGame.getQuota()){
+		// for dictator
+		if (s == -1) {
+			if (sinternal == 0) {
+				if (weights[player] >= mGame.getQuota()) {
 					mCalculator->increment(mTmp);
 				}
 			}
 		}
 		mCalculator->to_bigInt(&mBigTmp, mTmp);
-		internal_ssi[mGame.getPrecoalitions()[precoalition][player]] += (factorial[sinternal] * factorial[n - sinternal - 1]) * mBigTmp * scale_factor;	
+		internal_ssi[mGame.getPrecoalitions()[precoalition][player]] += (factorial[sinternal] * factorial[n - sinternal - 1]) * mBigTmp * scale_factor;
 	}
 }
