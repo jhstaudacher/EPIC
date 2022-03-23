@@ -5,8 +5,9 @@
 #include "index/AbsolutePowerIndexG.h"
 #include "index/AbsolutePublicGood.h"
 #include "index/Banzhaf.h"
-#include "index/BanzhafBelow.h"
 #include "index/BanzhafOwen.h"
+#include "index/BanzhafOwenBelow.h"
+#include "index/BanzhafBelow.h"
 #include "index/ColemanCollective.h"
 #include "index/ColemanInitiative.h"
 #include "index/ColemanPreventive.h"
@@ -20,6 +21,7 @@
 #include "index/NevisonPH.h"
 #include "index/Owen.h"
 #include "index/OwenExtendedPGI.h"
+#include "index/OwenBelow.h"
 #include "index/PowerIndexF.h"
 #include "index/PowerIndexG.h"
 #include "index/PowerIndexGPH.h"
@@ -50,6 +52,7 @@
 #include "index/ThreatPGI1.h"
 #include "index/ThreatPGI2.h"
 #include "index/ThreatPGI3.h"
+#include "index/SymmetricCoalitionalBanzhafBelow.h"
 #include "index/Tijs.h"
 #include "index/UnionPGI.h"
 
@@ -60,6 +63,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{APIG, {"APIG", "absolute null-player-free Power Index G (based on the Dubey-Shapley identity)"}},
 	{BZ, {"BZ", "Banzhaf"}},
 	{BO, {"BO", "Banzhaf-Owen"}},
+	{BOB, {"BOB", "Banzhaf-Owen from below"}},
 	{BZB, {"BZB", "Banzhaf below"}},
 	{CC, {"CC", "Coleman collective"}},
 	{CI, {"CI", "Coleman initiative"}},
@@ -74,6 +78,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{NPH, {"NPH", "Nevsion (based on raw Public Help theta)"}},
 	{O, {"O", "Owen"}},
 	{OPGI, {"OPGI", "Owen Extended Public Good Index"}},
+	{OB, {"OB", "Owen from below"}},
 	{PG, {"PG", "Public Good"}},
 	{PHT, {"PHT", "Public Help theta (based on the Dubey-Shapley identity)"}},
 	{PHTPH, {"PHTPH", "Public Help theta (based on the raw Public Help theta)"}},
@@ -94,6 +99,7 @@ const std::map<epic::index::IndexFactory::IndexType, std::pair<std::string, std:
 	{RPIF, {"RPIF", "raw null-player-free Power Index F"}},
 	{RSH, {"RSH", "raw Shapley Shubik"}},
 	{SCB, {"SCB", "Symmetric Coalitional Banzhaf"}},
+	{SCBB, {"SCBB", "Symmetric Coalitional Banzhaf from below"}},
 	{RSHB, {"RSHB", "raw Shapley Shubik below"}},
 	{SH, {"SH", "Shapley Shubik"}},
 	{SHB, {"SHB", "Shapley Shubik below"}},
@@ -119,6 +125,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::ABZ: index = new AbsoluteBanzhaf(); break;
 		case IndexType::BZ: index = new Banzhaf(); break;
 		case IndexType::BO: index = new BanzhafOwen(); break;
+		case IndexType::BOB: index = new BanzhafOwenBelow(); break;
 		case IndexType::BZB: index = new BanzhafBelow(); break;
 		case IndexType::APG: index = new AbsolutePublicGood(); break;
 		case IndexType::APIG: index = new AbsolutePowerIndexG(g); break;
@@ -134,6 +141,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::N: index = new Nevison(g); break;
 		case IndexType::NPH: index = new NevisonPH(g); break;
 		case IndexType::O: index = new Owen(); break;
+		case IndexType::OB: index = new OwenBelow(); break;
 		case IndexType::OPGI: index = new OwenExtendedPGI(); break;
 		case IndexType::PG: index = new PublicGood(); break;
 		case IndexType::PHT: index = new PublicHelpTheta(g); break;
@@ -155,6 +163,7 @@ epic::index::ItfPowerIndex* epic::index::IndexFactory::new_powerIndex(const std:
 		case IndexType::RPIF: index = new RawPowerIndexF(g); break;
 		case IndexType::RSH: index = new RawShapleyShubik(); break;
 		case IndexType::SCB: index = new SymmetricCoalitionalBanzhaf(); break;
+		case IndexType::SCBB: index = new SymmetricCoalitionalBanzhafBelow(); break;
 		case IndexType::RSHB: index = new RawShapleyShubikBelow(); break;
 		case IndexType::SH: index = new ShapleyShubik(); break;
 		case IndexType::SHB: index = new ShapleyShubikBelow(); break;

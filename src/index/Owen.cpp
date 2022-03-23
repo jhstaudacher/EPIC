@@ -11,114 +11,107 @@ std::vector<epic::bigFloat> epic::index::Owen::calculate(Game* g_) {
 	gCalculator->alloc_largeNumber(mTmp);
 	std::vector<bigFloat> solution;
 
-	if (g->getNumberOfVetoPlayers() > 0) {
-		solution.resize(g->getNumberOfPlayers());
-		for (longUInt i = 0; i < g->getNumberOfPlayers(); ++i) {
-			solution[i] = g->getVetoPlayerVector()[i] ? 1 : 0;
+	bigInt* factorial;
+	{
+		longUInt size = std::max(g->getMaxPrecoalitionSize(), g->getNumberOfPrecoalitions());
+		factorial = new bigInt[size + 1];
+
+		factorial[0] = 1;
+		factorial[1] = 1;
+
+		for (longUInt i = 2; i <= size; ++i) {
+			factorial[i] = factorial[i - 1] * i;
 		}
-	} else {
-		bigInt* factorial;
-		{
-			longUInt size = std::max(g->getMaxPrecoalitionSize(), g->getNumberOfPrecoalitions());
-			factorial = new bigInt[size + 1];
-
-			factorial[0] = 1;
-			factorial[1] = 1;
-
-			for (longUInt i = 2; i <= size; ++i) {
-				factorial[i] = factorial[i - 1] * i;
-			}
-		}
-
-		Array2dOffset<lint::LargeNumber> cc(g->getWeightSum() + 1, g->getNumberOfPrecoalitions(), g->getQuota(), 0);
-		gCalculator->allocInit_largeNumberArray(cc.getArrayPointer(), cc.getNumberOfElements());
-		gCalculator->assign_one(cc(g->getWeightSum(), g->getNumberOfPrecoalitions() - 1));
-		generalizedBackwardCountingPerWeightCardinality(g, cc, g->getPrecoalitionWeights(), g->getNumberOfPrecoalitions());
-
-		Array2dOffset<lint::LargeNumber> cw(g->getWeightSum() + 1, g->getNumberOfPrecoalitions(), g->getQuota(), 0);
-		gCalculator->allocInit_largeNumberArray(cw.getArrayPointer(), cw.getNumberOfElements());
-
-		auto shapleysInternal = new bigInt[g->getNumberOfPlayers()]();
-
-		Array2dOffset<lint::LargeNumber> cw2(g->getWeightSum() + 1, g->getMaxPrecoalitionSize(), g->getQuota(), 0);
-		gCalculator->allocInit_largeNumberArray(cw2.getArrayPointer(), cw2.getNumberOfElements());
-
-		Array2dOffset<lint::LargeNumber> cwi(g->getWeightSum() + 1, g->getMaxPrecoalitionSize(), g->getQuota(), 0);
-		gCalculator->alloc_largeNumberArray(cwi.getArrayPointer(), cwi.getNumberOfElements());
-
-		std::vector<longUInt> winternal(g->getMaxPrecoalitionSize());
-
-		bigInt factor;
-
-		for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); ++i) {
-			longUInt nbPlayersInPartI = g->getPrecoalitions()[i].size();
-
-			coalitionsCardinalityContainingPlayerFromAbove(g, cw, cc, g->getNumberOfPrecoalitions(), i, g->getPrecoalitionWeights());
-
-			// initialize winternal
-			for (longUInt z = 0; z < nbPlayersInPartI; ++z) {
-				winternal[z] = g->getWeights()[g->getPrecoalitions()[i][z]];
-			}
-
-			for (longUInt s = 0; s < g->getNumberOfPrecoalitions(); ++s) {
-				factor = factorial[s] * factorial[g->getNumberOfPrecoalitions() - s - 1];
-
-				if (nbPlayersInPartI > 1) {
-					for (longUInt x = g->getQuota(); x <= g->getWeightSum(); ++x) {
-						for (longUInt y = 0; y < nbPlayersInPartI - 1; ++y) {
-							gCalculator->assign_zero(cw2(x, y));
-						}
-						gCalculator->assign(cw2(x, nbPlayersInPartI - 1), cw(x, s));
-					}
-
-					generalizedBackwardCountingPerWeightCardinality(g, cw2, winternal, nbPlayersInPartI);
-
-					for (longUInt x = g->getQuota(); x <= g->getWeightSum(); ++x) {
-						for (longUInt y = 0; y < nbPlayersInPartI; ++y) {
-							gCalculator->assign(cwi(x, y), cw2(x, y));
-						}
-					}
-
-					for (longUInt ii = 0; ii < nbPlayersInPartI; ++ii) {
-						coalitionsCardinalityContainingPlayerFromAbove(g, cwi, cw2, nbPlayersInPartI, ii, winternal);
-						updateInternalShapleyShubik(g, shapleysInternal, cwi, i, ii, winternal, factorial, factor);
-					}
-				} else {
-					// shapleysInternal[g->getPrecoalitions()[i][0] - 1] += factor * sum(cw[q:tmp_min, s])
-					gCalculator->assign_zero(mTmp);
-					longUInt tmp_min = std::min(g->getQuota() + g->getPrecoalitionWeights()[i] - 1, g->getWeightSum());
-					for (longUInt z = g->getQuota(); z <= tmp_min; ++z) {
-						gCalculator->plusEqual(mTmp, cw(z, s));
-					}
-					gCalculator->to_bigInt(&mBigTmp, mTmp);
-					shapleysInternal[g->getPrecoalitions()[i][0]] += mBigTmp * factor;
-				}
-			}
-		}
-
-		gCalculator->free_largeNumberArray(cc.getArrayPointer());
-		gCalculator->free_largeNumberArray(cw.getArrayPointer());
-		gCalculator->free_largeNumberArray(cw2.getArrayPointer());
-		gCalculator->free_largeNumberArray(cwi.getArrayPointer());
-
-		solution.resize(g->getNumberOfPlayers());
-		{
-			for (longUInt part = 0; part < g->getNumberOfPrecoalitions(); ++part) {
-				longUInt nbPlayersInParti = g->getPrecoalitions()[part].size();
-				factor = factorial[nbPlayersInParti] * factorial[g->getNumberOfPrecoalitions()];
-
-				for (longUInt i = 0; i < nbPlayersInParti; ++i) {
-					// solution[player] = shapleysInternal[player] / (factorial[nbPlayersInParti] * factorial[nbPartitions]);
-					longUInt player = g->getPrecoalitions()[part][i];
-					solution[player] = shapleysInternal[player];
-					solution[player] /= factor;
-				}
-			}
-		}
-
-		delete[] factorial;
-		delete[] shapleysInternal;
 	}
+
+	Array2dOffset<lint::LargeNumber> cc(g->getWeightSum() + 1, g->getNumberOfPrecoalitions(), g->getQuota(), 0);
+	gCalculator->allocInit_largeNumberArray(cc.getArrayPointer(), cc.getNumberOfElements());
+	gCalculator->assign_one(cc(g->getWeightSum(), g->getNumberOfPrecoalitions() - 1));
+	generalizedBackwardCountingPerWeightCardinality(g, cc, g->getPrecoalitionWeights(), g->getNumberOfPrecoalitions());
+
+	Array2dOffset<lint::LargeNumber> cw(g->getWeightSum() + 1, g->getNumberOfPrecoalitions(), g->getQuota(), 0);
+	gCalculator->allocInit_largeNumberArray(cw.getArrayPointer(), cw.getNumberOfElements());
+
+	auto shapleysInternal = new bigInt[g->getNumberOfPlayers()]();
+
+	Array2dOffset<lint::LargeNumber> cw2(g->getWeightSum() + 1, g->getMaxPrecoalitionSize(), g->getQuota(), 0);
+	gCalculator->allocInit_largeNumberArray(cw2.getArrayPointer(), cw2.getNumberOfElements());
+
+	Array2dOffset<lint::LargeNumber> cwi(g->getWeightSum() + 1, g->getMaxPrecoalitionSize(), g->getQuota(), 0);
+	gCalculator->alloc_largeNumberArray(cwi.getArrayPointer(), cwi.getNumberOfElements());
+
+	std::vector<longUInt> winternal(g->getMaxPrecoalitionSize());
+
+	bigInt factor;
+
+	for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); ++i) {
+		longUInt nbPlayersInPartI = g->getPrecoalitions()[i].size();
+
+		coalitionsCardinalityContainingPlayerFromAbove(g, cw, cc, g->getNumberOfPrecoalitions(), i, g->getPrecoalitionWeights());
+
+		// initialize winternal
+		for (longUInt z = 0; z < nbPlayersInPartI; ++z) {
+			winternal[z] = g->getWeights()[g->getPrecoalitions()[i][z]];
+		}
+
+		for (longUInt s = 0; s < g->getNumberOfPrecoalitions(); ++s) {
+			factor = factorial[s] * factorial[g->getNumberOfPrecoalitions() - s - 1];
+
+			if (nbPlayersInPartI > 1) {
+				for (longUInt x = g->getQuota(); x <= g->getWeightSum(); ++x) {
+					for (longUInt y = 0; y < nbPlayersInPartI - 1; ++y) {
+						gCalculator->assign_zero(cw2(x, y));
+					}
+					gCalculator->assign(cw2(x, nbPlayersInPartI - 1), cw(x, s));
+				}
+
+				generalizedBackwardCountingPerWeightCardinality(g, cw2, winternal, nbPlayersInPartI);
+
+				for (longUInt x = g->getQuota(); x <= g->getWeightSum(); ++x) {
+					for (longUInt y = 0; y < nbPlayersInPartI; ++y) {
+						gCalculator->assign(cwi(x, y), cw2(x, y));
+					}
+				}
+
+				for (longUInt ii = 0; ii < nbPlayersInPartI; ++ii) {
+					coalitionsCardinalityContainingPlayerFromAbove(g, cwi, cw2, nbPlayersInPartI, ii, winternal);
+					updateInternalShapleyShubik(g, shapleysInternal, cwi, i, ii, winternal, factorial, factor);
+				}
+			} else {
+				// shapleysInternal[g->getPrecoalitions()[i][0] - 1] += factor * sum(cw[q:tmp_min, s])
+				gCalculator->assign_zero(mTmp);
+				longUInt tmp_min = std::min(g->getQuota() + g->getPrecoalitionWeights()[i] - 1, g->getWeightSum());
+				for (longUInt z = g->getQuota(); z <= tmp_min; ++z) {
+					gCalculator->plusEqual(mTmp, cw(z, s));
+				}
+				gCalculator->to_bigInt(&mBigTmp, mTmp);
+				shapleysInternal[g->getPrecoalitions()[i][0]] += mBigTmp * factor;
+			}
+		}
+	}
+
+	gCalculator->free_largeNumberArray(cc.getArrayPointer());
+	gCalculator->free_largeNumberArray(cw.getArrayPointer());
+	gCalculator->free_largeNumberArray(cw2.getArrayPointer());
+	gCalculator->free_largeNumberArray(cwi.getArrayPointer());
+
+	solution.resize(g->getNumberOfPlayers());
+	{
+		for (longUInt part = 0; part < g->getNumberOfPrecoalitions(); ++part) {
+			longUInt nbPlayersInParti = g->getPrecoalitions()[part].size();
+			factor = factorial[nbPlayersInParti] * factorial[g->getNumberOfPrecoalitions()];
+
+			for (longUInt i = 0; i < nbPlayersInParti; ++i) {
+				// solution[player] = shapleysInternal[player] / (factorial[nbPlayersInParti] * factorial[nbPartitions]);
+				longUInt player = g->getPrecoalitions()[part][i];
+				solution[player] = shapleysInternal[player];
+				solution[player] /= factor;
+			}
+		}
+	}
+
+	delete[] factorial;
+	delete[] shapleysInternal;
 
 	gCalculator->free_largeNumber(mTmp);
 
