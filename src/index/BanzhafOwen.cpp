@@ -47,7 +47,7 @@ std::vector<epic::bigFloat> epic::index::BanzhafOwen::calculate(Game* g_) {
 	for (longUInt i = 0; i < g->getNumberOfPrecoalitions(); i++) {
 		coalitionsContainingPlayerFromAbove(g, cw, c, g->getPrecoalitionWeights()[i]);
 
-		//replicate vector c onto cw
+		//replicate vector cw onto cw2
 		for (longUInt ii = quota; ii <= totalWeight; ii++) {
 			//cw2[i] = cw[i];
 			gCalculator->assign(cw2[ii], cw[ii]);
